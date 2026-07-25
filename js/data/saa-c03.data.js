@@ -1,0 +1,3244 @@
+window.APP_DATA = window.APP_DATA || {};
+window.APP_DATA.saa = {
+  "id": "saa-c03",
+  "name": "AWS Certified Solutions Architect - Associate",
+  "code": "SAA-C03",
+  "passScore": 720,
+  "maxScore": 1000,
+  "examMinutes": 130,
+  "totalQuestions": 65,
+  "scoredQuestions": 50,
+  "domains": [
+    {
+      "id": "d1",
+      "title": "보안 아키텍처 설계",
+      "weight": 30,
+      "tasks": [
+        {
+          "taskId": "1.1",
+          "title": "AWS 리소스에 대한 보안 액세스 설계",
+          "concept": {
+            "summary": "여러 AWS 계정에 걸친 보안 액세스를 설계할 때는 장기 자격증명을 가진 IAM 사용자보다 임시 자격증명을 발급하는 IAM 역할을 우선적으로 사용하는 것이 핵심 원칙이다. IAM Identity Center(구 AWS SSO)는 여러 계정과 SaaS 애플리케이션에 대해 중앙집중식 페더레이션 액세스를 제공하며, 온프레미스 디렉터리나 외부 IdP와 연동할 수 있다. AWS Organizations의 SCP는 계정에 허용 가능한 권한의 상한선을 설정하는 가드레일인 반면, IAM 정책은 실제 권한을 부여하는 수단이므로 두 개념은 상호 보완적으로 함께 검토해야 한다. 다중 계정 전략에서는 Control Tower로 랜딩존과 가드레일을 자동화하고, 계정 간 접근은 STS AssumeRole 기반 교차 계정 역할로 처리하는 것이 모범 사례다. 최소 권한 원칙은 한 번 설정하고 끝내는 것이 아니라 IAM Access Analyzer, 권한 경계(Permission Boundary) 등을 통해 지속적으로 검증하고 축소해야 한다.",
+            "keyPoints": [
+              "IAM 사용자(장기 자격증명) vs IAM 역할(임시 자격증명, STS 발급): 애플리케이션·교차 계정·연합 액세스에는 항상 역할을 우선 고려",
+              "IAM Identity Center: 다중 계정과 SaaS 애플리케이션에 대한 SSO/페더레이션 허브, 기존 AD나 외부 IdP와 연동 가능",
+              "SCP(서비스 제어 정책): 계정/OU 단위의 권한 상한선(가드레일)이며, 명시적 Deny는 어떤 IAM Allow보다도 항상 우선 적용됨",
+              "자격증명 기반 정책(IAM 정책) vs 리소스 기반 정책: 우리가 관리할 수 없는 외부 계정의 접근에는 S3 버킷 정책 같은 리소스 기반 정책이 유용",
+              "교차 계정 액세스: STS AssumeRole로 임시 자격증명을 발급하며, 신뢰 정책(Trust Policy)으로 역할을 전환할 수 있는 주체를 지정",
+              "AWS Control Tower: 다중 계정 랜딩존을 자동 구성하고 계정 팩토리, 필수/선택적 가드레일(SCP 기반)을 제공",
+              "권한 경계(Permission Boundary): 위임된 관리자가 생성하는 역할/사용자가 가질 수 있는 최대 권한 범위를 제한",
+              "루트 사용자 보안: MFA 필수 활성화, 일상 업무에 사용 금지, 액세스 키 발급 최소화 및 안전한 보관"
+            ],
+            "example": "스타트업이 개발/스테이징/운영 계정을 분리하고 Control Tower로 랜딩존을 구성한 뒤, 운영 계정 OU에는 특정 리전 외 리소스 생성을 막는 SCP를 적용한다. 중앙 보안 계정의 감사팀은 각 계정에 배포된 교차 계정 역할을 STS AssumeRole로 전환해 감사를 수행하고, 사내 직원은 IAM Identity Center를 통해 기존 AD 자격증명으로 필요한 계정에만 SSO로 접근한다."
+          }
+        },
+        {
+          "taskId": "1.2",
+          "title": "안전한 워크로드 및 애플리케이션 설계",
+          "concept": {
+            "summary": "안전한 워크로드 설계의 핵심은 네트워크 계층(VPC)과 애플리케이션 계층의 방어를 여러 겹으로 중첩하는 심층 방어(Defense in Depth)다. VPC 내에서는 퍼블릭/프라이빗 서브넷 분리, 보안 그룹(상태 저장)과 NACL(상태 비저장)의 계층적 필터링, NAT 게이트웨이를 통한 프라이빗 리소스의 안전한 아웃바운드 통신을 설계한다. 애플리케이션 자격증명은 하드코딩하지 않고 Secrets Manager나 Parameter Store에 저장해 IAM 역할로 접근하며, 사용자 인증은 Cognito, 위협 탐지는 GuardDuty/Macie, 외부 공격 방어는 Shield(DDoS)와 WAF(계층7 공격)를 조합한다. 온프레미스와의 하이브리드 연결은 성능과 지연시간이 중요하면 Direct Connect, 신속한 구축과 백업 경로가 필요하면 Site-to-Site VPN을 사용하며 둘을 병행해 이중화하는 것도 흔한 설계다.",
+            "keyPoints": [
+              "보안 그룹: 상태 저장(Stateful), 인스턴스/ENI 수준 적용, Allow 규칙만 지원(Deny 규칙 미지원)",
+              "NACL: 상태 비저장(Stateless), 서브넷 수준 적용, Allow/Deny 규칙 모두 지원하며 번호 순서대로 평가",
+              "퍼블릭 서브넷(IGW로 라우팅) vs 프라이빗 서브넷(NAT 게이트웨이를 경유한 아웃바운드) 설계 원칙",
+              "VPC 엔드포인트(Gateway/Interface)로 S3·DynamoDB 등에 인터넷 경유 없이 비공개로 접근해 NAT 비용 절감",
+              "Cognito User Pool(사용자 디렉터리·인증) vs Identity Pool(인증 후 AWS 리소스용 임시 자격증명 연동) 구분",
+              "GuardDuty(계정/네트워크 위협 탐지) vs Macie(S3 민감데이터 자동 분류) vs Inspector(취약점 스캔)의 역할 구분",
+              "Shield Standard/Advanced(네트워크·전송 계층 DDoS 방어)와 WAF(SQL 인젝션·XSS 등 애플리케이션 계층 룰 기반 필터링)의 조합",
+              "Secrets Manager(자동 순환 기능 내장) vs Systems Manager Parameter Store(경량, 순환 기능 제한적)",
+              "Direct Connect(전용 회선, 안정적 지연시간) vs Site-to-Site VPN(신속 구축, 암호화된 인터넷 기반 터널)"
+            ],
+            "example": "온라인 쇼핑몰이 ALB를 퍼블릭 서브넷에, 애플리케이션 서버와 RDS를 프라이빗 서브넷에 배치하고, ALB 앞단에 WAF와 Shield Advanced를 적용해 인젝션 공격과 DDoS를 방어한다. 회원 로그인은 Cognito User Pool로 처리하고 로그인 후 S3 업로드 권한은 Identity Pool의 임시 자격증명으로 부여하며, 프라이빗 서브넷의 서버는 S3 Gateway 엔드포인트로 정적 자산 버킷에 접근해 NAT 비용을 절감하고 DB 자격증명은 Secrets Manager에 저장해 자동 순환시킨다."
+          }
+        },
+        {
+          "taskId": "1.3",
+          "title": "적합한 데이터 보안 제어 결정",
+          "concept": {
+            "summary": "데이터 보안 설계는 저장 데이터 암호화(KMS), 전송 데이터 암호화(TLS/ACM), 키 관리, 백업/복구, 데이터 분류 및 보존 정책을 통합적으로 다룬다. KMS는 AWS 관리형 키(간편하지만 정책 제어가 제한적), 고객 관리형 키(세밀한 키 정책·교체 주기·감사 제어), 자체 키 자료 가져오기, CloudHSM 기반 커스텀 키 스토어(단일 테넌트 HSM, 높은 규제 수준)까지 필요한 통제 수준에 따라 선택지가 다르다. 규제 준수를 위해 삭제 방지가 필요하면 S3 Object Lock의 Compliance 모드를 사용하고, 재해 복구를 위해 Cross-Region Replication, 자동 백업과 PITR, 다중 AZ 구성을 목적에 맞게 조합한다. 키와 인증서는 정기적으로 교체·갱신되어야 하며 ACM은 DNS 검증 방식을 사용할 경우 자동 갱신을 지원해 운영 부담을 줄인다.",
+            "keyPoints": [
+              "AWS 관리형 키 vs 고객 관리형 키(CMK): 키 정책 세밀도, 교체 주기 제어, 감사 로그 수준의 차이",
+              "키 정책(Key Policy)은 KMS 키에 대한 리소스 기반 정책으로, IAM 정책과 함께 반드시 검토해야 하는 접근 제어 계층",
+              "CloudHSM/커스텀 키 스토어: 단일 테넌트 하드웨어, 완전한 키 소유권, FIPS 140-2 Level 3 등 높은 규제 요구 시 사용",
+              "전송 중 암호화: ACM으로 발급한 인증서를 ALB/CloudFront에 연결하고 DNS 검증 시 자동 갱신 활용",
+              "S3 Object Lock(Governance/Compliance 모드)로 WORM 요구사항 충족, Compliance 모드는 루트 사용자도 삭제 불가",
+              "백업/복구 전략: 자동 백업+PITR(짧은 RPO), 다중 AZ(고가용성 목적, 백업의 대체가 아님), Cross-Region Replication(리전 재해 대비)",
+              "데이터 거버넌스: Lake Formation으로 데이터 레이크의 세밀한 컬럼/행 수준 접근 권한 관리, 단순 IAM/버킷 정책만으로는 한계",
+              "데이터 분류: Macie로 S3 내 개인식별정보(PII) 등 민감 데이터 자동 탐지 및 분류",
+              "AWS Config + Config Rules로 조직 전체 규정 준수 상태를 지속 점검하고 위반 시 자동 교정"
+            ],
+            "example": "의료 데이터를 다루는 회사가 저장 데이터는 고객 관리형 KMS 키로 암호화하고 1년 주기 자동 키 교체를 설정하며, 특정 계약서는 S3 Object Lock Compliance 모드로 7년간 삭제를 차단한다. RDS는 자동 백업과 PITR로 짧은 RPO를 확보하고 다중 AZ로 가용성을 높이며, 재해복구를 위해 다른 리전으로 Cross-Region Replication을 구성한다. ALB의 TLS 인증서는 ACM으로 발급해 DNS 검증 기반 자동 갱신을 적용하고, Macie로 S3 내 민감정보 존재 여부를 정기적으로 스캔한다."
+          }
+        }
+      ]
+    },
+    {
+      "id": "d2",
+      "title": "복원력을 갖춘 아키텍처 설계",
+      "weight": 26,
+      "tasks": [
+        {
+          "taskId": "2.1",
+          "title": "확장 가능하고 느슨하게 결합된 아키텍처 설계",
+          "concept": {
+            "summary": "확장 가능한 아키텍처의 핵심은 컴포넌트 간 직접적인 동기 호출 의존성을 없애고, 큐와 이벤트를 매개로 비동기적으로 통신하도록 만드는 것입니다. SQS는 생산자와 소비자 사이의 버퍼 역할을 하여 트래픽 급증 시에도 소비자가 자신의 처리 속도에 맞게 메시지를 가져가게 하고, SNS는 하나의 이벤트를 여러 구독자에게 동시에 전달하는 게시/구독(pub/sub) 팬아웃을 구현합니다. 컴퓨팅 계층에서는 상태를 서버 밖(ElastiCache, DynamoDB, S3)에 저장하는 스테이트리스 설계를 채택해야 개별 인스턴스가 자유롭게 추가·제거되며 수평 확장이 가능해집니다. 컨테이너 워크로드는 오케스트레이션 도구(ECS/EKS)와 실행 엔진(EC2/Fargate)을 조합해 운영 부담과 커스터마이징 필요성 사이에서 선택하며, ALB는 계층 7 라우팅과 콘텐츠 기반 분산을, 캐싱(CloudFront, ElastiCache, DAX)은 백엔드 부하 감소와 지연 시간 단축을 담당합니다. 이러한 요소들을 조합하면 특정 구성 요소의 장애나 부하 급증이 전체 시스템으로 전파되지 않는 느슨하게 결합된 다중 티어 아키텍처를 구성할 수 있습니다.",
+            "keyPoints": [
+              "스테이트리스 설계: 세션·상태 정보를 인스턴스가 아닌 ElastiCache, DynamoDB 등 외부 저장소에 두어 어떤 인스턴스로도 요청을 처리할 수 있게 함",
+              "SQS 표준 큐: 처리량이 무제한에 가깝고 최소 한 번 전달을 보장하지만 순서가 보장되지 않고 중복 가능성이 있음(높은 처리량 우선)",
+              "SQS FIFO 큐: 메시지 그룹 단위로 순서를 보장하고 중복 제거를 지원하지만 처리량 한도가 있음(순서·정확성 우선)",
+              "SNS는 1:N 팬아웃(게시/구독)에 사용하며, SNS+SQS 조합으로 각 구독자가 독립적인 속도로 메시지를 소비하게 하여 결합도를 낮춤",
+              "ALB(Layer 7)는 HTTP/HTTPS 경로·호스트 기반 라우팅, 마이크로서비스 라우팅에 적합하며 NLB(Layer 4)는 초저지연·고정 IP·TCP/UDP 대용량 처리에 적합",
+              "ECS는 AWS 전용 오케스트레이터로 상대적으로 단순하고, EKS는 쿠버네티스 표준 API로 멀티 클라우드/이식성이 필요할 때 적합하며, Fargate는 서버 관리 없이 두 오케스트레이터 위에서 컨테이너를 실행하는 서버리스 실행 방식",
+              "캐싱 계층(CloudFront는 엣지에서 콘텐츠 캐싱, ElastiCache는 애플리케이션 데이터/세션 캐싱, DynamoDB DAX는 DynamoDB 전용 마이크로초 캐싱)으로 백엔드 부하와 지연 시간을 줄임",
+              "읽기 전용 복제본(Read Replica)으로 읽기 트래픽을 분산해 쓰기 위주의 기본 DB 부하를 완화",
+              "Step Functions로 여러 Lambda·서비스 호출 순서를 상태 머신으로 오케스트레이션하여 재시도, 오류 처리, 병렬 실행을 코드 없이 관리",
+              "관리형 서비스(Secrets Manager로 자격 증명 자동 순환, Transfer Family로 SFTP/FTPS 워크로드를 서버리스로 이관)를 활용해 운영 부담을 낮춤"
+            ],
+            "example": "온라인 주문 시스템에서 클라이언트는 API Gateway를 통해 REST 요청을 보내고, Lambda가 주문을 검증한 뒤 SQS 표준 큐에 적재합니다. 재고 확인, 결제, 배송 알림 등 후속 처리는 Fargate 위에서 실행되는 ECS 서비스들이 각자의 속도로 큐를 폴링하여 처리하므로, 결제 서비스에 장애가 나도 주문 접수 자체는 영향을 받지 않습니다. 배송 완료 이벤트는 SNS 토픽에 게시되어 이메일 알림, 데이터 웨어하우스 적재, 파트너사 웹훅 등 여러 구독자에게 동시에 팬아웃되고, ElastiCache는 상품 카탈로그 조회 결과를 캐싱해 데이터베이스 부하를 줄입니다."
+          }
+        },
+        {
+          "taskId": "2.2",
+          "title": "고가용성 및/또는 내결함성 아키텍처 설계",
+          "concept": {
+            "summary": "고가용성(HA)은 장애가 발생해도 서비스가 최대한 끊기지 않도록 설계하는 것이고, 내결함성(FT)은 구성 요소 하나가 완전히 죽어도 사용자가 이를 인지하지 못하도록 중복성을 확보하는 것입니다. AWS 리전은 서로 격리된 여러 가용 영역(AZ)으로 구성되며, 최소 2개 이상의 AZ에 자원을 분산 배치하는 것이 HA 설계의 출발점입니다. 재해 복구(DR) 전략은 백업/복원, 파일럿 라이트, 웜 스탠바이, 액티브-액티브 순으로 RTO/RPO가 짧아지지만 비용은 커지는 트레이드오프를 가지며, 비즈니스 요구 사항(허용 가능한 다운타임과 데이터 손실량)에 따라 선택합니다. Route 53의 다양한 라우팅 정책(장애 조치, 가중치, 지연 시간, 지리 위치, 다중값)은 리전 간 트래픽 분산과 자동 장애 조치를 구현하는 핵심 도구이며, RDS Proxy는 Lambda처럼 연결을 자주 열고 닫는 워크로드에서 데이터베이스 연결 폭증과 장애 조치 시간을 줄여줍니다. 마지막으로 X-Ray로 분산 시스템의 지연·오류 지점을 추적하고, 불변 인프라와 Service Quotas 모니터링을 통해 확장 한도로 인한 장애를 예방합니다.",
+            "keyPoints": [
+              "RTO(복구 시간 목표)는 서비스가 다시 정상화되기까지 허용 가능한 시간, RPO(복구 시점 목표)는 허용 가능한 데이터 손실 범위(마지막 백업 시점과의 간격)",
+              "백업/복원: 가장 저렴하지만 RTO/RPO가 수 시간~수일로 가장 길다. 정기 스냅샷을 다른 리전에 보관해 두었다가 재해 시 인프라를 새로 구성",
+              "파일럿 라이트: 핵심 데이터베이스(예: RDS 복제본)만 상시 실행해 두고 나머지 컴퓨팅 자원은 재해 시에만 기동. 백업/복원보다 빠르지만 웜 스탠바이보다 저렴",
+              "웜 스탠바이: 축소된 규모로 전체 스택을 상시 가동해 두었다가 재해 시 용량만 확장. RTO/RPO가 짧고 비용은 파일럿 라이트보다 높음",
+              "액티브-액티브(멀티 사이트): 여러 리전에서 동시에 실시간 트래픽을 처리하며 RTO/RPO가 거의 0에 가깝지만 비용과 복잡도가 가장 높음",
+              "Route 53 라우팅 정책: 장애 조치(기본/보조 자동 전환), 가중치(비율별 분산·카나리아 배포), 지연 시간(가장 빠른 리전 선택), 지리 위치(국가/지역별 라우팅), 다중값 응답(단순 DNS 수준의 이중화), 단순 라우팅(단일 리소스)",
+              "RDS Proxy는 커넥션 풀링을 통해 DB 연결 수를 줄이고, Lambda의 급격한 동시성 증가로 인한 DB 연결 고갈을 방지하며 장애 조치 시간을 최대 66%까지 단축",
+              "Multi-AZ RDS는 동기식 복제로 자동 장애 조치를 제공(고가용성 목적), Read Replica는 비동기 복제로 읽기 확장을 제공(성능 목적)하며 크로스 리전 구성도 DR에 활용 가능",
+              "불변 인프라(Immutable Infrastructure)는 기존 서버를 수정하지 않고 새 이미지/AMI로 교체 배포하여 설정 드리프트를 없애고 롤백을 쉽게 함",
+              "Service Quotas를 사전에 모니터링하고 한도 상승을 요청해 두어야 트래픽 급증이나 리전 장애 조치 시 인스턴스/IP 한도 초과로 확장이 막히는 상황을 방지",
+              "X-Ray는 마이크로서비스 전반의 요청 흐름을 추적해 지연 병목과 오류 발생 지점을 시각화하여 장애 원인 분석 시간을 단축"
+            ],
+            "example": "글로벌 SaaS 서비스는 서울과 버지니아 두 리전에 동일한 스택(ALB, Auto Scaling 그룹, Multi-AZ RDS)을 액티브-액티브로 운영하고, Route 53 지연 시간 기반 라우팅으로 사용자를 가장 가까운 리전으로 안내합니다. 한 리전에서 상태 확인이 실패하면 Route 53 장애 조치 라우팅이 자동으로 트래픽을 나머지 리전으로 전환하고, Lambda 기반 백엔드는 RDS Proxy를 통해 데이터베이스에 연결하여 트래픽 급증 시에도 연결 수를 안정적으로 유지합니다. 재무 데이터베이스처럼 RTO 요구가 느슨한 부가 시스템은 비용 절감을 위해 파일럿 라이트 방식으로 별도 리전에 최소 구성만 유지합니다."
+          }
+        }
+      ]
+    },
+    {
+      "id": "d3",
+      "title": "고성능 아키텍처 설계",
+      "weight": 24,
+      "tasks": [
+        {
+          "taskId": "3.1",
+          "title": "고성능 및/또는 확장 가능한 스토리지 솔루션 결정",
+          "concept": {
+            "summary": "고성능 스토리지 솔루션을 설계할 때는 워크로드의 액세스 패턴(객체/파일/블록), 필요한 처리량과 IOPS, 지연시간 허용범위, 그리고 향후 데이터 증가에 따른 확장성을 함께 고려해야 합니다. Amazon S3는 사실상 무제한으로 확장되는 객체 스토리지로 정적 자산, 백업, 데이터 레이크에 적합하며, Amazon EFS는 여러 Linux EC2 인스턴스가 동시에 공유해야 하는 POSIX 파일 시스템에 적합합니다. Amazon EBS는 단일 EC2 인스턴스에 연결하는 블록 스토리지로 데이터베이스처럼 낮은 지연시간과 높은 IOPS가 필요한 워크로드에 사용되며, 볼륨 타입에 따라 성능 특성이 크게 달라집니다. 온프레미스 환경과의 통합이 필요하다면 AWS Storage Gateway나 대량 데이터 이전에는 Snow 제품군을 고려해야 합니다.",
+            "keyPoints": [
+              "S3 Standard는 99.99% 가용성과 밀리초 단위 첫 바이트 지연시간을 제공하며 정적 콘텐츠, 데이터 레이크 원본 저장에 적합하다",
+              "S3 Standard-IA/One Zone-IA는 검색은 밀리초 단위지만 검색 요청당 요금이 부과되어 접근 빈도가 낮은 데이터에 적합하다",
+              "S3 Glacier Instant Retrieval은 분기 1회 미만 접근하는 아카이브에, Glacier Flexible Retrieval은 분~시간 단위 검색에, Glacier Deep Archive는 최대 12시간 검색으로 가장 저렴하다",
+              "gp3는 볼륨 크기와 무관하게 기본 3,000 IOPS/125MiB/s를 제공하고 최대 16,000 IOPS/1,000MiB/s까지 별도로 프로비저닝 가능하다",
+              "io2 Block Express는 볼륨당 최대 256,000 IOPS와 99.999% 내구성을 제공해 대규모 트랜잭션 데이터베이스에 적합하다",
+              "st1(처리량 최적화 HDD)은 빅데이터/로그 처리처럼 순차 처리량이 중요한 워크로드에, sc1(콜드 HDD)은 접근 빈도가 매우 낮은 데이터에 적합하다",
+              "Amazon EFS는 여러 AZ에 걸쳐 자동으로 확장/축소되며 Bursting, Provisioned, Elastic 처리량 모드를 제공한다",
+              "FSx for Lustre는 HPC/머신러닝 등 초고속 병렬 처리가 필요한 워크로드에, FSx for Windows File Server는 SMB 기반 워크로드에 적합하다"
+            ],
+            "example": "예를 들어 전자상거래 사이트가 제품 이미지를 저장하는 S3 버킷, 여러 웹 서버가 공유하는 사용자 업로드 파일용 EFS, 그리고 주문 데이터베이스용 프로비저닝된 IOPS(io2) EBS 볼륨을 조합하여 각 계층의 성능 요구사항에 맞는 스토리지를 구성할 수 있습니다."
+          }
+        },
+        {
+          "taskId": "3.2",
+          "title": "고성능의 탄력적인 컴퓨팅 솔루션 설계",
+          "concept": {
+            "summary": "탄력적인 고성능 컴퓨팅 아키텍처는 워크로드 특성에 맞는 컴퓨팅 서비스 선택과 대기열 기반의 느슨한 결합, 그리고 지표 기반 자동 확장을 통해 구현됩니다. 배치성 대규모 병렬 작업에는 AWS Batch나 Amazon EMR을, 컨테이너 기반 마이크로서비스에는 ECS/EKS와 Fargate를, 이벤트 기반 워크로드에는 Lambda를 사용합니다. 컴퓨팅 계층 간에는 SQS/SNS 같은 메시징 서비스로 프로듀서와 컨슈머를 분리하여 트래픽 급증에도 안정적으로 대응할 수 있습니다. EC2 Auto Scaling은 대상 추적, 단계 조정, 예측 조정 등 다양한 정책과 CPU, 네트워크, 사용자 지정 CloudWatch 지표를 기반으로 확장/축소를 자동화합니다.",
+            "keyPoints": [
+              "AWS Batch는 완전관리형으로 컴퓨팅 리소스 프로비저닝, 작업 큐, 재시도, 종속성 관리를 자동화하여 대규모 배치 작업에 적합하다",
+              "Amazon EMR은 Hadoop/Spark/Hive 등 빅데이터 프레임워크를 관리형 클러스터로 실행하며 일시적(transient) 클러스터로 비용을 절감할 수 있다",
+              "AWS Fargate는 서버나 클러스터를 관리할 필요 없이 컨테이너를 직접 실행하는 서버리스 컴퓨팅 엔진이다",
+              "Amazon ECS는 AWS 네이티브의 단순한 컨테이너 오케스트레이션을, Amazon EKS는 Kubernetes 호환성과 이식성이 필요한 경우에 적합하다",
+              "SQS/SNS를 이용한 느슨한 결합(decoupling)은 컴포넌트 장애가 전체 시스템에 전파되지 않도록 하고, 대기열 깊이를 기반으로 컨슈머를 자동 확장할 수 있게 한다",
+              "EC2 Auto Scaling 정책은 대상 추적(Target Tracking), 단계 조정(Step Scaling), 예측 조정(Predictive Scaling)을 지원하며 CPU 사용률, 네트워크 트래픽, 사용자 지정 지표를 사용할 수 있다",
+              "AWS Lambda의 메모리 설정은 CPU와 네트워크 대역폭에 비례하여 할당되므로 CPU 바운드 작업의 실행 시간을 줄이려면 메모리를 늘리는 것이 효과적이다",
+              "인스턴스 유형 선택 시 컴퓨팅 최적화(C), 메모리 최적화(R/X), 스토리지 최적화(I/D), 가속 컴퓨팅(P/G), 범용(M/T) 계열 중 워크로드 특성에 맞는 것을 선택해야 한다"
+            ],
+            "example": "예를 들어 이미지 처리 파이프라인에서는 업로드 이벤트를 SQS에 전달하고, 대기열 깊이에 따라 Fargate 기반 ECS 서비스의 태스크 수를 Auto Scaling으로 조정하며, CPU 집약적인 인코딩 작업은 컴퓨팅 최적화(C 계열) 인스턴스에서 처리하도록 설계할 수 있습니다."
+          }
+        },
+        {
+          "taskId": "3.3",
+          "title": "고성능 데이터베이스 솔루션 결정",
+          "concept": {
+            "summary": "고성능 데이터베이스 설계는 워크로드가 읽기 집약적인지 쓰기 집약적인지, 트랜잭션 일관성이 필요한지, 그리고 예상되는 처리량(IOPS, 처리량, 동시 연결 수)을 파악하는 것에서 시작합니다. Amazon RDS/Aurora는 관계형 워크로드에, DynamoDB는 대규모 확장이 필요한 키-값/문서형 워크로드에 적합하며, ElastiCache는 데이터베이스 앞단에서 읽기 부하를 줄이는 인메모리 캐시로 사용됩니다. 읽기 집약적 워크로드는 읽기 전용 복제본이나 캐싱으로, 연결 수가 많은 워크로드는 RDS Proxy로 연결 폭주 문제를 완화할 수 있습니다. 데이터베이스 엔진 마이그레이션 시 동종 엔진 간에는 AWS DMS만으로, 이기종 엔진 간에는 AWS SCT와 DMS를 함께 사용합니다.",
+            "keyPoints": [
+              "Amazon Aurora는 스토리지가 최대 128TiB까지 자동 확장되고 최대 15개의 읽기 전용 복제본을 지원하며 Aurora Serverless v2로 부하에 따라 용량을 자동 조정한다",
+              "DynamoDB는 단일 자릿수 밀리초 지연시간과 사실상 무제한의 처리량 확장을 제공하며, 온디맨드와 프로비저닝 용량 모드를 선택할 수 있다",
+              "DynamoDB Accelerator(DAX)는 마이크로초 단위 응답이 필요한 읽기 집약적 워크로드를 위한 인메모리 캐시이다",
+              "ElastiCache Redis는 데이터 지속성, 복제, 다중 AZ 자동 장애 조치, 정렬된 집합 등 고급 자료구조와 Pub/Sub을 지원한다",
+              "ElastiCache Memcached는 단순한 키-값 캐싱, 멀티스레드 활용, 수평 샤딩에 최적화되어 있지만 데이터 지속성과 복제를 지원하지 않는다",
+              "RDS Proxy는 연결 풀링을 통해 데이터베이스 연결 폭주를 방지하고 장애 조치 시간을 단축하며 IAM 인증을 지원한다",
+              "읽기 전용 복제본(Read Replica)은 읽기 처리량을 수평으로 확장하는 반면 Multi-AZ 배포는 고가용성을 위한 것으로 두 개념은 목적이 다르다",
+              "이기종 데이터베이스 마이그레이션(예: Oracle to PostgreSQL)에는 AWS SCT로 스키마를 변환하고 AWS DMS로 데이터를 이전하며, 동종 마이그레이션은 DMS만으로 가능하다"
+            ],
+            "example": "예를 들어 온라인 게임의 리더보드처럼 초당 수십만 건의 읽기·쓰기가 발생하는 워크로드는 DynamoDB와 DAX 조합으로, 복잡한 조인 쿼리가 필요한 주문 관리 시스템은 Aurora와 RDS Proxy 조합으로 설계할 수 있습니다."
+          }
+        },
+        {
+          "taskId": "3.4",
+          "title": "고성능 및/또는 확장 가능한 네트워크 아키텍처 결정",
+          "concept": {
+            "summary": "고성능 네트워크 아키텍처는 사용자와 콘텐츠 사이의 거리를 줄이는 엣지 서비스, 트래픽 특성에 맞는 로드밸런서, 그리고 온프레미스와의 안정적인 연결 방식을 조합하여 설계합니다. CloudFront는 캐시 가능한 정적/동적 콘텐츠를 엣지 로케이션에서 제공하여 지연시간을 줄이고, Global Accelerator는 애니캐스트 IP를 통해 AWS 글로벌 네트워크로 캐시 불가능한 TCP/UDP 트래픽의 성능과 가용성을 높입니다. 계층 7 라우팅이 필요한 HTTP(S) 트래픽은 ALB로, 초저지연·고성능이 필요한 트래픽은 NLB로 처리합니다. 온프레미스 연결은 소요 시간과 비용이 중요하면 VPN을, 안정적인 대역폭과 낮은 지연시간이 중요하면 Direct Connect를 선택하며, 서비스 간 사설 연결에는 PrivateLink를 사용합니다.",
+            "keyPoints": [
+              "CloudFront는 정적 콘텐츠뿐 아니라 캐시 정책과 오리진 쉴드를 통해 동적 콘텐츠도 가속할 수 있으며 콘텐츠가 캐시 가능할 때 가장 효과적이다",
+              "Global Accelerator는 애니캐스트 IP로 사용자를 가장 가까운 AWS 엣지로 라우팅하고, 정상/비정상 엔드포인트 간 자동 장애 조치를 지원하여 캐시 불가능한 게이밍/IoT/VoIP 트래픽에 적합하다",
+              "ALB(Application Load Balancer)는 계층 7에서 동작하며 경로/호스트/헤더 기반 라우팅과 여러 대상 그룹을 지원한다",
+              "NLB(Network Load Balancer)는 계층 4에서 동작하며 초당 수백만 요청과 정적 IP, 매우 낮은 지연시간을 지원한다",
+              "GWLB(Gateway Load Balancer)는 방화벽 등 타사 가상 어플라이언스를 트래픽 경로에 투명하게 삽입할 때 사용한다",
+              "AWS Direct Connect는 전용 회선을 통해 1/10/100Gbps의 일관된 대역폭과 낮은 지연시간을 제공하지만 구축 기간이 길다",
+              "Site-to-Site VPN은 인터넷을 통한 IPsec 터널로 빠르게 구축 가능하지만 대역폭과 지연시간이 인터넷 상태에 좌우된다",
+              "AWS PrivateLink는 인터넷 게이트웨이나 VPC 피어링 없이 서비스 간 사설 연결을 제공하여 IP 주소 중복 문제를 회피하고 공격 표면을 줄인다",
+              "Transit Gateway는 다수의 VPC와 온프레미스 네트워크를 허브 앤 스포크 구조로 연결해 라우팅을 중앙에서 관리한다",
+              "멀티티어 서브넷 설계는 퍼블릭(로드밸런서), 프라이빗(애플리케이션), 격리(데이터베이스) 계층을 여러 AZ에 분산 배치하여 고가용성과 보안을 동시에 확보한다"
+            ],
+            "example": "예를 들어 글로벌 실시간 멀티플레이어 게임은 Global Accelerator로 플레이어를 가장 가까운 리전으로 라우팅하고, 정적 게임 자산 배포는 CloudFront로, 백엔드 매치메이킹 서비스는 여러 VPC를 Transit Gateway로 연결하고 ALB로 내부 트래픽을 분산하는 구조로 설계할 수 있습니다."
+          }
+        },
+        {
+          "taskId": "3.5",
+          "title": "고성능 데이터 수집 및 변환 솔루션 결정",
+          "concept": {
+            "summary": "고성능 데이터 수집 및 변환 파이프라인은 데이터의 발생 속도(배치 vs 스트리밍), 원본 위치(온프레미스 vs 클라우드), 그리고 최종 분석 요구사항에 맞춰 서비스를 조합해 구축합니다. 실시간 스트리밍 데이터는 Kinesis Data Streams로 수집해 커스텀 컨슈머가 처리하거나, Kinesis Data Firehose로 별도 코드 없이 S3/Redshift/OpenSearch에 적재할 수 있습니다. 온프레미스 데이터는 DataSync로 빠르게 온라인 전송하거나 Storage Gateway로 하이브리드 스토리지를 구성하며, 수집된 원시 데이터는 Glue로 카탈로그화 및 변환한 뒤 데이터 레이크에 저장합니다. 저장된 데이터는 Athena로 서버리스 SQL 분석을, Lake Formation으로 세분화된 권한 관리를, QuickSight로 시각화를 수행합니다.",
+            "keyPoints": [
+              "Kinesis Data Streams는 샤드 단위로 처리량을 확장하고 최대 365일까지 데이터를 보관하여 여러 커스텀 컨슈머가 재처리(replay)할 수 있게 한다",
+              "Kinesis Data Firehose는 완전관리형으로 코드 작성 없이 스트리밍 데이터를 S3, Redshift, OpenSearch, 타사 엔드포인트로 근실시간 전달한다",
+              "Kinesis Data Analytics(관리형 Apache Flink)는 스트리밍 데이터에 대해 SQL 또는 Flink 애플리케이션으로 실시간 분석을 수행한다",
+              "AWS Glue는 서버리스 ETL 서비스로 크롤러가 데이터 스키마를 자동 탐색해 Glue Data Catalog에 등록하고 변환 작업을 실행한다",
+              "Amazon Athena는 서버 프로비저닝 없이 S3 데이터에 대해 표준 SQL 쿼리를 실행하며 스캔한 데이터양 기준으로 과금된다",
+              "AWS Lake Formation은 데이터 레이크에 대한 세분화된(컬럼/행 수준) 접근 권한을 중앙에서 관리하고 여러 분석 서비스에 일관되게 적용한다",
+              "AWS DataSync는 온프레미스 NFS/SMB 스토리지와 S3/EFS/FSx 간 데이터를 온라인으로 자동화·가속화하여 전송한다",
+              "AWS Storage Gateway는 온프레미스 애플리케이션에 파일/볼륨/테이프 인터페이스를 제공하며 클라우드 스토리지와 통합되는 하이브리드 스토리지 솔루션이다",
+              "Amazon EMR은 Spark/Hadoop 기반의 대규모 분산 데이터 변환과 세밀한 클러스터 튜닝이 필요한 경우에 적합하다",
+              "Amazon QuickSight는 SPICE 인메모리 엔진을 활용해 빠른 대시보드 시각화를 제공하는 완전관리형 BI 서비스이다"
+            ],
+            "example": "예를 들어 IoT 센서 데이터를 Kinesis Data Streams로 수집하고 Kinesis Data Analytics로 실시간 이상 탐지를 수행한 뒤, Firehose를 통해 원시 데이터를 S3 데이터 레이크에 저장하고, Glue로 카탈로그화한 후 Athena와 QuickSight로 일별 리포트를 생성하는 파이프라인을 구성할 수 있습니다."
+          }
+        }
+      ]
+    },
+    {
+      "id": "d4",
+      "title": "비용에 최적화된 아키텍처 설계",
+      "weight": 20,
+      "tasks": [
+        {
+          "taskId": "4.1",
+          "title": "비용에 최적화된 스토리지 솔루션 설계",
+          "concept": {
+            "summary": "스토리지 비용 최적화의 핵심은 데이터의 접근 빈도와 예측 가능성에 따라 적절한 스토리지 클래스와 볼륨 유형을 선택하고, 시간이 지나면서 자동으로 저비용 계층으로 이동시키는 것이다. S3는 Standard, Intelligent-Tiering, IA, One Zone-IA, Glacier 계열(Instant/Flexible/Deep Archive)로 나뉘며 접근 빈도가 낮을수록, 검색 지연을 감수할수록 저렴해진다. EBS는 gp3(범용 SSD), io2(고성능 SSD), st1/sc1(HDD)로 나뉘어 IOPS·처리량 요구사항에 따라 GB당 비용 차이가 크다. 비용 가시성은 비용 할당 태그, Cost Explorer, Budgets, CUR 같은 도구로 확보하며, 하이브리드 환경에서는 DataSync·Storage Gateway·Transfer Family로 온프레미스-클라우드 간 전송을 효율화한다.",
+            "keyPoints": [
+              "S3 수명주기 정책으로 객체를 Standard → IA → Glacier 계열로 자동 이동시켜 저장 비용 절감",
+              "접근 패턴을 예측하기 어려운 데이터는 S3 Intelligent-Tiering이 모니터링 오버헤드 없이 최적 계층을 자동 선택",
+              "EBS gp3는 gp2 대비 저렴하면서 IOPS/처리량을 볼륨 크기와 독립적으로 조정 가능",
+              "순차적 대용량 처리(빅데이터, 로그)는 st1, 접근 빈도가 매우 낮은 데이터는 sc1이 SSD보다 GB당 비용이 저렴",
+              "EFS Lifecycle Management로 미접근 파일을 자동으로 IA 스토리지 클래스로 전환",
+              "Requester Pays 버킷을 사용하면 데이터를 다운로드하는 요청자가 전송 비용을 부담하도록 전가 가능",
+              "비용 할당 태그 + Cost Explorer(시각화/예측) + Budgets(임계값 알림) + CUR(시간 단위 상세 데이터)로 비용 가시성 확보",
+              "다중 계정 통합 결제(Consolidated Billing)로 볼륨 할인 및 RI/Savings Plans 공유 효과",
+              "Storage Gateway, DataSync, Transfer Family로 온프레미스-클라우드 하이브리드 전송 비용/시간 최적화",
+              "백업 전략에서는 스냅샷 생성 주기와 보존 기간을 업무 요구사항에 맞게 최소화해 스토리지 비용 통제"
+            ],
+            "example": "예를 들어 업로드 후 30일간은 자주 조회되는 로그 데이터를 30일 후 IA로, 90일 후 Glacier Flexible Retrieval로, 180일 후 Deep Archive로 이동하는 수명주기 규칙을 적용하면 Standard 대비 저장 비용을 대폭 절감할 수 있다. 단, Deep Archive는 복원에 최대 12시간이 걸릴 수 있어 즉시 접근이 필요한 데이터에는 부적합하므로 접근 패턴과 복원 시간 요구사항(RTO)을 함께 고려해야 한다."
+          }
+        },
+        {
+          "taskId": "4.2",
+          "title": "비용에 최적화된 컴퓨팅 솔루션 설계",
+          "concept": {
+            "summary": "컴퓨팅 비용 최적화는 워크로드의 중단 허용도, 예측 가능성, 트래픽 변동성에 맞는 구매 옵션과 실행 모델을 선택하는 것에서 시작한다. On-Demand는 유연하지만 가장 비싸고, Reserved Instance/Savings Plans는 정상 상태(steady-state) 워크로드에서 약정을 통해 큰 폭의 할인을 제공하며, Spot Instance는 중단을 허용하는 워크로드에서 최대 90%까지 절감할 수 있다. 서버리스(Lambda, Fargate)는 유휴 시간에 비용이 발생하지 않아 트래픽이 간헐적이거나 변동이 큰 워크로드에 유리하다. 여기에 오토 스케일링, EC2 최대 절전 모드, 비프로덕션 환경 자동 중지 같은 운영 기법과 ALB/NLB/GWLB의 특성에 맞는 로드밸런서 선택을 결합해야 한다.",
+            "keyPoints": [
+              "On-Demand: 약정 없음, 단기/예측 불가 워크로드에 적합하지만 시간당 비용이 가장 높음",
+              "Reserved Instance/Savings Plans: 1년/3년 약정으로 최대 약 72% 할인, 정상 상태(steady-state) 워크로드에 적합",
+              "Compute Savings Plans는 인스턴스 패밀리/리전/OS 변경에 유연, EC2 Instance Savings Plans는 할인율은 더 크지만 특정 패밀리+리전에 고정",
+              "Spot Instance: 유휴 용량을 최대 90% 할인된 가격에 사용, 중단(회수) 가능한 배치/무상태 워크로드에 적합",
+              "Lambda/Fargate 같은 서버리스는 사용한 만큼만 과금되어 트래픽이 간헐적인 워크로드의 유휴 비용을 제거",
+              "오토 스케일링으로 수요에 따라 인스턴스 수를 자동 조정, EC2 최대 절전 모드로 재시작 시 초기화 비용/시간 절감",
+              "ALB(계층7, 콘텐츠 기반 라우팅)·NLB(계층4, 초저지연/고정 IP)·GWLB(제3자 어플라이언스 인라인 삽입)는 용도에 맞게 선택해야 과잉 비용을 피함",
+              "비프로덕션(개발/테스트) 워크로드는 업무 시간에만 실행하거나 Spot을 활용해 상시 가동 비용을 제거",
+              "수평 확장(여러 소형 인스턴스)과 수직 확장(더 큰 인스턴스) 중 트래픽 패턴과 장애 허용 수준에 맞는 방식 선택",
+              "컨테이너(ECS/EKS on Fargate)로 마이크로서비스를 운영하면 서버 프로비저닝/패치 부담과 유휴 용량 비용을 동시에 줄임"
+            ],
+            "example": "예를 들어 중단을 허용하는 야간 배치 렌더링 작업은 Spot Instance로 실행하고, 상시 실행되는 웹 서버 플릿은 1년 약정 Compute Savings Plans로 커버하며, 트래픽이 간헐적인 내부 API는 Lambda로 전환하면 유휴 시간 비용을 사실상 제거하면서도 전체 컴퓨팅 비용을 크게 낮출 수 있다."
+          }
+        },
+        {
+          "taskId": "4.3",
+          "title": "비용에 최적화된 데이터베이스 솔루션 설계",
+          "concept": {
+            "summary": "데이터베이스 비용 최적화는 캐싱으로 DB 부하 자체를 줄이는 것과, 워크로드의 트래픽 예측 가능성에 맞는 용량 모델(프로비저닝 vs 온디맨드/서버리스)을 선택하는 것 두 축으로 이루어진다. DynamoDB On-Demand와 Aurora Serverless v2는 트래픽이 변동적이거나 예측이 어려운 초기 단계 워크로드에서 과잉 프로비저닝을 피하게 해주고, 안정적인 트래픽에서는 프로비저닝된 용량과 예약 인스턴스가 더 저렴하다. 읽기 복제본과 RDS Proxy는 각각 읽기 확장과 연결 관리를 통해 더 큰 인스턴스로의 업그레이드를 지연시킨다. 또한 상용 엔진에서 오픈소스 엔진으로의 이기종 마이그레이션은 라이선스 비용을 절감하는 핵심 수단이며, 시계열/열 형식 등 워크로드 특화 데이터베이스를 선택하면 범용 DB보다 저장/쿼리 비용이 낮아진다.",
+            "keyPoints": [
+              "ElastiCache/DAX로 반복 조회 결과를 캐싱하면 DB 인스턴스 크기 증설 없이 읽기 부하를 흡수",
+              "DynamoDB On-Demand는 트래픽 예측이 어려운 초기 단계에 적합, 트래픽이 안정화되면 Provisioned + Auto Scaling이 더 저렴",
+              "Aurora Serverless v2는 ACU 단위로 자동 확장/축소되어 변동이 큰 워크로드의 유휴 비용을 절감",
+              "RDS 예약 인스턴스는 상시 가동되는 정상 상태 워크로드 비용을 크게 낮춤",
+              "읽기 복제본으로 읽기 트래픽을 분산시켜 쓰기 인스턴스의 과도한 스케일업을 방지",
+              "RDS Proxy로 연결 풀링을 하면 연결 폭주로 인한 대형 인스턴스 필요성을 줄임",
+              "스냅샷 보존 정책과 백업 빈도를 업무 요구사항(RPO)에 맞춰 최소화해 백업 스토리지 비용 통제",
+              "이기종(heterogeneous) 마이그레이션(SCT+DMS)으로 상용 라이선스(Oracle/SQL Server)를 오픈소스(PostgreSQL/MySQL)로 전환해 라이선스 비용 절감",
+              "워크로드 특성에 맞는 DB 선택: 시계열 데이터는 Timestream, 대규모 분석/열 형식은 Redshift, 키-값은 DynamoDB",
+              "DynamoDB vs RDS 선택 시 액세스 패턴이 단순 키 기반이고 확장성이 중요하면 DynamoDB가, 복잡한 조인/트랜잭션이 필요하면 관계형 DB가 총소유비용 관점에서 유리할 수 있음"
+            ],
+            "example": "트래픽이 예측 불가능한 스타트업 서비스는 DynamoDB On-Demand로 시작해 초기 과잉 프로비저닝 비용을 피하고, 트래픽 패턴이 안정화되면 Provisioned Capacity + Auto Scaling으로 전환해 단가를 낮춘다. 반대로 상시 고정 부하가 있는 사내 백오피스 시스템은 RDS 예약 인스턴스가 더 경제적이다."
+          }
+        },
+        {
+          "taskId": "4.4",
+          "title": "비용에 최적화된 네트워크 아키텍처 설계",
+          "concept": {
+            "summary": "네트워크 비용 최적화는 크게 데이터 전송 경로 최소화와 연결 방식(전용회선/VPN/인터넷) 선택으로 나뉜다. NAT Gateway는 시간당 요금과 처리 데이터당 요금이 함께 부과되므로, VPC 엔드포인트를 통해 AWS 서비스로 향하는 트래픽을 NAT/인터넷 경로에서 우회시키면 비용을 크게 줄일 수 있다. 같은 가용 영역 내 통신은 무료지만 교차 AZ·교차 리전 통신에는 전송 비용이 발생하므로 리소스 배치를 신중히 설계해야 하며, 다수의 VPC를 연결할 때는 완전 메시 VPC Peering보다 Transit Gateway의 허브-스포크 구조가 관리 비용과 복잡도 면에서 유리하다. 대용량 지속적 온프레미스-클라우드 연결에는 Direct Connect가, 빠른 구축과 낮은 초기 비용에는 VPN이 적합하며, CloudFront 같은 CDN으로 엣지 캐싱을 하면 오리진으로 향하는 데이터 전송량과 요청 수 자체를 줄여 비용을 절감한다.",
+            "keyPoints": [
+              "NAT Gateway는 시간당 요금 + 처리 데이터(GB)당 요금이 부과되며, NAT Instance는 EC2 요금만 발생하지만 관리 부담이 큼",
+              "S3/DynamoDB 등 AWS 서비스용 VPC 게이트웨이/인터페이스 엔드포인트를 사용하면 해당 트래픽이 NAT Gateway나 인터넷을 거치지 않아 비용 절감",
+              "AZ마다 NAT Gateway를 배치하면 가용성이 높아지고 교차 AZ 전송 비용도 회피할 수 있으나 NAT Gateway 자체 비용은 증가",
+              "같은 AZ 내 트래픽은 무료, 교차 AZ/교차 리전 트래픽에는 전송 요금이 부과되므로 함께 통신하는 리소스는 같은 AZ에 배치",
+              "Direct Connect는 대용량·지속적 트래픽에서 안정적인 대역폭당 비용을 제공하지만 구축 시간이 필요, VPN은 빠르게 구축 가능하지만 인터넷 기반이라 대용량 전송 시 상대적으로 비쌀 수 있음",
+              "다수의 VPC를 연결할 때 완전 메시 VPC Peering은 연결 수가 기하급수적으로 늘어 관리가 복잡해지므로 Transit Gateway의 허브-스포크 구조가 대규모 환경에서 효율적",
+              "VPC Peering 자체는 시간당/데이터 요금이 없지만 교차 AZ/교차 리전 구간에는 전송 비용이 발생",
+              "CloudFront 등 CDN으로 정적/동적 콘텐츠를 엣지에서 캐싱하면 오리진 데이터 전송량과 요청 수가 줄어 비용 절감",
+              "Route 53의 지연 시간 기반 라우팅으로 사용자를 가까운 리전으로 유도해 전송 경로와 지연을 최적화",
+              "Direct Connect 다중 연결/속도 조합과 VPN 다중 터널로 대역폭을 확장하면서 비용 대비 처리량을 최적화"
+            ],
+            "example": "S3에 자주 접근하는 프라이빗 서브넷의 EC2 인스턴스들이 NAT Gateway를 통해 인터넷으로 나가면 NAT Gateway 데이터 처리 비용이 지속적으로 발생하지만, S3용 Gateway VPC 엔드포인트를 추가하면 해당 트래픽이 무료로 우회되어 네트워크 비용을 크게 절감할 수 있다."
+          }
+        }
+      ]
+    }
+  ],
+  "services": [
+    {
+      "name": "Amazon Athena",
+      "category": "분석",
+      "oneLiner": "S3에 저장된 데이터를 서버 프로비저닝 없이 표준 SQL로 바로 쿼리하는 서버리스 대화형 쿼리 서비스로, 스캔한 데이터양만큼만 과금되어 데이터 레이크 분석에 적합하다."
+    },
+    {
+      "name": "AWS Data Exchange",
+      "category": "분석",
+      "oneLiner": "서드파티 제공자의 데이터 세트를 검색·구독·이용할 수 있는 데이터 마켓플레이스 서비스로, 외부 데이터를 AWS 워크플로에 손쉽게 결합할 수 있게 한다."
+    },
+    {
+      "name": "Amazon Data Firehose",
+      "category": "분석",
+      "oneLiner": "스트리밍 데이터를 S3, Redshift, OpenSearch Service 등으로 안정적으로 전송하는 완전관리형 서비스로, 버퍼링과 변환을 자동 처리해 별도 코드 없이 데이터를 적재할 수 있다."
+    },
+    {
+      "name": "Amazon EMR",
+      "category": "분석",
+      "oneLiner": "Hadoop, Spark, Hive 등 빅데이터 프레임워크를 클러스터 형태로 실행하는 관리형 서비스로, 대규모 데이터 처리·ETL·머신러닝 워크로드에 사용되며 스팟 인스턴스로 비용을 절감할 수 있다."
+    },
+    {
+      "name": "AWS Glue",
+      "category": "분석",
+      "oneLiner": "서버리스 ETL 및 데이터 카탈로그 서비스로, 크롤러가 데이터 스키마를 자동 탐지하고 데이터 소스 간 변환·이동 작업을 코드 작성 없이 수행할 수 있게 한다."
+    },
+    {
+      "name": "Amazon Kinesis",
+      "category": "분석",
+      "oneLiner": "대량의 실시간 스트리밍 데이터를 수집·처리하는 서비스로, 여러 소비자 애플리케이션이 동일한 데이터 스트림을 병렬로 읽어 실시간 분석 파이프라인을 구축할 수 있다."
+    },
+    {
+      "name": "AWS Lake Formation",
+      "category": "분석",
+      "oneLiner": "S3 기반 데이터 레이크를 빠르게 구축하고 컬럼·행 수준의 세밀한 접근 제어를 중앙에서 적용할 수 있는 서비스로, 여러 분석 서비스에 걸친 데이터 거버넌스를 단순화한다."
+    },
+    {
+      "name": "Amazon Managed Streaming for Apache Kafka(Amazon MSK)",
+      "category": "분석",
+      "oneLiner": "완전관리형 Apache Kafka 서비스로, 클러스터 프로비저닝·패치·모니터링 부담 없이 실시간 이벤트 스트리밍 파이프라인을 구축할 수 있다."
+    },
+    {
+      "name": "Amazon OpenSearch Service",
+      "category": "분석",
+      "oneLiner": "Elasticsearch/OpenSearch 기반의 관리형 검색 및 분석 서비스로, 로그 분석, 전문(全文) 검색, 실시간 모니터링 대시보드 구축에 주로 사용된다."
+    },
+    {
+      "name": "Amazon Quick(QuickSight)",
+      "category": "분석",
+      "oneLiner": "완전관리형 서버리스 BI 서비스로, 다양한 데이터 소스를 연결해 대화형 대시보드를 만들고 조직 전체에 사용량 기반 요금으로 공유할 수 있다."
+    },
+    {
+      "name": "Amazon Redshift",
+      "category": "분석",
+      "oneLiner": "페타바이트급 완전관리형 데이터 웨어하우스 서비스로, 컬럼형 저장과 MPP 아키텍처를 사용해 복잡한 분석 쿼리를 빠르게 처리한다."
+    },
+    {
+      "name": "Amazon AppFlow",
+      "category": "애플리케이션 통합",
+      "oneLiner": "Salesforce, Slack 같은 SaaS 애플리케이션과 AWS 서비스 간 데이터를 코드 작성 없이 안전하게 주고받는 완전관리형 통합 서비스이다."
+    },
+    {
+      "name": "AWS AppSync",
+      "category": "애플리케이션 통합",
+      "oneLiner": "GraphQL 및 실시간 API를 관리형으로 제공하는 서비스로, 여러 데이터 소스를 단일 API로 통합하고 실시간 구독과 오프라인 동기화를 지원한다."
+    },
+    {
+      "name": "Amazon EventBridge",
+      "category": "애플리케이션 통합",
+      "oneLiner": "이벤트 기반 아키텍처를 위한 서버리스 이벤트 버스 서비스로, AWS 서비스·SaaS·자체 애플리케이션에서 발생한 이벤트를 규칙에 따라 여러 대상으로 라우팅한다."
+    },
+    {
+      "name": "Amazon MQ",
+      "category": "애플리케이션 통합",
+      "oneLiner": "ActiveMQ·RabbitMQ와 호환되는 관리형 메시지 브로커 서비스로, JMS·AMQP 등 기존 메시징 프로토콜을 쓰는 애플리케이션을 코드 변경 최소화로 클라우드에 이전할 때 적합하다."
+    },
+    {
+      "name": "Amazon SNS",
+      "category": "애플리케이션 통합",
+      "oneLiner": "완전관리형 퍼블리시/구독 메시징 서비스로, 하나의 메시지를 SQS, Lambda, 이메일, SMS 등 다수의 구독자에게 팬아웃 방식으로 동시에 전달한다."
+    },
+    {
+      "name": "Amazon SQS",
+      "category": "애플리케이션 통합",
+      "oneLiner": "완전관리형 메시지 큐 서비스로, 애플리케이션 컴포넌트 간 결합도를 낮추는 비동기 처리를 지원하며 표준 큐와 순서 보장이 필요한 FIFO 큐를 제공한다."
+    },
+    {
+      "name": "AWS Step Functions",
+      "category": "애플리케이션 통합",
+      "oneLiner": "상태 머신 기반으로 여러 AWS 서비스를 순서대로 조율하는 서버리스 워크플로 오케스트레이션 서비스로, 시각적으로 워크플로를 정의하고 재시도·오류 처리를 자동화한다."
+    },
+    {
+      "name": "AWS Budgets",
+      "category": "AWS Cost Management",
+      "oneLiner": "비용, 사용량, 예약 인스턴스/절감형 플랜 사용률에 대해 예산 임계값을 설정하고 초과 시 알림을 받을 수 있는 서비스이다."
+    },
+    {
+      "name": "AWS Cost and Usage Report",
+      "category": "AWS Cost Management",
+      "oneLiner": "가장 상세한 수준의 AWS 비용 및 사용량 데이터를 제공하는 리포트로, S3에 저장한 뒤 Athena나 Redshift 등으로 정밀 분석할 수 있다."
+    },
+    {
+      "name": "AWS Cost Explorer",
+      "category": "AWS Cost Management",
+      "oneLiner": "비용과 사용량 추이를 시각화하고 향후 지출을 예측하는 도구로, 서비스·태그·계정별로 세분화해 비용 최적화 기회를 찾을 수 있다."
+    },
+    {
+      "name": "절감형 플랜(Savings Plans)",
+      "category": "AWS Cost Management",
+      "oneLiner": "1년 또는 3년 동안 시간당 일정 사용 금액을 약정하는 대가로 온디맨드 대비 최대 72%까지 할인받는 유연한 요금제로, 인스턴스 유형이나 리전 변경에도 할인이 적용된다."
+    },
+    {
+      "name": "AWS Batch",
+      "category": "컴퓨팅",
+      "oneLiner": "배치 컴퓨팅 작업을 완전관리형으로 스케줄링·실행하는 서비스로, 작업량에 따라 EC2나 Fargate 컴퓨팅 리소스를 자동으로 프로비저닝한다."
+    },
+    {
+      "name": "Amazon EC2",
+      "category": "컴퓨팅",
+      "oneLiner": "가상 서버(인스턴스)를 온디맨드로 제공하는 컴퓨팅 서비스로, 인스턴스 패밀리·크기와 구매 옵션(온디맨드, 예약, 스팟)을 아키텍처 요구사항에 맞게 선택할 수 있다."
+    },
+    {
+      "name": "Amazon EC2 Auto Scaling",
+      "category": "컴퓨팅",
+      "oneLiner": "Auto Scaling 그룹의 최소·최대·희망 용량을 지정해 애플리케이션 부하에 맞춰 EC2 인스턴스 수를 자동으로 늘리거나 줄이는 서비스로, 상태 확인 실패 인스턴스를 자동 교체해 가용성을 유지한다."
+    },
+    {
+      "name": "AWS Elastic Beanstalk",
+      "category": "컴퓨팅",
+      "oneLiner": "코드만 업로드하면 인프라 프로비저닝, 로드밸런싱, 오토 스케일링, 모니터링을 자동으로 처리해 주는 PaaS 서비스로, 인프라 세부 관리 없이 애플리케이션 배포를 단순화한다."
+    },
+    {
+      "name": "AWS Outposts",
+      "category": "컴퓨팅",
+      "oneLiner": "AWS 인프라와 서비스를 온프레미스 데이터센터로 확장하는 완전관리형 하이브리드 솔루션으로, 낮은 지연시간이나 로컬 데이터 처리가 필요한 워크로드에 사용한다."
+    },
+    {
+      "name": "AWS Serverless Application Repository",
+      "category": "컴퓨팅",
+      "oneLiner": "SAM 템플릿 기반의 서버리스 애플리케이션을 검색, 배포, 공유할 수 있는 관리형 저장소로, 재사용 가능한 서버리스 구성 요소를 빠르게 도입할 수 있다."
+    },
+    {
+      "name": "VMware Cloud on AWS",
+      "category": "컴퓨팅",
+      "oneLiner": "VMware SDDC(vSphere, vSAN, NSX)를 AWS 인프라 위에서 그대로 실행하는 서비스로, 온프레미스 VMware 환경을 애플리케이션 재설계 없이 클라우드로 확장·마이그레이션할 때 사용한다."
+    },
+    {
+      "name": "AWS Wavelength",
+      "category": "컴퓨팅",
+      "oneLiner": "통신사의 5G 네트워크 엣지에 AWS 컴퓨팅·스토리지를 배치해 모바일 및 엣지 기기에 한 자릿수 밀리초의 초저지연 애플리케이션을 제공하는 인프라이다."
+    },
+    {
+      "name": "Amazon ECR",
+      "category": "컨테이너",
+      "oneLiner": "완전관리형 Docker/OCI 컨테이너 이미지 레지스트리로, 이미지 저장·취약점 스캔·버전 관리를 제공하며 ECS·EKS·Lambda와 매끄럽게 통합된다."
+    },
+    {
+      "name": "Amazon ECS",
+      "category": "컨테이너",
+      "oneLiner": "AWS 고유의 완전관리형 컨테이너 오케스트레이션 서비스로, EC2 또는 Fargate 실행 유형 위에서 태스크와 서비스를 정의해 컨테이너 애플리케이션을 배포·확장한다."
+    },
+    {
+      "name": "Amazon ECS Anywhere",
+      "category": "컨테이너",
+      "oneLiner": "ECS 제어 플레인을 그대로 이용해 온프레미스나 자체 인프라의 서버에서도 ECS 컨테이너를 실행·관리할 수 있게 하는 기능이다."
+    },
+    {
+      "name": "Amazon EKS",
+      "category": "컨테이너",
+      "oneLiner": "완전관리형 Kubernetes 서비스로, 컨트롤 플레인의 가용성·확장성을 AWS가 관리하며 EC2, Fargate, 온프레미스 등 다양한 컴퓨팅에서 노드를 운영할 수 있다."
+    },
+    {
+      "name": "Amazon EKS Anywhere",
+      "category": "컨테이너",
+      "oneLiner": "온프레미스나 자체 인프라에서도 EKS와 동일한 방식으로 Kubernetes 클러스터를 생성·운영할 수 있게 해주는 배포 옵션이다."
+    },
+    {
+      "name": "Amazon EKS Distro",
+      "category": "컨테이너",
+      "oneLiner": "AWS가 EKS 운영에 실제로 사용하는 것과 동일한 오픈소스 Kubernetes 배포판으로, 어디서든 자체적으로 검증된 Kubernetes 클러스터를 구축할 때 사용할 수 있다."
+    },
+    {
+      "name": "Amazon Aurora",
+      "category": "데이터베이스",
+      "oneLiner": "MySQL·PostgreSQL과 호환되는 완전관리형 관계형 데이터베이스로, 표준 MySQL·PostgreSQL 대비 훨씬 높은 처리량과 스토리지 자동 확장, 최대 15개의 읽기 복제본을 제공한다."
+    },
+    {
+      "name": "Amazon Aurora Serverless",
+      "category": "데이터베이스",
+      "oneLiner": "Aurora의 서버리스 구성으로, 애플리케이션 트래픽에 따라 데이터베이스 용량을 자동으로 확장·축소하고 유휴 시 비용을 절감할 수 있어 간헐적이거나 예측하기 어려운 워크로드에 적합하다."
+    },
+    {
+      "name": "Amazon DocumentDB",
+      "category": "데이터베이스",
+      "oneLiner": "MongoDB와 호환되는 완전관리형 문서 데이터베이스 서비스로, JSON 형태의 반정형 문서 데이터를 저장·쿼리하는 워크로드에 적합하다."
+    },
+    {
+      "name": "Amazon DynamoDB",
+      "category": "데이터베이스",
+      "oneLiner": "완전관리형 서버리스 NoSQL 키-값/문서 데이터베이스로, 어떤 규모에서도 한 자릿수 밀리초의 응답 속도를 제공하며 온디맨드 또는 프로비저닝 용량 모드로 확장할 수 있다."
+    },
+    {
+      "name": "Amazon ElastiCache",
+      "category": "데이터베이스",
+      "oneLiner": "Redis 또는 Memcached 호환 완전관리형 인메모리 캐시 서비스로, 데이터베이스 앞단에 배치해 읽기 지연시간을 낮추고 부하를 줄이는 데 사용된다."
+    },
+    {
+      "name": "Amazon Keyspaces",
+      "category": "데이터베이스",
+      "oneLiner": "Apache Cassandra와 호환되는 서버리스 관리형 와이드컬럼 데이터베이스 서비스로, 서버 프로비저닝 없이 Cassandra Query Language(CQL) API를 그대로 사용할 수 있다."
+    },
+    {
+      "name": "Amazon Neptune",
+      "category": "데이터베이스",
+      "oneLiner": "완전관리형 그래프 데이터베이스 서비스로, 소셜 네트워크·추천 엔진·지식 그래프처럼 개체 간 복잡한 관계를 다루는 워크로드에 적합하다."
+    },
+    {
+      "name": "Amazon RDS",
+      "category": "데이터베이스",
+      "oneLiner": "MySQL, PostgreSQL, MariaDB, Oracle, SQL Server, Db2 등 여러 엔진을 지원하는 관리형 관계형 데이터베이스 서비스로, 프로비저닝·백업·패치·Multi-AZ 장애 조치 같은 운영 작업을 자동화한다."
+    },
+    {
+      "name": "Amazon Redshift",
+      "category": "데이터베이스",
+      "oneLiner": "페타바이트급 완전관리형 데이터 웨어하우스로, 컬럼형 저장과 분산 처리를 통해 대규모 데이터셋에 대한 복잡한 분석 쿼리를 빠르게 실행한다."
+    },
+    {
+      "name": "AWS X-Ray",
+      "category": "개발자 도구",
+      "oneLiner": "분산 애플리케이션에서 요청이 여러 서비스를 거치는 경로를 추적·시각화하는 서비스로, 마이크로서비스 간 지연시간과 오류의 근본 원인을 분석하는 데 사용된다."
+    },
+    {
+      "name": "AWS Amplify",
+      "category": "프런트 엔드 웹 및 모바일",
+      "oneLiner": "웹·모바일 애플리케이션을 빠르게 구축, 배포, 호스팅할 수 있는 풀스택 개발 플랫폼으로, 인증·API·스토리지 같은 백엔드 기능을 손쉽게 연동할 수 있다."
+    },
+    {
+      "name": "Amazon API Gateway",
+      "category": "프런트 엔드 웹 및 모바일",
+      "oneLiner": "REST, HTTP, WebSocket API를 생성·게시·모니터링·보안 관리하는 완전관리형 서비스로, Lambda나 다른 AWS 서비스 앞단에서 인증·스로틀링·요청 변환을 처리하는 서버리스 API 게이트웨이로 자주 쓰인다."
+    },
+    {
+      "name": "AWS Device Farm",
+      "category": "프런트 엔드 웹 및 모바일",
+      "oneLiner": "실제 및 가상의 다양한 모바일 기기에서 애플리케이션을 테스트할 수 있는 앱 테스트 서비스이다."
+    },
+    {
+      "name": "Amazon Comprehend",
+      "category": "기계 학습",
+      "oneLiner": "텍스트에서 감정, 개체명, 핵심 문구, 언어 등을 추출하는 자연어 처리(NLP) 서비스이다."
+    },
+    {
+      "name": "Amazon Kendra",
+      "category": "기계 학습",
+      "oneLiner": "머신러닝 기반의 지능형 엔터프라이즈 검색 서비스로, 자연어 질의에 대해 여러 데이터 소스에서 정확한 답변을 찾아준다."
+    },
+    {
+      "name": "Amazon Lex",
+      "category": "기계 학습",
+      "oneLiner": "음성 및 텍스트 기반의 대화형 인터페이스(챗봇)를 구축하는 서비스로, Amazon Alexa와 동일한 자연어 이해·자동 음성 인식 기술을 사용한다."
+    },
+    {
+      "name": "Amazon Polly",
+      "category": "기계 학습",
+      "oneLiner": "텍스트를 자연스러운 음성으로 변환하는 텍스트 음성 변환(TTS) 서비스이다."
+    },
+    {
+      "name": "Amazon Rekognition",
+      "category": "기계 학습",
+      "oneLiner": "이미지와 동영상에서 객체, 얼굴, 텍스트, 부적절한 콘텐츠 등을 인식·분석하는 컴퓨터 비전 서비스이다."
+    },
+    {
+      "name": "Amazon SageMaker AI",
+      "category": "기계 학습",
+      "oneLiner": "머신러닝 모델을 구축, 훈련, 튜닝, 배포하는 완전관리형 플랫폼으로, 데이터 준비부터 모델 서빙까지 전체 ML 워크플로를 지원한다."
+    },
+    {
+      "name": "Amazon Textract",
+      "category": "기계 학습",
+      "oneLiner": "스캔한 문서에서 텍스트, 표, 양식 데이터를 자동으로 추출하는 OCR 기반 문서 분석 서비스이다."
+    },
+    {
+      "name": "Amazon Transcribe",
+      "category": "기계 학습",
+      "oneLiner": "음성을 텍스트로 변환하는 자동 음성 인식(ASR) 서비스이다."
+    },
+    {
+      "name": "Amazon Translate",
+      "category": "기계 학습",
+      "oneLiner": "신경망 기반 기계 번역 서비스로, 여러 언어 간 텍스트를 실시간으로 번역한다."
+    },
+    {
+      "name": "AWS Auto Scaling",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "EC2뿐 아니라 ECS, DynamoDB, Aurora 등 여러 리소스의 스케일링 정책을 하나의 통합 콘솔에서 설정·관리하는 서비스이다."
+    },
+    {
+      "name": "AWS CLI",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "명령줄에서 AWS 서비스를 제어·자동화할 수 있는 통합 명령줄 인터페이스 도구이다."
+    },
+    {
+      "name": "AWS CloudFormation",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "템플릿(코드)으로 AWS 인프라를 정의해 일관되고 반복 가능하게 프로비저닝·관리하는 코드형 인프라(IaC) 서비스이다."
+    },
+    {
+      "name": "AWS CloudTrail",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "AWS 계정에서 발생한 API 호출과 사용자 활동을 기록해 감사, 보안 분석, 규정 준수를 지원하는 서비스이다."
+    },
+    {
+      "name": "Amazon CloudWatch",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "AWS 리소스와 애플리케이션의 로그, 메트릭, 이벤트를 수집·모니터링하고 임계값 기반 알람으로 자동 대응을 트리거하는 관측 가능성 서비스이다."
+    },
+    {
+      "name": "AWS Compute Optimizer",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "실제 리소스 사용 이력을 머신러닝으로 분석해 EC2, EBS, Lambda 등의 비용·성능 최적 구성을 추천하는 서비스이다."
+    },
+    {
+      "name": "AWS Config",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "AWS 리소스의 구성 변경 이력을 지속적으로 기록·평가해 규정 준수 여부를 확인하고 구성 드리프트를 탐지하는 서비스이다."
+    },
+    {
+      "name": "AWS Control Tower",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "여러 AWS 계정으로 구성된 랜딩존을 모범 사례에 따라 자동으로 설정하고 가드레일(정책)을 적용해 멀티 계정 거버넌스를 간소화하는 서비스이다."
+    },
+    {
+      "name": "AWS Health Dashboard",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "AWS 서비스 상태와 사용자 계정 리소스에 영향을 주는 이벤트를 개인화해 알려주는 대시보드이다."
+    },
+    {
+      "name": "AWS License Manager",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "온프레미스와 클라우드 전반에 걸쳐 소프트웨어 라이선스를 중앙에서 추적·관리해 라이선스 위반 위험을 줄이는 서비스이다."
+    },
+    {
+      "name": "Amazon Managed Grafana",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "Grafana 기반의 완전관리형 데이터 시각화 서비스로, 여러 데이터 소스의 운영 메트릭과 로그를 대시보드로 시각화한다."
+    },
+    {
+      "name": "Amazon Managed Service for Prometheus",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "Prometheus와 호환되는 완전관리형 모니터링 서비스로, 컨테이너 환경의 메트릭을 안전하게 수집·저장·쿼리할 수 있다."
+    },
+    {
+      "name": "AWS Management Console",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "AWS 리소스를 생성하고 관리할 수 있는 웹 기반 그래픽 사용자 인터페이스이다."
+    },
+    {
+      "name": "AWS Organizations",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "여러 AWS 계정을 조직 단위(OU)로 그룹화해 중앙에서 관리하고, 서비스 제어 정책(SCP)으로 계정 전반의 권한 가드레일을 적용하는 서비스이다."
+    },
+    {
+      "name": "AWS Service Catalog",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "조직에서 승인한 IT 서비스(CloudFormation 템플릿 등)의 카탈로그를 만들어, 사용자가 표준화되고 규정을 준수하는 리소스만 셀프서비스로 배포하도록 하는 서비스이다."
+    },
+    {
+      "name": "AWS Systems Manager",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "EC2 및 온프레미스 서버에 대한 패치, 구성, 실행 명령, 파라미터 저장 등을 통합 제공하는 운영 관리 서비스로, Session Manager를 통해 SSH 없이 안전한 접속도 지원한다."
+    },
+    {
+      "name": "AWS Trusted Advisor",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "비용 최적화, 보안, 내결함성, 성능, 서비스 한도 등 영역에서 모범 사례에 따라 계정을 점검하고 개선 권장 사항을 제공하는 서비스이다."
+    },
+    {
+      "name": "AWS Well-Architected Tool",
+      "category": "AWS의 관리 및 거버넌스",
+      "oneLiner": "AWS Well-Architected 프레임워크의 6가지 기둥(운영 우수성, 보안, 안정성, 성능 효율성, 비용 최적화, 지속 가능성)에 따라 워크로드를 검토하고 개선 사항을 식별하는 무료 도구이다."
+    },
+    {
+      "name": "Amazon Elastic Transcoder",
+      "category": "미디어 서비스",
+      "oneLiner": "비디오·오디오 파일을 웹, 모바일 등 다양한 기기에서 재생 가능한 형식으로 변환하는 완전관리형 미디어 트랜스코딩 서비스이다."
+    },
+    {
+      "name": "Amazon Kinesis Video Streams",
+      "category": "미디어 서비스",
+      "oneLiner": "카메라, 센서 등 다양한 기기에서 스트리밍되는 비디오와 시계열 데이터를 안전하게 수집, 저장, 처리, 분석할 수 있는 완전관리형 서비스이다."
+    },
+    {
+      "name": "AWS Application Migration Service",
+      "category": "마이그레이션 및 전송",
+      "oneLiner": "물리 서버, 가상 머신, 클라우드 서버를 최소한의 다운타임과 애플리케이션 변경 없이 AWS로 리호스팅(lift-and-shift)하는 마이그레이션 서비스이다."
+    },
+    {
+      "name": "AWS DataSync",
+      "category": "마이그레이션 및 전송",
+      "oneLiner": "온프레미스 스토리지와 S3, EFS, FSx 등 AWS 스토리지 서비스 간 대용량 데이터를 자동화하여 빠르고 안전하게 전송하는 서비스이다."
+    },
+    {
+      "name": "AWS DMS",
+      "category": "마이그레이션 및 전송",
+      "oneLiner": "온프레미스 및 클라우드 데이터베이스를 동일하거나 다른 엔진으로 최소 다운타임에 마이그레이션하는 데이터베이스 마이그레이션 서비스로, 지속적 복제(CDC)를 지원한다."
+    },
+    {
+      "name": "AWS Snow Family",
+      "category": "마이그레이션 및 전송",
+      "oneLiner": "네트워크 대역폭이 제한적이거나 페타바이트급 데이터를 물리적으로 이동해야 할 때 사용하는 엣지 컴퓨팅·데이터 전송 디바이스(Snowcone, Snowball Edge, Snowmobile) 제품군이다."
+    },
+    {
+      "name": "AWS Transfer Family",
+      "category": "마이그레이션 및 전송",
+      "oneLiner": "SFTP, FTPS, FTP 프로토콜을 그대로 사용해 S3 또는 EFS로 파일을 안전하게 전송할 수 있게 하는 완전관리형 파일 전송 서비스이다."
+    },
+    {
+      "name": "AWS Client VPN",
+      "category": "네트워킹 및 콘텐츠 전송",
+      "oneLiner": "OpenVPN 기반 클라이언트에서 AWS 및 온프레미스 리소스로 안전하게 원격 접속할 수 있게 하는 완전관리형 클라이언트 기반 VPN 서비스이다."
+    },
+    {
+      "name": "Amazon CloudFront",
+      "category": "네트워킹 및 콘텐츠 전송",
+      "oneLiner": "전 세계 엣지 로케이션을 통해 콘텐츠를 캐싱하여 낮은 지연시간으로 전달하는 콘텐츠 전송 네트워크(CDN) 서비스로, S3나 EC2, ALB를 오리진으로 사용하고 Shield·WAF와 통합해 보안을 강화할 수 있다."
+    },
+    {
+      "name": "AWS Direct Connect",
+      "category": "네트워킹 및 콘텐츠 전송",
+      "oneLiner": "온프레미스 데이터센터와 AWS 사이에 전용 네트워크 연결을 구성하는 서비스로, 인터넷 경유보다 안정적인 대역폭과 낮은 지연시간, 데이터 전송 비용 절감을 제공한다."
+    },
+    {
+      "name": "Elastic Load Balancing(ELB)",
+      "category": "네트워킹 및 콘텐츠 전송",
+      "oneLiner": "여러 가용 영역의 EC2 인스턴스, 컨테이너, IP 대상으로 트래픽을 자동 분산하는 서비스로, 계층별 요구에 따라 ALB(HTTP/HTTPS), NLB(고성능 TCP/UDP), GWLB(트래픽 검사), CLB를 선택할 수 있다."
+    },
+    {
+      "name": "AWS Global Accelerator",
+      "category": "네트워킹 및 콘텐츠 전송",
+      "oneLiner": "고정 Anycast IP와 AWS 글로벌 백본 네트워크를 이용해 전 세계 사용자의 트래픽을 가장 가까운 정상 엔드포인트로 라우팅함으로써 애플리케이션 성능과 가용성을 높이는 서비스이다."
+    },
+    {
+      "name": "AWS PrivateLink",
+      "category": "네트워킹 및 콘텐츠 전송",
+      "oneLiner": "VPC, AWS 서비스, 온프레미스 네트워크 간 트래픽을 퍼블릭 인터넷에 노출하지 않고 프라이빗하게 연결하는 서비스로, 인터페이스 VPC 엔드포인트를 통해 서비스에 접근한다."
+    },
+    {
+      "name": "Amazon Route 53",
+      "category": "네트워킹 및 콘텐츠 전송",
+      "oneLiner": "고가용성·확장성을 갖춘 DNS 웹 서비스로, 도메인 등록, 상태 확인, 가중치·지연시간·장애 조치·지리 위치 기반 등 다양한 라우팅 정책을 제공한다."
+    },
+    {
+      "name": "AWS Site-to-Site VPN",
+      "category": "네트워킹 및 콘텐츠 전송",
+      "oneLiner": "온프레미스 네트워크와 VPC 간에 IPsec 기반의 암호화된 터널을 생성하는 관리형 사이트 간 VPN 서비스이다."
+    },
+    {
+      "name": "AWS Transit Gateway",
+      "category": "네트워킹 및 콘텐츠 전송",
+      "oneLiner": "여러 VPC와 온프레미스 네트워크를 하나의 중앙 허브에 연결하는 네트워크 트랜짓 허브 서비스로, VPC 피어링의 점대점 관계를 허브 앤 스포크 구조로 단순화해 대규모 네트워크 확장을 쉽게 한다."
+    },
+    {
+      "name": "Amazon VPC",
+      "category": "네트워킹 및 콘텐츠 전송",
+      "oneLiner": "AWS 클라우드 내에 논리적으로 격리된 가상 네트워크를 프로비저닝하는 서비스로, IP 주소 범위, 서브넷, 라우팅 테이블, 게이트웨이를 직접 정의해 온프레미스와 유사한 네트워크 환경을 구성할 수 있다."
+    },
+    {
+      "name": "AWS Artifact",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "AWS의 보안 및 컴플라이언스 보고서(SOC, PCI 등)와 계약 문서를 온디맨드로 다운로드할 수 있는 셀프서비스 포털이다."
+    },
+    {
+      "name": "AWS Audit Manager",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "업계 표준 및 규정 프레임워크에 맞춰 AWS 사용 현황에 대한 증거를 지속적으로 수집·정리해 감사 준비를 간소화하는 서비스이다."
+    },
+    {
+      "name": "AWS Certificate Manager(ACM)",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "SSL/TLS 인증서를 손쉽게 발급, 관리, 배포하는 서비스로, ELB, CloudFront, API Gateway 등과 통합되어 인증서 갱신을 자동화한다."
+    },
+    {
+      "name": "AWS CloudHSM",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "FIPS 140-2 검증된 전용 하드웨어 보안 모듈(HSM)을 제공하는 서비스로, 고객이 암호화 키에 대한 완전한 단독 통제권을 가져야 하는 규제 요구사항이 있을 때 사용한다."
+    },
+    {
+      "name": "Amazon Cognito",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "웹·모바일 앱을 위한 사용자 인증, 권한 부여, 사용자 관리를 제공하는 서비스로, 사용자 풀을 통한 회원가입/로그인과 자격 증명 풀을 통한 소셜/SAML 연동, 임시 AWS 자격 증명 발급을 지원한다."
+    },
+    {
+      "name": "Amazon Detective",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "CloudTrail, VPC Flow Logs, GuardDuty 결과 등을 자동으로 분석·시각화해 보안 사건의 근본 원인을 신속히 조사할 수 있게 돕는 서비스이다."
+    },
+    {
+      "name": "AWS Directory Service",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "AWS에서 Microsoft Active Directory를 관리형으로 실행하거나 온프레미스 AD와 신뢰 관계를 맺어 연동할 수 있게 하는 디렉터리 서비스이다."
+    },
+    {
+      "name": "AWS Firewall Manager",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "여러 계정과 리소스에 걸쳐 WAF 규칙, 보안 그룹, Shield Advanced 보호 정책을 중앙에서 일관되게 배포·관리하는 서비스이다."
+    },
+    {
+      "name": "Amazon GuardDuty",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "VPC Flow Logs, DNS 로그, CloudTrail 이벤트 등을 머신러닝과 위협 인텔리전스로 분석해 악의적 활동과 이상 행위를 자동으로 탐지하는 위협 탐지 서비스이다."
+    },
+    {
+      "name": "AWS IAM Identity Center",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "여러 AWS 계정과 비즈니스 애플리케이션에 대한 SSO(단일 로그인) 접근을 중앙에서 관리하는 서비스로, AWS Organizations와 통합해 권한 세트를 계정 전반에 할당한다."
+    },
+    {
+      "name": "Amazon Inspector",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "EC2 인스턴스, 컨테이너 이미지, Lambda 함수의 소프트웨어 취약점과 의도치 않은 네트워크 노출을 자동으로 지속 스캔하는 서비스이다."
+    },
+    {
+      "name": "AWS KMS",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "데이터 암호화에 사용되는 암호화 키를 생성하고 중앙에서 관리하는 서비스로, FIPS 검증 HSM으로 키를 보호하며 대부분의 AWS 서비스와 통합되어 저장 데이터 암호화를 지원한다."
+    },
+    {
+      "name": "Amazon Macie",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "머신러닝과 패턴 매칭을 사용해 S3에 저장된 개인식별정보(PII) 등 민감한 데이터를 자동으로 검색·분류·보호하는 서비스이다."
+    },
+    {
+      "name": "AWS Network Firewall",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "VPC 트래픽을 검사하는 상태 저장(stateful) 관리형 네트워크 방화벽 서비스로, 침입 탐지·방지 규칙과 도메인 필터링을 적용할 수 있다."
+    },
+    {
+      "name": "AWS Resource Access Manager(AWS RAM)",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "서브넷, Transit Gateway, License Manager 구성 등 AWS 리소스를 여러 계정 간에 안전하게 공유해 리소스를 중복 생성하지 않도록 하는 서비스이다."
+    },
+    {
+      "name": "AWS Secrets Manager",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "데이터베이스 자격 증명, API 키 등 비밀 정보를 안전하게 저장하고 정해진 주기에 따라 자동으로 순환(rotate)하는 서비스이다."
+    },
+    {
+      "name": "AWS Security Hub",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "GuardDuty, Inspector, Macie 등 여러 AWS 보안 서비스와 서드파티 도구의 알림을 통합해 보안 상태를 한눈에 확인하고 보안 표준 준수 여부를 점검하는 서비스이다."
+    },
+    {
+      "name": "AWS Shield",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "DDoS 공격으로부터 애플리케이션을 보호하는 관리형 서비스로, Standard는 모든 고객에게 기본 제공되고 Advanced는 고급 탐지·대응, 24/7 DDoS 대응팀 지원, 확장 비용 보호를 추가로 제공한다."
+    },
+    {
+      "name": "AWS WAF",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "SQL 삽입, 크로스 사이트 스크립팅 등 일반적인 웹 공격으로부터 웹 애플리케이션을 보호하는 웹 애플리케이션 방화벽으로, CloudFront, ALB, API Gateway 등에 웹 ACL 규칙을 적용한다."
+    },
+    {
+      "name": "IAM",
+      "category": "보안, ID 및 규정 준수",
+      "oneLiner": "AWS 리소스에 대한 접근을 안전하게 제어하는 서비스로, 사용자·그룹·역할과 정책을 통해 누가 무엇에 대해 어떤 작업을 할 수 있는지(인증과 권한 부여)를 관리한다."
+    },
+    {
+      "name": "AWS AppSync",
+      "category": "서버리스",
+      "oneLiner": "GraphQL/실시간 API를 완전관리형으로 제공하는 서버리스 서비스로, 여러 데이터 소스를 하나의 API로 통합하고 서버 관리 없이 실시간 구독 기능을 제공한다."
+    },
+    {
+      "name": "AWS Fargate",
+      "category": "서버리스",
+      "oneLiner": "ECS와 EKS에서 사용할 수 있는 서버리스 컴퓨팅 엔진으로, 서버나 클러스터를 프로비저닝·관리할 필요 없이 컨테이너 단위로 컴퓨팅 자원을 지정하고 그만큼만 비용을 지불한다."
+    },
+    {
+      "name": "AWS Lambda",
+      "category": "서버리스",
+      "oneLiner": "서버 프로비저닝 없이 코드를 실행하는 서버리스 컴퓨팅 서비스로, 이벤트(트리거)에 반응해 자동으로 확장되며 실행 시간과 요청 수 기준으로 과금된다."
+    },
+    {
+      "name": "AWS Backup",
+      "category": "스토리지",
+      "oneLiner": "EBS, RDS, DynamoDB, EFS 등 여러 AWS 서비스의 백업을 중앙에서 정책 기반으로 자동화·관리하는 완전관리형 백업 서비스이다."
+    },
+    {
+      "name": "Amazon EBS",
+      "category": "스토리지",
+      "oneLiner": "EC2 인스턴스에 연결하는 영구 블록 스토리지 볼륨으로, 데이터베이스처럼 낮은 지연시간과 높은 IOPS가 필요한 단일 인스턴스 워크로드에 적합하며 스냅샷으로 백업할 수 있다."
+    },
+    {
+      "name": "Amazon EFS",
+      "category": "스토리지",
+      "oneLiner": "여러 EC2 인스턴스와 온프레미스 서버에서 동시에 마운트할 수 있는 완전관리형 확장형 NFS 파일 스토리지 서비스로, 용량이 자동으로 늘고 줄어든다."
+    },
+    {
+      "name": "Amazon FSx(모든 유형)",
+      "category": "스토리지",
+      "oneLiner": "Windows File Server, Lustre, NetApp ONTAP, OpenZFS 등 다양한 파일 시스템을 완전관리형으로 제공하는 서비스로, 워크로드 특성(고성능 컴퓨팅, 윈도우 호환성 등)에 맞는 파일 스토리지를 선택할 수 있다."
+    },
+    {
+      "name": "Amazon S3",
+      "category": "스토리지",
+      "oneLiner": "사실상 무제한의 확장성과 11 9's(99.999999999%)의 내구성을 제공하는 객체 스토리지 서비스로, 데이터 레이크, 정적 웹 호스팅, 백업·아카이브 등 다양한 용도에 사용되며 여러 스토리지 클래스로 비용을 최적화할 수 있다."
+    },
+    {
+      "name": "Amazon S3 Glacier",
+      "category": "스토리지",
+      "oneLiner": "S3의 장기 아카이브 및 백업을 위한 저비용 스토리지 클래스로, 검색 소요 시간에 따라 Instant Retrieval, Flexible Retrieval, Deep Archive 등 여러 계층을 선택할 수 있다."
+    },
+    {
+      "name": "AWS Storage Gateway",
+      "category": "스토리지",
+      "oneLiner": "온프레미스 환경과 AWS 스토리지를 연결하는 하이브리드 클라우드 스토리지 서비스로, 파일·볼륨·테이프 게이트웨이 형태로 온프레미스 애플리케이션에 클라우드 기반 스토리지를 제공한다."
+    }
+  ],
+  "questions": [
+    {
+      "id": "saa-d1-q001",
+      "taskId": "1.1",
+      "type": "single",
+      "question": "회사에 개발/스테이징/운영 등 총 5개의 AWS 계정이 있다. 중앙 보안팀이 별도의 감사 계정에서 필요할 때마다 모든 계정의 리소스를 감사해야 한다. 최소 권한 원칙에 가장 부합하는 설계는?",
+      "choices": [
+        "각 계정에 감사팀 전용 IAM 사용자를 개별 생성하고 장기 액세스 키를 발급한다",
+        "각 계정에 감사팀 전용 IAM 역할을 생성하고, 감사 계정에서 STS AssumeRole로 해당 역할을 전환하도록 구성한다",
+        "각 계정의 루트 사용자 자격증명을 감사팀과 공유한다",
+        "각 계정 관리자 콘솔 비밀번호를 감사팀에 공유한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "교차 계정 접근에는 장기 자격증명을 발급하는 IAM 사용자보다 임시 자격증명을 제공하는 IAM 역할과 STS AssumeRole 방식이 안전하다. 신뢰 정책으로 감사 계정만 역할 전환이 가능하도록 제한할 수 있어 최소 권한 원칙에 부합한다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q002",
+      "taskId": "1.1",
+      "type": "single",
+      "question": "조직 내 모든 계정에서 특정 허용 리전(서울, 도쿄) 외의 리소스 생성을 계정별 설정 없이 중앙에서 원천 차단하고 싶다. 가장 적합한 방법은?",
+      "choices": [
+        "각 계정의 모든 IAM 사용자 정책에 리전 조건부 Deny 문을 개별적으로 추가한다",
+        "AWS Organizations에서 해당 OU에 허용 리전 외 리소스 생성을 거부하는 SCP를 적용한다",
+        "CloudTrail로 모니터링한 뒤 위반 리소스를 수동으로 삭제한다",
+        "각 계정에 AWS Config 규칙만 설정하고 알림을 받는다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "SCP는 OU/계정 단위로 적용되는 권한 상한선이므로 계정마다 개별 IAM 정책을 관리할 필요 없이 중앙에서 일괄적으로 특정 리전 사용을 차단할 수 있다. Config는 사후 탐지이며 예방적 통제가 아니다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q003",
+      "taskId": "1.1",
+      "type": "single",
+      "question": "사내 직원 500명이 이미 Microsoft Active Directory로 인증을 받고 있다. 이들이 여러 AWS 계정에 SSO 방식으로 로그인하도록 하려면 가장 적절한 접근은?",
+      "choices": [
+        "각 AWS 계정에 500명분의 IAM 사용자를 개별 생성한다",
+        "IAM Identity Center를 도입하고 기존 AD와 연동(AD Connector 또는 트러스트)하여 다중 계정 SSO를 구성한다",
+        "각 직원에게 Cognito User Pool 계정을 새로 발급한다",
+        "각 계정의 루트 사용자 자격증명을 공유한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "IAM Identity Center는 여러 AWS 계정에 대한 중앙집중식 SSO/페더레이션을 제공하며 기존 온프레미스 AD와 연동해 별도의 IAM 사용자 대량 생성 없이 접근을 관리할 수 있다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q004",
+      "taskId": "1.1",
+      "type": "multi",
+      "question": "신규 애플리케이션 개발팀에 S3 특정 버킷 읽기 권한만 부여했다. 시간이 지나며 실제 사용되지 않는 과도한 권한이 누적되지 않도록 최소 권한 원칙을 지속적으로 실천하려면 어떤 조치를 취해야 하는가? (해당하는 것을 모두 고르시오)",
+      "choices": [
+        "IAM Access Analyzer로 미사용 권한이나 정책 생성 제안을 활용해 권한을 검증한다",
+        "사용되지 않는 권한을 주기적으로 검토하고 제거한다",
+        "관리가 번거로우므로 모든 사용자에게 AdministratorAccess를 부여하고 사후 감시로 대체한다",
+        "정책에서 리소스를 와일드카드(*) 대신 구체적인 ARN으로 지정한다"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "최소 권한 원칙은 초기 설계뿐 아니라 IAM Access Analyzer 등을 통한 지속적인 검증과 축소가 필요하다. 모든 사용자에게 관리자 권한을 부여하고 사후 감시로 대체하는 것은 최소 권한 원칙에 정면으로 위배된다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q005",
+      "taskId": "1.1",
+      "type": "multi",
+      "question": "AWS 계정의 루트 사용자에 대한 보안 모범 사례로 옳은 것을 모두 고르시오.",
+      "choices": [
+        "루트 사용자에 MFA(다단계 인증)를 활성화한다",
+        "일상 업무를 위한 IAM 관리자 사용자를 별도로 생성해 사용하고 루트는 최소한으로만 사용한다",
+        "루트 사용자의 액세스 키를 발급해 애플리케이션 서버에 배포한다",
+        "루트 자격증명을 안전한 곳에 보관하고 계정 설정 등 꼭 필요한 작업에만 사용한다"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "루트 사용자는 MFA를 필수로 활성화하고 일상 업무에는 사용하지 않아야 하며, 별도의 IAM 관리자 계정을 통해 업무를 수행하는 것이 모범 사례다. 루트 액세스 키를 애플리케이션에 사용하는 것은 심각한 보안 위험이다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q006",
+      "taskId": "1.1",
+      "type": "single",
+      "question": "우리가 IAM을 관리할 수 없는 파트너사의 AWS 계정에서 우리 계정의 S3 버킷에 직접 접근해야 한다. 가장 적절한 접근 제어 방식은?",
+      "choices": [
+        "파트너사 계정에 우리 IAM 사용자의 자격증명을 전달한다",
+        "S3 버킷 정책(리소스 기반 정책)에 파트너사 계정의 ARN을 명시적으로 허용한다",
+        "파트너사 전용으로 VPN 연결을 구성한다",
+        "Cognito Identity Pool을 파트너사 계정에 연동한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "관리 권한이 없는 외부 계정의 접근을 허용할 때는 리소스 기반 정책(S3 버킷 정책)을 사용해 대상 계정 ARN을 지정하는 것이 적절하다. 이는 파트너사가 자신의 계정 내 역할/사용자로 우리 리소스에 접근할 수 있게 하면서 자격증명 공유를 피할 수 있다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q007",
+      "taskId": "1.1",
+      "type": "single",
+      "question": "조직의 SCP에서 특정 서비스 사용을 명시적으로 Deny 처리했지만, 해당 계정의 IAM 정책에는 동일 서비스에 대한 전체 허용(Allow *) 정책이 연결되어 있다. 실제 동작은?",
+      "choices": [
+        "IAM Allow 정책이 우선 적용되어 서비스 사용이 허용된다",
+        "SCP의 명시적 Deny가 최종적으로 우선 적용되어 서비스 사용이 거부된다",
+        "두 정책이 충돌하여 무작위로 적용된다",
+        "리전에 따라 결과가 달라진다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "SCP는 계정에 허용되는 권한의 상한선이며, SCP의 명시적 Deny는 IAM 정책의 Allow보다 항상 우선한다. 즉 SCP에서 막힌 작업은 계정 내 IAM 정책이 아무리 관대해도 수행할 수 없다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q008",
+      "taskId": "1.1",
+      "type": "single",
+      "question": "EC2 인스턴스에서 실행되는 애플리케이션이 S3에 접근해야 한다. 자격증명 관리 모범 사례에 가장 부합하는 방법은?",
+      "choices": [
+        "EC2 인스턴스에 필요한 권한을 가진 IAM 역할(인스턴스 프로파일)을 연결한다",
+        "IAM 사용자의 액세스 키를 애플리케이션 설정 파일에 하드코딩한다",
+        "인스턴스 사용자 데이터 스크립트에 평문 자격증명을 삽입한다",
+        "루트 사용자의 액세스 키를 발급해 사용한다"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "EC2 인스턴스가 AWS 리소스에 접근할 때는 IAM 역할을 인스턴스 프로파일로 연결해 자동으로 임시 자격증명이 순환되도록 하는 것이 모범 사례이며, 액세스 키 하드코딩은 유출 위험이 크다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q009",
+      "taskId": "1.1",
+      "type": "multi",
+      "question": "개발팀 리더에게 팀원용 IAM 역할을 자유롭게 생성할 수 있도록 위임하되, 팀원이 생성하는 역할이 특정 상한 권한을 절대 넘지 못하도록 강제하려 한다. 올바른 조치를 모두 고르시오.",
+      "choices": [
+        "권한 경계(Permission Boundary)를 설정해 생성 가능한 역할의 최대 권한 범위를 제한한다",
+        "SCP만 설정하면 팀 내 개별 위임 상한 제어까지 충분하다",
+        "역할/사용자 생성 권한을 위임할 때 권한 경계 지정을 필수 조건으로 정책에 명시한다",
+        "모든 팀원에게 AdministratorAccess를 부여한 뒤 사후 감시로 대체한다"
+      ],
+      "answer": [
+        0,
+        2
+      ],
+      "explanation": "권한 경계는 위임된 관리자가 생성하는 IAM 엔터티가 가질 수 있는 최대 권한을 제한하는 기능이며, 역할 생성 위임 정책에서 권한 경계 지정을 강제해야 실제로 우회 없이 적용된다. SCP는 계정 전체 단위이며 개별 위임 상한을 세밀하게 제어하기에는 부족할 수 있다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q010",
+      "taskId": "1.1",
+      "type": "single",
+      "question": "온프레미스 Active Directory와 신뢰 관계를 맺어 기존 AD 자격증명으로 AWS 리소스에 접근하게 하려면 어떤 서비스를 사용해야 하는가?",
+      "choices": [
+        "AWS Managed Microsoft AD(AWS Directory Service)를 배포하고 온프레미스 AD와 트러스트를 설정한다",
+        "Cognito Identity Pool을 새로 생성한다",
+        "500명분의 IAM 사용자를 대량으로 생성하는 스크립트를 작성한다",
+        "Simple AD를 단독으로 배포해 트러스트를 설정한다"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "AWS Managed Microsoft AD는 온프레미스 AD와의 트러스트 관계를 지원해 기존 자격증명으로 AWS 리소스에 접근할 수 있게 한다. Simple AD는 온프레미스 AD와의 트러스트를 지원하지 않으므로 이 요구사항에는 적합하지 않다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q011",
+      "taskId": "1.1",
+      "type": "single",
+      "question": "신생 스타트업이 앞으로 계정 수가 계속 늘어날 것을 예상해 처음부터 계정 자동 프로비저닝, 가드레일, 중앙 로그 집계 등 거버넌스 체계를 구축하려고 한다. 가장 적절한 접근은?",
+      "choices": [
+        "각 계정을 수동으로 생성하고 계정마다 개별적으로 CloudTrail을 설정한다",
+        "AWS Control Tower로 랜딩존을 구성하고 OU/SCP 기반 가드레일과 계정 팩토리를 활용한다",
+        "IAM 사용자 수만 지속적으로 늘려 대응한다",
+        "모든 워크로드를 계정 하나로 통합해 운영한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "AWS Control Tower는 다중 계정 랜딩존을 자동으로 구성하며 계정 팩토리, 사전 정의된 가드레일(SCP 기반), 중앙 로그 집계 기능을 제공해 확장 가능한 거버넌스 체계를 손쉽게 구축할 수 있다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q012",
+      "taskId": "1.1",
+      "type": "multi",
+      "question": "계정 A의 EC2에서 실행되는 애플리케이션이 계정 B가 소유한 S3 버킷에 접근해야 한다. 유효하고 안전한 설계 방법을 모두 고르시오.",
+      "choices": [
+        "계정 B의 버킷 정책에 계정 A의 IAM 역할 ARN을 허용 대상으로 명시한다",
+        "계정 A의 EC2 역할이 계정 B에 생성된 교차 계정 역할을 STS AssumeRole로 전환하도록 신뢰 관계를 구성한다",
+        "계정 B의 루트 사용자 자격증명을 계정 A의 애플리케이션에 배포한다",
+        "계정 A와 계정 B가 동일한 IAM 액세스 키를 공유해서 사용한다"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "교차 계정 S3 접근은 버킷 정책에 상대 계정의 역할을 명시적으로 허용하거나, 상대 계정에 생성된 역할을 STS AssumeRole로 전환하는 방식이 표준적이고 안전하다. 루트 자격증명이나 액세스 키 공유는 보안 원칙에 위배된다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q013",
+      "taskId": "1.1",
+      "type": "single",
+      "question": "모바일 앱이 구글/페이스북 등 소셜 로그인 인증 후 AWS S3에 임시로 파일을 업로드해야 한다. 앱에 어떠한 AWS 자격증명도 내장하지 않으려면 어떤 방식을 사용해야 하는가?",
+      "choices": [
+        "IAM 사용자의 액세스 키를 앱 코드에 내장한다",
+        "Cognito Identity Pool을 통해 STS의 AssumeRoleWithWebIdentity 방식으로 임시 자격증명을 발급받는다",
+        "루트 계정 자격증명을 앱에 내장한다",
+        "모든 사용자에게 동일한 IAM 역할 액세스 키를 하드코딩한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Cognito Identity Pool은 외부 소셜/OIDC 로그인 후 STS의 AssumeRoleWithWebIdentity를 통해 사용자별로 스코프가 제한된 임시 자격증명을 발급하므로 클라이언트에 장기 자격증명을 내장할 필요가 없다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q014",
+      "taskId": "1.2",
+      "type": "single",
+      "question": "3계층 웹 애플리케이션에서 웹 서버는 인터넷에서 접근 가능해야 하고, 데이터베이스는 어떤 경우에도 인터넷에서 직접 접근되면 안 된다. 적절한 VPC 서브넷 설계는?",
+      "choices": [
+        "웹 서버와 데이터베이스를 모두 퍼블릭 서브넷에 배치한다",
+        "웹 서버는 퍼블릭 서브넷에, 데이터베이스는 프라이빗 서브넷에 배치하고 아웃바운드 통신은 NAT 게이트웨이를 통해서만 허용한다",
+        "모든 리소스를 프라이빗 서브넷에 배치하고 인터넷 게이트웨이를 직접 연결한다",
+        "VPC 피어링만으로 인터넷 접근을 대체한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "인터넷 노출이 필요한 계층(웹 서버)은 퍼블릭 서브넷에, 노출되면 안 되는 계층(DB)은 프라이빗 서브넷에 배치하고, 프라이빗 서브넷의 아웃바운드(패치 다운로드 등)는 NAT 게이트웨이를 경유하도록 하는 것이 표준적인 네트워크 분할 설계다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q015",
+      "taskId": "1.2",
+      "type": "single",
+      "question": "특정 포트로 들어온 인바운드 요청에 대한 응답 트래픽을 별도의 아웃바운드 규칙 추가 없이 자동으로 허용하고 싶다. 이런 상태 저장(stateful) 특성을 제공하는 계층은?",
+      "choices": [
+        "보안 그룹",
+        "네트워크 ACL(NACL)",
+        "라우팅 테이블",
+        "NAT 게이트웨이"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "보안 그룹은 상태 저장(stateful) 방식으로 동작하여 인바운드가 허용된 연결의 응답 트래픽을 별도의 아웃바운드 규칙 없이 자동으로 허용한다. 반면 NACL은 상태 비저장(stateless)이라 양방향 규칙을 모두 명시해야 한다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q016",
+      "taskId": "1.2",
+      "type": "single",
+      "question": "프라이빗 서브넷에 있는 다수의 마이크로서비스가 S3와 DynamoDB에 자주 접근한다. 트래픽이 인터넷을 거치지 않게 하면서 NAT 게이트웨이 데이터 처리 비용도 절감하고 싶다. 가장 적합한 설계는?",
+      "choices": [
+        "NAT 게이트웨이의 대역폭을 증설한다",
+        "S3와 DynamoDB에 대해 VPC 게이트웨이 엔드포인트를 구성한다",
+        "마이크로서비스를 퍼블릭 서브넷으로 이전한다",
+        "인터넷 게이트웨이를 경유하도록 라우팅을 변경한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "S3와 DynamoDB는 VPC 게이트웨이 엔드포인트를 지원하며, 이를 구성하면 프라이빗 서브넷에서 인터넷이나 NAT 게이트웨이를 거치지 않고 AWS 백본 네트워크로 직접 통신할 수 있어 보안과 비용 모두 개선된다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q017",
+      "taskId": "1.2",
+      "type": "single",
+      "question": "신규 모바일 앱에 자체 회원가입, 로그인, 비밀번호 재설정 기능이 필요하고, 로그인 후에는 임시 AWS 자격증명으로 S3에 직접 업로드할 수 있어야 한다. 가장 적절한 서비스 조합은?",
+      "choices": [
+        "Cognito User Pool(사용자 인증)과 Identity Pool(임시 AWS 자격증명 연동)을 함께 사용한다",
+        "앱 사용자마다 IAM 사용자를 생성한다",
+        "AWS Directory Service만 사용한다",
+        "루트 계정 자격증명을 앱에 내장한다"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Cognito User Pool은 회원가입/로그인/비밀번호 재설정 등 사용자 디렉터리 기능을 제공하고, Identity Pool은 인증된 사용자에게 STS를 통한 임시 AWS 자격증명을 발급하므로 두 서비스를 함께 사용하는 것이 이 요구사항에 맞는 표준 설계다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q018",
+      "taskId": "1.2",
+      "type": "single",
+      "question": "회사에 이미 자체 사내 SAML IdP를 통한 인증 시스템이 있고, 로그인된 사용자에게는 AWS 리소스 접근을 위한 임시 자격증명만 필요하다. 신규 사용자 데이터베이스는 만들고 싶지 않다. 가장 적절한 방법은?",
+      "choices": [
+        "Cognito User Pool을 구축해 신규 사용자 데이터베이스를 별도로 만든다",
+        "Cognito Identity Pool만 사용해 기존 SAML IdP를 자격증명 공급자로 연동하고 AWS 임시 자격증명만 발급받는다",
+        "IAM 사용자를 대량으로 생성한다",
+        "Simple AD를 새로 구축한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "이미 자체 인증 체계(IdP)가 있다면 Cognito Identity Pool만으로 외부 IdP를 자격증명 공급자로 연동해 인증된 사용자에게 AWS 임시 자격증명을 발급할 수 있으며, User Pool을 통한 별도의 사용자 데이터베이스 구축이 불필요하다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q019",
+      "taskId": "1.2",
+      "type": "single",
+      "question": "S3에 저장된 대량의 데이터에 개인식별정보(PII)가 포함되어 있는지 자동으로 탐지하고 분류해야 한다. 가장 적합한 서비스는?",
+      "choices": [
+        "GuardDuty",
+        "Macie",
+        "Inspector",
+        "Shield"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Macie는 머신러닝을 활용해 S3에 저장된 데이터에서 PII 등 민감 데이터를 자동으로 탐지하고 분류하는 데 특화된 서비스다. GuardDuty는 위협 탐지, Inspector는 취약점 스캔에 초점을 둔다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q020",
+      "taskId": "1.2",
+      "type": "single",
+      "question": "계정 내 비정상적인 API 호출 패턴이나, 손상된 EC2 인스턴스가 알려진 악성 IP와 통신하는 것과 같은 위협을 자동으로 탐지하고 싶다. 가장 적합한 서비스는?",
+      "choices": [
+        "Macie",
+        "GuardDuty",
+        "Trusted Advisor",
+        "AWS Config"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "GuardDuty는 CloudTrail, VPC 흐름 로그, DNS 로그 등을 분석해 비정상 API 호출, 악성 IP 통신 등 보안 위협을 지속적으로 탐지하는 관리형 위협 탐지 서비스다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q021",
+      "taskId": "1.2",
+      "type": "multi",
+      "question": "공개 웹 애플리케이션이 SQL 인젝션과 같은 애플리케이션 계층 공격과 대규모 DDoS 공격 모두에 대비해야 한다. 올바른 조합을 모두 고르시오.",
+      "choices": [
+        "AWS WAF로 SQL 인젝션 등 계층 7 공격 패턴을 필터링하는 규칙을 구성한다",
+        "AWS Shield(Standard 또는 Advanced)로 네트워크/전송 계층 DDoS 공격을 방어한다",
+        "NACL 설정만으로 이러한 공격을 모두 차단할 수 있다",
+        "CloudFront와 연계해 엣지 로케이션에서 WAF/Shield 방어를 적용한다"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "WAF는 애플리케이션 계층(L7) 공격 패턴을 룰 기반으로 필터링하고, Shield는 네트워크/전송 계층 DDoS를 방어하며, 이를 CloudFront 엣지와 연계하면 방어 범위와 성능이 향상된다. NACL은 IP/포트 기반 필터링만 가능해 SQL 인젝션 같은 애플리케이션 계층 공격을 차단할 수 없다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q022",
+      "taskId": "1.2",
+      "type": "single",
+      "question": "RDS 데이터베이스 자격증명을 안전하게 저장하고 주기적으로 자동 교체(rotation)되도록 하고 싶다. 가장 적합한 서비스는?",
+      "choices": [
+        "Systems Manager Parameter Store의 표준 파라미터",
+        "AWS Secrets Manager(자동 순환 기능 활용)",
+        "EC2 사용자 데이터에 평문으로 저장",
+        "S3 버킷에 일반 텍스트 파일로 저장"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Secrets Manager는 RDS 등 지원 데이터베이스의 자격증명을 정해진 주기로 자동 교체하는 내장 기능을 제공해 자격증명 보안과 운영 효율을 동시에 확보할 수 있다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q023",
+      "taskId": "1.2",
+      "type": "multi",
+      "question": "온프레미스 데이터센터와 AWS 간 하이브리드 연결에서 고가용성과 장애 시 백업 경로를 동시에 확보하려는 설계로 올바른 조합을 모두 고르시오.",
+      "choices": [
+        "Direct Connect를 프라이머리 경로로, Site-to-Site VPN을 백업 경로로 구성한다",
+        "Direct Connect 단일 회선만 구성하고 장애 시 수동으로 복구한다",
+        "서로 다른 두 개의 Direct Connect 로케이션을 이용해 회선을 이중화한다",
+        "모든 트래픽을 공인 인터넷 경유로 우회시킨다"
+      ],
+      "answer": [
+        0,
+        2
+      ],
+      "explanation": "Direct Connect의 안정적 성능과 VPN의 신속한 대체 경로를 조합하거나, 서로 다른 두 로케이션의 Direct Connect로 이중화하는 것이 고가용성 하이브리드 연결의 표준 설계다. 단일 회선 구성이나 무조건적인 인터넷 우회는 가용성/보안 요구를 충족하지 못한다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q024",
+      "taskId": "1.2",
+      "type": "single",
+      "question": "온프레미스와의 연결이 시급히 필요하고, 초기 대역폭 요구가 낮으며, 구축 기간과 비용을 최소화하고 싶다. 가장 적합한 선택은?",
+      "choices": [
+        "신규 Direct Connect 전용 회선을 구축한다(구축까지 수 주 이상 소요될 수 있음)",
+        "IPsec 기반 Site-to-Site VPN을 구성한다(비교적 짧은 시간 내 구축 가능)",
+        "완전히 새로운 전용선을 포설한다",
+        "VPC 피어링으로 온프레미스 연결을 대체한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Site-to-Site VPN은 인터넷 회선 위에 암호화된 터널을 구성하는 방식으로 물리적 회선 포설이 필요한 Direct Connect보다 훨씬 빠르고 저렴하게 구축할 수 있어 긴급한 연결 요구에 적합하다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q025",
+      "taskId": "1.2",
+      "type": "multi",
+      "question": "EC2에서 실행되는 애플리케이션이 데이터베이스 비밀번호와 API 키를 안전하게 관리하도록 설계할 때 올바른 방법을 모두 고르시오.",
+      "choices": [
+        "Secrets Manager 또는 Parameter Store(SecureString)에 저장하고 IAM 역할을 통해 접근한다",
+        "소스 코드 저장소에 자격증명을 하드코딩한다",
+        "KMS로 저장된 자격증명 데이터를 암호화한다",
+        "배포할 때마다 자격증명을 평문 텍스트 파일로 서버에 복사한다"
+      ],
+      "answer": [
+        0,
+        2
+      ],
+      "explanation": "애플리케이션 자격증명은 Secrets Manager나 Parameter Store에 저장하고 IAM 역할로 접근 권한을 제어하며, 저장 시 KMS로 암호화하는 것이 모범 사례다. 소스 코드 하드코딩이나 평문 파일 배포는 심각한 보안 위험을 초래한다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q026",
+      "taskId": "1.2",
+      "type": "multi",
+      "question": "보안 그룹과 네트워크 ACL(NACL)의 차이에 대한 설명으로 옳은 것을 모두 고르시오.",
+      "choices": [
+        "보안 그룹은 상태 저장(stateful)이라 요청에 대한 응답 트래픽을 자동으로 허용한다",
+        "NACL은 상태 비저장(stateless)이라 인바운드와 아웃바운드 규칙을 모두 명시해야 한다",
+        "보안 그룹은 Deny(명시적 거부) 규칙을 지원한다",
+        "NACL은 서브넷 수준에서 적용되고, 보안 그룹은 ENI(인스턴스) 수준에서 적용된다"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "보안 그룹은 인스턴스(ENI) 수준에서 상태 저장 방식으로 동작하며 Allow 규칙만 지원한다. NACL은 서브넷 수준에서 상태 비저장 방식으로 동작하며 Allow/Deny 규칙을 모두 지원하고 양방향 규칙을 각각 명시해야 한다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q027",
+      "taskId": "1.3",
+      "type": "single",
+      "question": "회사가 KMS 키의 교체 주기를 직접 설정하고, 키 정책을 세밀하게 제어하며, 필요시 키 사용을 비활성화하거나 삭제 예약을 걸고 싶어 한다. 어떤 키 유형을 사용해야 하는가?",
+      "choices": [
+        "AWS 관리형 키(예: aws/s3)",
+        "고객 관리형 키(Customer Managed Key)",
+        "AWS 소유 키(AWS owned key)",
+        "S3 기본 SSE-S3 암호화만 사용"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "고객 관리형 키는 키 정책, 교체 주기, 별칭, 비활성화/삭제 예약 등을 사용자가 세밀하게 제어할 수 있다. AWS 관리형 키는 AWS가 대부분의 설정(예: 교체 주기)을 관리하므로 세밀한 제어가 제한적이다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q028",
+      "taskId": "1.3",
+      "type": "single",
+      "question": "규정상 암호화 키 자료(key material)를 회사가 직접 생성해 AWS로 가져와야 하고, 필요시 즉시 해당 키 자료를 삭제(파기)할 수 있어야 한다. 어떤 방법을 사용해야 하는가?",
+      "choices": [
+        "AWS 관리형 키를 그대로 사용한다",
+        "KMS 고객 관리형 키를 생성한 뒤 자체 키 자료를 가져오기(Import Key Material) 기능으로 등록한다",
+        "S3의 기본 SSE-S3 암호화만 사용한다",
+        "KMS를 사용하지 않고 애플리케이션에서 직접 암호화 로직을 구현한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "KMS 고객 관리형 키는 자체 생성한 키 자료를 가져와 등록하는 기능을 지원하며, 이 경우 키 자료를 삭제하면 즉시 해당 키로 암호화된 데이터에 대한 접근이 차단되므로 즉각적인 파기 요구사항을 만족한다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q029",
+      "taskId": "1.3",
+      "type": "single",
+      "question": "퍼블릭 도메인을 사용하는 ALB에 HTTPS를 적용하되, 인증서 발급과 만료 전 갱신 관리 부담을 최소화하고 싶다. 가장 적합한 방법은?",
+      "choices": [
+        "자체 서명 인증서를 발급해 매년 수동으로 EC2에 재설치한다",
+        "AWS Certificate Manager(ACM)로 인증서를 발급받아 ALB에 연결하고 DNS 검증 기반 자동 갱신을 활용한다",
+        "IAM 정책으로 인증서 만료를 관리한다",
+        "KMS로 TLS 인증서를 직접 발급한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "ACM은 퍼블릭 인증서를 무료로 발급하고 ALB/CloudFront 등에 손쉽게 연결할 수 있으며, DNS 검증 방식을 사용하면 만료 전 자동으로 갱신되어 수동 관리 부담이 크게 줄어든다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q030",
+      "taskId": "1.3",
+      "type": "single",
+      "question": "특정 KMS 고객 관리형 키에 대해 어떤 IAM 주체가 암호화/복호화를 수행할 수 있는지 세밀하게 통제하려고 한다. IAM 정책 외에 반드시 함께 검토해야 하는 것은?",
+      "choices": [
+        "키 정책(Key Policy) - KMS 키 자체에 연결된 리소스 기반 정책",
+        "보안 그룹",
+        "네트워크 ACL",
+        "라우팅 테이블"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "KMS 키에는 키 자체에 연결되는 리소스 기반 정책인 키 정책이 존재하며, IAM 정책만으로는 접근이 허용되지 않고 키 정책에서도 함께 허용되어야 실제 사용이 가능하다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q031",
+      "taskId": "1.3",
+      "type": "single",
+      "question": "여러 리전에 걸친 재해복구(DR)를 대비해 S3에 저장된 객체를 다른 리전으로 자동으로 복제하고 싶다. 가장 적합한 기능은?",
+      "choices": [
+        "S3 Cross-Region Replication(CRR)",
+        "S3 Lifecycle 정책만 사용",
+        "Snowball을 이용한 수동 이관",
+        "CloudFront 캐싱 설정"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "S3 Cross-Region Replication은 소스 버킷의 객체 변경 사항을 다른 리전의 대상 버킷으로 자동 복제해 리전 단위 재해에 대비한 데이터 가용성을 확보하는 기능이다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q032",
+      "taskId": "1.3",
+      "type": "single",
+      "question": "금융 규제상 특정 문서를 정해진 보존 기간 동안 어떤 사용자(루트 사용자 포함)도 삭제하거나 수정할 수 없도록 강제해야 한다. 가장 적합한 기능은?",
+      "choices": [
+        "S3 버전 관리(Versioning)만 활성화한다",
+        "S3 Object Lock의 Compliance 모드를 사용한다",
+        "버킷 정책으로 삭제 API를 Deny 처리한다",
+        "IAM 정책으로 모든 사용자의 삭제 권한을 제거한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "S3 Object Lock의 Compliance 모드는 지정한 보존 기간 동안 루트 사용자를 포함한 어떤 주체도 객체를 삭제하거나 덮어쓸 수 없도록 강제하는 WORM(Write Once Read Many) 통제를 제공한다. 단순 정책 기반 Deny는 정책 자체가 변경될 위험이 있어 규제 수준의 강제성을 보장하지 못한다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q033",
+      "taskId": "1.3",
+      "type": "single",
+      "question": "조직 전체 여러 계정의 규정 준수 상태(예: 암호화 미적용 리소스, 퍼블릭 노출 설정)를 중앙에서 지속적으로 점검하고, 위반 발견 시 자동으로 교정(remediation)하고 싶다. 가장 적합한 서비스는?",
+      "choices": [
+        "AWS Config와 Config Rules(자동 교정 기능 포함)",
+        "CloudTrail만 사용",
+        "Trusted Advisor만 사용",
+        "VPC 흐름 로그만 사용"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "AWS Config는 리소스 구성 변경을 지속적으로 기록하고 Config Rules로 규정 준수 여부를 평가하며, 자동 교정 작업(Remediation)을 연결해 위반 사항을 자동으로 수정할 수 있다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q034",
+      "taskId": "1.3",
+      "type": "multi",
+      "question": "규제 환경에서 자체 하드웨어 보안 모듈(HSM) 수준의 완전한 키 제어와 단일 테넌트 소유권이 요구된다. 고려해야 할 서비스와 특징을 모두 고르시오.",
+      "choices": [
+        "AWS CloudHSM을 사용한다",
+        "CloudHSM은 단일 테넌트 전용 하드웨어 클러스터를 제공한다",
+        "이런 요구사항에는 AWS 관리형 키만으로도 충분하다",
+        "KMS 커스텀 키 스토어(Custom Key Store)를 CloudHSM 클러스터와 연동해 사용할 수 있다"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "CloudHSM은 단일 테넌트 전용 HSM 클러스터를 제공해 키 소유권과 제어권을 온전히 고객이 가지며, KMS 커스텀 키 스토어와 연동하면 KMS의 편의성과 CloudHSM의 통제 수준을 함께 활용할 수 있다. AWS 관리형 키는 AWS가 다수 고객을 위해 관리하는 공유형 키로 이런 높은 통제 요구사항에는 부적합하다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q035",
+      "taskId": "1.3",
+      "type": "multi",
+      "question": "다음 요구사항(저장 데이터 암호화, 전송 데이터 암호화, 키 교체 자동화)을 모두 만족하는 설계 요소를 고르시오.",
+      "choices": [
+        "RDS 저장 볼륨에 KMS 암호화를 활성화한다",
+        "ALB/RDS 연결 구간에 TLS를 강제하고 ACM 인증서를 사용한다",
+        "KMS 키의 자동 교체(연 1회)를 활성화한다",
+        "관리를 단순화하기 위해 애플리케이션 코드에 DB 비밀번호를 평문으로 저장한다"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "저장 데이터 암호화는 KMS 볼륨 암호화, 전송 중 암호화는 TLS/ACM 인증서, 키 교체 자동화는 KMS 키 자동 교체 기능으로 각각 달성한다. 평문 비밀번호 저장은 모든 암호화 노력을 무력화하는 심각한 취약점이다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q036",
+      "taskId": "1.3",
+      "type": "multi",
+      "question": "RDS 데이터베이스에 대해 짧은 RPO(분 단위 데이터 손실 허용치)와 특정 시점 복구(PITR)가 모두 필요하다. 적합한 설계 요소를 모두 고르시오.",
+      "choices": [
+        "자동 백업(Automated Backups)과 트랜잭션 로그 기반 특정 시점 복구(PITR)를 활용한다",
+        "수동 스냅샷만 매주 1회 생성한다",
+        "다중 AZ 배포로 고가용성을 확보한다(백업/복구 요구사항과는 별개의 목적)",
+        "Read Replica만으로 백업을 완전히 대체한다"
+      ],
+      "answer": [
+        0,
+        2
+      ],
+      "explanation": "짧은 RPO와 PITR을 위해서는 자동 백업과 트랜잭션 로그 기반 복구가 필요하며, 다중 AZ는 장애 발생 시 자동 페일오버로 가용성을 높이는 별개의 목적이므로 함께 고려할 요소다. 매주 1회 수동 스냅샷은 RPO 요구를 충족하지 못하며, Read Replica는 데이터 손상이나 실수로 인한 삭제에는 보호를 제공하지 못해 백업의 대체재가 될 수 없다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q037",
+      "taskId": "1.3",
+      "type": "multi",
+      "question": "여러 부서가 공유하는 S3 기반 데이터 레이크에서 부서별로 세밀한 컬럼/행 수준 접근 제어와 중앙 집중식 데이터 권한 관리가 필요하다. 고려할 방법을 모두 고르시오.",
+      "choices": [
+        "AWS Lake Formation을 도입해 세밀한 데이터 접근 권한을 중앙에서 관리한다",
+        "S3 버킷 정책만으로 컬럼 수준 접근 제어를 구현한다",
+        "IAM 정책과 Lake Formation 권한을 결합해 세밀하게 접근을 제어한다",
+        "모든 사용자에게 버킷 전체 읽기 권한을 부여하고 애플리케이션 레벨에서 필터링한다"
+      ],
+      "answer": [
+        0,
+        2
+      ],
+      "explanation": "Lake Formation은 데이터 레이크에 대해 테이블/컬럼/행 수준의 세밀한 권한을 중앙에서 관리할 수 있게 해주며, IAM 정책과 결합해 세분화된 접근 제어를 구현한다. S3 버킷 정책만으로는 컬럼 수준 제어가 불가능하고, 전체 권한 부여 후 애플리케이션 필터링에 의존하는 방식은 데이터 유출 위험이 크다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q038",
+      "taskId": "1.3",
+      "type": "single",
+      "question": "ACM에서 발급받은 퍼블릭 인증서를 CloudFront 배포에 연결해 사용 중이다. 인증서 만료로 인한 서비스 장애를 걱정하지 않으려면 어떻게 해야 하는가?",
+      "choices": [
+        "매년 수동으로 인증서를 갱신하고 재배포한다",
+        "DNS 검증 방식을 사용하고 필요한 DNS 레코드를 유지하면, ACM이 만료 전 자동으로 인증서를 갱신한다",
+        "서드파티 인증서를 별도로 구매해 병행 관리한다",
+        "인증서를 KMS 키로 저장해 만료를 방지한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "ACM은 DNS 검증 방식으로 발급된 퍼블릭 인증서에 대해 필요한 DNS 레코드가 유지되는 한 만료 전 자동으로 갱신을 처리하므로 별도의 수동 갱신 작업이 필요하지 않다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d1-q039",
+      "taskId": "1.3",
+      "type": "multi",
+      "question": "규정 준수 감사에 대비해 데이터 라이프사이클(생성-분류-보존-폐기) 정책을 설계할 때 포함해야 할 요소를 모두 고르시오.",
+      "choices": [
+        "Macie로 민감 데이터를 자동 탐지하고 분류한다",
+        "S3 Lifecycle 정책으로 스토리지 계층 전환과 만료를 자동화한다",
+        "감사 대비를 단순화하기 위해 백업 없이 최신 데이터만 유지한다",
+        "CloudTrail 및 S3 액세스 로그를 기록하고 주기적으로 검토한다"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "데이터 라이프사이클 관리에는 민감 데이터 자동 분류(Macie), 계층 전환/만료 자동화(S3 Lifecycle), 접근 이력 기록 및 검토(CloudTrail/S3 액세스 로그)가 포함되어야 한다. 백업 없이 최신 데이터만 유지하는 것은 데이터 손실 및 규정 준수 요구사항 위반 위험을 크게 높인다.",
+      "domainId": "d1"
+    },
+    {
+      "id": "saa-d2-q001",
+      "taskId": "2.1",
+      "type": "single",
+      "question": "한 소셜 미디어 회사는 사용자가 업로드한 이미지를 처리하는 파이프라인을 운영합니다. 업로드 순서와 관계없이 여러 워커가 병렬로 이미지를 처리해도 되며, 초당 수만 건의 업로드가 발생하는 시간대가 있습니다. 어떤 큐 유형을 사용하는 것이 가장 적합합니까?",
+      "choices": [
+        "SQS FIFO 큐를 사용해 메시지 순서를 보장한다",
+        "SQS 표준 큐를 사용해 높은 처리량을 확보한다",
+        "SNS 표준 토픽만 사용하고 큐는 두지 않는다",
+        "단일 EC2 인스턴스에서 순차적으로 처리한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "순서 보장이 필요 없고 대량 처리량이 중요한 경우 SQS 표준 큐가 적합합니다. 표준 큐는 처리량 제한이 사실상 없고 여러 소비자가 병렬로 메시지를 가져가 처리할 수 있습니다. FIFO 큐는 순서와 중복 제거가 중요하지만 처리량이 제한적이라 이 시나리오에는 과도한 제약이 됩니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q002",
+      "taskId": "2.1",
+      "type": "single",
+      "question": "주문이 접수되면 결제 서비스, 재고 서비스, 알림 서비스가 각각 독립적으로 이 이벤트를 처리해야 합니다. 각 서비스는 서로 다른 속도로 메시지를 소비하며, 한 서비스의 장애가 다른 서비스에 영향을 주지 않아야 합니다. 가장 적합한 아키텍처는 무엇입니까?",
+      "choices": [
+        "하나의 SQS 큐를 세 서비스가 공유하여 폴링한다",
+        "SNS 토픽에 게시하고 서비스별로 별도의 SQS 큐를 구독시켜 팬아웃한다",
+        "주문 서비스가 세 서비스에 각각 동기식 HTTP 호출을 보낸다",
+        "세 서비스를 하나의 Lambda 함수로 통합한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "SNS 팬아웃 패턴은 하나의 이벤트를 여러 SQS 큐로 동시에 전달하여 각 소비자가 독립적인 속도로 메시지를 처리하게 합니다. 이렇게 하면 한 소비자의 지연이나 장애가 다른 소비자의 큐에 영향을 주지 않아 느슨한 결합이 유지됩니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q003",
+      "taskId": "2.1",
+      "type": "multi",
+      "question": "애플리케이션 계층 사이에 SQS 큐를 도입함으로써 얻을 수 있는 이점으로 옳은 것을 모두 고르세요.",
+      "choices": [
+        "생산자와 소비자 간의 직접적인 의존성을 제거해 한쪽 장애가 다른 쪽으로 전파되지 않는다",
+        "소비자가 일시적으로 다운되어도 메시지가 큐에 보존되어 유실을 방지한다",
+        "트래픽 급증 시 버퍼 역할을 해 소비자가 감당 가능한 속도로 처리하게 한다",
+        "데이터베이스의 트랜잭션 일관성을 자동으로 보장한다",
+        "네트워크 지연 시간을 0에 가깝게 만들어 준다"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "SQS는 생산자-소비자 간 결합을 끊어 장애 전파를 막고, 메시지를 큐에 보관해 소비자 다운타임 동안 유실을 방지하며, 트래픽 버퍼 역할로 급증한 부하를 흡수합니다. 트랜잭션 일관성 보장이나 지연 시간 제거는 SQS의 기능이 아닙니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q004",
+      "taskId": "2.1",
+      "type": "single",
+      "question": "스타트업 팀은 컨테이너 오케스트레이션 경험이 없고, 서버 프로비저닝이나 클러스터 패치 작업에 시간을 쓰고 싶어하지 않습니다. AWS 전용 오케스트레이터를 사용하면서 서버 관리 부담을 최소화하려면 어떤 조합이 가장 적합합니까?",
+      "choices": [
+        "EKS on EC2",
+        "ECS on Fargate",
+        "ECS on EC2 with Auto Scaling",
+        "EKS on EC2 with Cluster Autoscaler"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "ECS는 AWS 전용 오케스트레이터로 쿠버네티스보다 학습 곡선이 낮고, Fargate 실행 방식을 선택하면 EC2 인스턴스 프로비저닝이나 패치 없이 컨테이너를 서버리스로 실행할 수 있어 운영 부담이 가장 적습니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q005",
+      "taskId": "2.1",
+      "type": "single",
+      "question": "실시간 금융 거래 애플리케이션이 초저지연 TCP 연결과 고정 IP 주소를 요구하며, 초당 수백만 건의 연결을 처리해야 합니다. 어떤 로드 밸런서를 사용해야 합니까?",
+      "choices": [
+        "Application Load Balancer(ALB)",
+        "Network Load Balancer(NLB)",
+        "Classic Load Balancer만 단독 사용",
+        "Route 53 가중치 라우팅으로 대체"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "NLB는 Layer 4에서 동작하여 초저지연과 초당 수백만 요청 처리에 최적화되어 있고 고정 IP(Elastic IP) 연결을 지원합니다. ALB는 Layer 7 HTTP 라우팅에 강점이 있지만 NLB만큼의 초저지연과 고정 IP 특성을 제공하지 않습니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q006",
+      "taskId": "2.1",
+      "type": "multi",
+      "question": "다음 중 각 캐싱 서비스와 용도가 올바르게 짝지어진 것을 모두 고르세요.",
+      "choices": [
+        "CloudFront - 전 세계 엣지 로케이션에서 정적 콘텐츠를 캐싱해 지연 시간을 줄인다",
+        "ElastiCache - 애플리케이션의 세션 데이터나 자주 조회되는 쿼리 결과를 인메모리에 캐싱한다",
+        "DynamoDB DAX - DynamoDB 테이블 앞단에서 마이크로초 단위의 읽기 캐싱을 제공한다",
+        "Secrets Manager - 데이터베이스 쿼리 결과를 캐싱해 응답 속도를 높인다",
+        "Step Functions - API 응답을 캐싱해 백엔드 호출을 줄인다"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "CloudFront, ElastiCache, DynamoDB DAX는 각각 엣지 콘텐츠, 범용 애플리케이션 데이터, DynamoDB 전용 캐싱을 담당하는 정식 캐싱 서비스입니다. Secrets Manager는 자격 증명 관리 서비스이고 Step Functions는 워크플로 오케스트레이션 서비스로 캐싱 기능이 아닙니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q007",
+      "taskId": "2.1",
+      "type": "single",
+      "question": "회사는 파트너사에 REST API를 공개하면서 파트너별로 초당 요청 수를 제한하고 API 키로 사용량을 추적하고 싶습니다. 가장 적합한 서비스 조합은 무엇입니까?",
+      "choices": [
+        "API Gateway의 사용량 계획(Usage Plan)과 API 키를 사용해 스로틀링과 쿼터를 설정한다",
+        "ALB 리스너 규칙만으로 파트너별 속도 제한을 구현한다",
+        "각 파트너에게 별도의 EC2 인스턴스를 할당한다",
+        "Route 53 가중치 라우팅으로 요청을 제한한다"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "API Gateway는 사용량 계획과 API 키 기능을 제공해 클라이언트별로 초당 요청 수(rate)와 총 쿼터를 설정하고 사용량을 추적할 수 있습니다. 이는 API 관리에 특화된 관리형 기능으로, ALB나 EC2 인스턴스 분리로는 이런 세밀한 제어가 어렵습니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q008",
+      "taskId": "2.1",
+      "type": "single",
+      "question": "웹 애플리케이션을 Auto Scaling 그룹 뒤에서 운영하려고 합니다. 사용자의 로그인 세션 정보를 어디에 저장해야 인스턴스가 자유롭게 추가·종료되어도 세션이 끊기지 않습니까?",
+      "choices": [
+        "각 EC2 인스턴스의 로컬 메모리에 저장한다",
+        "ElastiCache(Redis/Memcached)와 같은 외부 저장소에 저장한다",
+        "인스턴스의 EBS 볼륨에 저장한다",
+        "로드밸런서의 스티키 세션 쿠키에만 의존하고 서버 측 저장은 하지 않는다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "스테이트리스 아키텍처에서는 세션 상태를 인스턴스 로컬이 아닌 ElastiCache 같은 외부 공유 저장소에 두어야 어떤 인스턴스가 요청을 처리하더라도 동일한 세션 데이터에 접근할 수 있고, Auto Scaling으로 인스턴스가 교체되어도 문제가 없습니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q009",
+      "taskId": "2.1",
+      "type": "single",
+      "question": "대출 심사 프로세스는 신용 조회, 서류 검증, 승인 단계를 순서대로 거치며 각 단계마다 재시도와 오류 처리 로직이 다르고, 특정 단계는 병렬로 실행되어야 합니다. 이를 서버리스로 오케스트레이션하기 가장 적합한 서비스는 무엇입니까?",
+      "choices": [
+        "AWS Step Functions",
+        "Amazon SQS 단일 큐",
+        "Amazon SNS",
+        "AWS Transfer Family"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Step Functions는 상태 머신을 정의해 여러 Lambda/서비스 호출의 순서, 병렬 실행, 재시도 및 오류 처리를 시각적으로 관리할 수 있는 워크플로 오케스트레이션 서비스로 이런 복잡한 다단계 프로세스에 적합합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q010",
+      "taskId": "2.1",
+      "type": "multi",
+      "question": "모놀리식 애플리케이션을 마이크로서비스로 분해할 때 얻을 수 있는 이점으로 옳은 것을 모두 고르세요.",
+      "choices": [
+        "각 서비스를 독립적으로 배포하고 확장할 수 있다",
+        "한 서비스의 장애가 전체 애플리케이션 중단으로 이어질 가능성이 줄어든다",
+        "서비스마다 적합한 기술 스택을 선택할 수 있다",
+        "모든 서비스가 반드시 하나의 데이터베이스를 공유해야 한다",
+        "네트워크 호출 없이 함수 호출만으로 서비스 간 통신이 가능해진다"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "마이크로서비스는 독립적인 배포·확장, 장애 격리, 기술 스택 다양성이라는 이점을 제공합니다. 반대로 마이크로서비스는 보통 서비스별 데이터베이스를 분리하는 것을 권장하며, 서비스 간 통신은 네트워크(HTTP, 메시징)를 통해 이루어지므로 나머지 두 보기는 틀린 설명입니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q011",
+      "taskId": "2.1",
+      "type": "single",
+      "question": "제조 회사가 레거시 파트너 시스템과 SFTP로 파일을 주고받아야 하는데, SFTP 서버를 직접 구축하고 패치하는 부담을 피하고 싶습니다. 파일은 최종적으로 S3에 저장되어야 합니다. 가장 적합한 서비스는 무엇입니까?",
+      "choices": [
+        "AWS Transfer Family",
+        "Amazon SQS",
+        "Amazon API Gateway",
+        "AWS Direct Connect"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "AWS Transfer Family는 SFTP, FTPS, FTP 프로토콜을 완전관리형으로 제공하여 서버 구축이나 패치 없이 S3 또는 EFS와 연동해 파일을 주고받을 수 있게 해주는 서비스입니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q012",
+      "taskId": "2.1",
+      "type": "single",
+      "question": "애플리케이션이 데이터베이스 자격 증명을 코드에 하드코딩하지 않고, 자격 증명을 주기적으로 자동 순환(rotation)하면서 안전하게 관리하고 싶습니다. 가장 적합한 서비스는 무엇입니까?",
+      "choices": [
+        "AWS Secrets Manager",
+        "Amazon SNS",
+        "AWS Step Functions",
+        "Amazon CloudFront"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Secrets Manager는 데이터베이스 자격 증명 등 민감한 정보를 암호화하여 저장하고, Lambda 로테이션 함수를 통해 자동으로 주기적인 자격 증명 교체를 지원하는 관리형 서비스입니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q013",
+      "taskId": "2.1",
+      "type": "multi",
+      "question": "다음 스토리지 요구 사항과 적합한 AWS 스토리지 유형을 올바르게 짝지은 것을 모두 고르세요.",
+      "choices": [
+        "여러 EC2 인스턴스가 동시에 마운트하여 공유 접근해야 하는 파일 데이터 - Amazon EFS(파일 스토리지)",
+        "정적 웹사이트 자산과 백업 아카이브를 저장 - Amazon S3(객체 스토리지)",
+        "단일 EC2 인스턴스에 연결되는 저지연 데이터베이스 볼륨 - Amazon EBS(블록 스토리지)",
+        "복수 인스턴스가 동시에 쓰기 접근해야 하는 블록 볼륨 - Amazon EBS(블록 스토리지)",
+        "글로벌 사용자에게 정적 콘텐츠를 낮은 지연으로 전달 - Amazon S3 단독(캐싱 없이)"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "EFS는 여러 인스턴스가 동시에 마운트하는 공유 파일 시스템에, S3는 객체 스토리지로 정적 자산/백업에, EBS는 단일 인스턴스에 연결되는 블록 스토리지에 적합합니다. EBS는 기본적으로 단일 인스턴스 연결용이라 다중 쓰기 공유에는 부적합하며, 글로벌 저지연 전달에는 S3 단독보다 CloudFront 결합이 적합합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q014",
+      "taskId": "2.1",
+      "type": "single",
+      "question": "전자상거래 사이트의 상품 조회 API는 읽기 요청이 쓰기 요청보다 압도적으로 많아 RDS 기본 인스턴스에 부하가 집중되고 있습니다. 쓰기 성능에 영향을 주지 않으면서 읽기 처리량을 확장하려면 어떤 방법이 가장 적합합니까?",
+      "choices": [
+        "RDS 읽기 전용 복제본(Read Replica)을 추가하고 조회 트래픽을 복제본으로 라우팅한다",
+        "기본 RDS 인스턴스의 스토리지 용량만 늘린다",
+        "모든 트래픽을 하나의 RDS 인스턴스로 계속 처리하되 인스턴스 유형만 낮춘다",
+        "RDS를 완전히 종료하고 S3로 대체한다"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "읽기 전용 복제본은 비동기 복제를 통해 읽기 트래픽을 분산시켜 기본(쓰기) 인스턴스의 부하를 줄여주는 표준적인 읽기 확장 패턴입니다. 스토리지 확장이나 인스턴스 다운그레이드는 읽기 부하 문제를 해결하지 못합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q015",
+      "taskId": "2.1",
+      "type": "single",
+      "question": "쇼핑몰이 특정 프로모션 기간에만 트래픽이 10배로 급증하고 평상시에는 낮은 트래픽을 유지합니다. 비용 효율적으로 이 패턴에 대응하려면 어떤 스케일링 전략이 가장 적합합니까?",
+      "choices": [
+        "평상시 트래픽 대비 항상 10배 용량의 인스턴스를 고정 배치한다",
+        "Auto Scaling 그룹과 CloudWatch 지표 기반 조정 정책을 사용해 수요에 따라 수평 확장/축소한다",
+        "수직 확장만 사용해 단일 대형 인스턴스로 모든 트래픽을 처리한다",
+        "트래픽 급증 시 수동으로 콘솔에서 인스턴스를 하나씩 추가한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Auto Scaling 그룹은 CloudWatch 지표(CPU, 요청 수 등)를 기반으로 인스턴스 수를 자동으로 늘리고 줄여 트래픽 패턴에 맞게 비용 효율적으로 대응합니다. 고정 배치는 평상시 과잉 비용을, 수직 확장 단독은 확장 한계와 다운타임 위험을, 수동 대응은 급증 속도를 따라가지 못합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q016",
+      "taskId": "2.1",
+      "type": "multi",
+      "question": "이벤트 기반 아키텍처(Event-Driven Architecture)를 구성할 때 사용할 수 있는 AWS 서비스로 옳은 것을 모두 고르세요.",
+      "choices": [
+        "Amazon EventBridge",
+        "Amazon SNS",
+        "Amazon SQS",
+        "AWS Direct Connect",
+        "Amazon Route 53"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "EventBridge는 이벤트 버스를 통한 라우팅과 필터링을, SNS는 게시/구독 팬아웃을, SQS는 메시지 큐잉을 제공하여 모두 이벤트 기반 아키텍처의 핵심 구성 요소입니다. Direct Connect는 전용 네트워크 연결 서비스이고 Route 53은 DNS 서비스로 이벤트 기반 아키텍처의 핵심 구성 요소가 아닙니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q017",
+      "taskId": "2.1",
+      "type": "single",
+      "question": "회사는 온프레미스에서 도커 컨테이너로 실행하던 애플리케이션을 AWS로 이관하면서, 서버 관리 없이 컨테이너만 배포하고 트래픽에 따라 자동으로 확장되기를 원합니다. 가장 적합한 마이그레이션 대상은 무엇입니까?",
+      "choices": [
+        "EC2에 직접 도커 엔진을 설치하고 수동으로 컨테이너를 실행한다",
+        "ECS 또는 EKS on Fargate로 컨테이너를 배포한다",
+        "온프레미스 서버를 그대로 유지하고 AWS는 백업 용도로만 사용한다",
+        "Lambda 함수로 전체 애플리케이션 로직을 재작성 없이 그대로 옮긴다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "ECS/EKS on Fargate는 기존 컨테이너 이미지를 그대로 활용하면서 서버 프로비저닝 없이 오케스트레이터가 자동으로 확장·배치를 관리해주므로 컨테이너 마이그레이션과 서버리스 운영을 동시에 만족합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q018",
+      "taskId": "2.2",
+      "type": "single",
+      "question": "재해 발생 시 회사는 최대 15분의 데이터 손실은 허용하지만, 서비스는 5분 이내에 복구되어야 한다고 요구합니다. 이 요구 사항을 올바르게 설명한 것은 무엇입니까?",
+      "choices": [
+        "RTO는 15분, RPO는 5분이다",
+        "RTO는 5분, RPO는 15분이다",
+        "RTO와 RPO 모두 5분이다",
+        "RTO와 RPO는 이 시나리오와 관계없는 개념이다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "RTO(복구 시간 목표)는 서비스가 다시 정상화되기까지 허용되는 시간이므로 5분이 RTO이고, RPO(복구 시점 목표)는 허용 가능한 데이터 손실 범위이므로 15분이 RPO입니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q019",
+      "taskId": "2.2",
+      "type": "multi",
+      "question": "재해 복구 전략 중 '백업 및 복원(Backup and Restore)' 방식에 대한 설명으로 옳은 것을 모두 고르세요.",
+      "choices": [
+        "네 가지 DR 전략 중 비용이 가장 저렴한 편에 속한다",
+        "RTO와 RPO가 네 가지 전략 중 가장 길다(느리다)",
+        "정기적으로 스냅샷이나 백업을 다른 리전에 저장해 두었다가 재해 시 인프라를 새로 구성한다",
+        "평상시에도 전체 프로덕션 규모의 인프라를 다른 리전에서 실시간으로 가동한다",
+        "RTO가 초 단위로 거의 즉시 복구된다"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "백업/복원은 정기 백업만 보관하다가 재해 시 처음부터 인프라를 구축하는 방식으로 비용은 가장 저렴하지만 RTO/RPO가 수 시간~수일로 가장 깁니다. 평상시 실시간 인프라 가동은 액티브-액티브나 웜 스탠바이의 특징이며, 초 단위 복구도 백업/복원과는 거리가 멉니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q020",
+      "taskId": "2.2",
+      "type": "single",
+      "question": "회사는 재해 복구 비용을 최소화하면서도 백업/복원보다는 빠른 복구를 원합니다. 이를 위해 DR 리전에 핵심 데이터베이스의 복제본만 상시로 실행해 두고, 애플리케이션 서버들은 재해가 선언될 때만 기동하기로 했습니다. 이 전략의 이름은 무엇입니까?",
+      "choices": [
+        "파일럿 라이트(Pilot Light)",
+        "웜 스탠바이(Warm Standby)",
+        "액티브-액티브(Active-Active)",
+        "백업 및 복원(Backup and Restore)"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "파일럿 라이트는 데이터베이스처럼 핵심적이고 데이터 동기화가 중요한 구성 요소만 상시 가동해 두고, 애플리케이션 계층은 평소에는 꺼둔 채로 재해 시에만 신속히 기동하는 전략으로 백업/복원보다 빠르고 웜 스탠바이보다 저렴합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q021",
+      "taskId": "2.2",
+      "type": "single",
+      "question": "DR 리전에 프로덕션과 동일한 아키텍처를 축소된 용량(예: 최소 인스턴스 수)으로 상시 가동해 두고, 재해 선언 시 Auto Scaling으로 용량만 신속히 확장하여 전체 트래픽을 처리하는 전략은 무엇입니까?",
+      "choices": [
+        "백업 및 복원",
+        "파일럿 라이트",
+        "웜 스탠바이",
+        "액티브-액티브"
+      ],
+      "answer": [
+        2
+      ],
+      "explanation": "웜 스탠바이는 축소된 규모로나마 전체 스택(웹, 앱, DB 계층)을 상시 가동해 두어 파일럿 라이트보다 빠른 RTO를 제공하며, 재해 시에는 스케일 아웃만으로 전체 용량에 도달할 수 있습니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q022",
+      "taskId": "2.2",
+      "type": "single",
+      "question": "금융 거래 플랫폼은 어떤 리전 장애가 발생해도 사용자가 다운타임을 전혀 느끼지 못해야 하며, RPO는 사실상 0에 가까워야 합니다. 비용이 매우 높더라도 이를 감수할 수 있습니다. 가장 적합한 DR 전략은 무엇입니까?",
+      "choices": [
+        "백업 및 복원",
+        "파일럿 라이트",
+        "웜 스탠바이",
+        "액티브-액티브(멀티 사이트)"
+      ],
+      "answer": [
+        3
+      ],
+      "explanation": "액티브-액티브(멀티 사이트) 전략은 여러 리전에서 동시에 실시간 트래픽을 처리하므로 한 리전이 장애가 나도 나머지 리전이 즉시 트래픽을 흡수해 RTO/RPO가 거의 0에 가깝습니다. 다만 네 가지 전략 중 비용과 운영 복잡도가 가장 높습니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q023",
+      "taskId": "2.2",
+      "type": "multi",
+      "question": "다음 Route 53 라우팅 정책과 사용 목적이 올바르게 짝지어진 것을 모두 고르세요.",
+      "choices": [
+        "장애 조치(Failover) 라우팅 - 기본 리소스의 상태 확인이 실패하면 자동으로 보조 리소스로 트래픽을 전환한다",
+        "가중치(Weighted) 라우팅 - 카나리아 배포처럼 트래픽을 특정 비율로 나누어 여러 버전에 분산한다",
+        "지연 시간(Latency) 기반 라우팅 - 사용자에게 가장 낮은 지연 시간을 제공하는 리전으로 트래픽을 보낸다",
+        "지리 위치(Geolocation) 라우팅 - 요청자의 위치와 무관하게 무작위로 리소스를 선택한다",
+        "단순(Simple) 라우팅 - 여러 리전에 걸친 자동 장애 조치를 기본 제공한다"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "장애 조치 라우팅은 상태 확인 기반 자동 전환을, 가중치 라우팅은 비율 기반 분산(카나리아 배포 등)을, 지연 시간 라우팅은 최저 지연 리전 선택을 제공합니다. 지리 위치 라우팅은 무작위가 아니라 요청자의 지리적 위치에 따라 라우팅하며, 단순 라우팅은 자동 장애 조치 기능이 없습니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q024",
+      "taskId": "2.2",
+      "type": "single",
+      "question": "회사는 기본 리전에서 서비스를 운영하고, DR 리전에는 동일한 스택을 웜 스탠바이로 구성해 두었습니다. 기본 리전의 ALB 상태 확인이 실패하면 자동으로 DR 리전으로 트래픽이 전환되도록 하려면 Route 53에서 어떤 라우팅 정책을 사용해야 합니까?",
+      "choices": [
+        "가중치 라우팅",
+        "장애 조치 라우팅",
+        "다중값 응답 라우팅",
+        "지리 위치 라우팅"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "장애 조치 라우팅 정책은 기본(primary) 레코드에 상태 확인을 연결해 실패 시 자동으로 보조(secondary) 레코드로 트래픽을 전환하도록 설계된 정책으로, 이 시나리오에 정확히 부합합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q025",
+      "taskId": "2.2",
+      "type": "single",
+      "question": "서버리스 API는 Lambda 함수가 트래픽 급증 시 수천 개의 동시 실행 인스턴스로 확장되며, 각 인스턴스가 RDS에 개별 연결을 열어 데이터베이스의 최대 연결 수를 초과하는 문제가 반복적으로 발생하고 있습니다. 이를 해결하기 위한 가장 적합한 서비스는 무엇입니까?",
+      "choices": [
+        "RDS Proxy를 도입해 연결 풀링을 통해 Lambda와 데이터베이스 사이의 연결을 관리한다",
+        "RDS 인스턴스 유형을 낮춘다",
+        "Lambda의 타임아웃 값을 늘린다",
+        "Route 53 가중치 라우팅을 설정한다"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "RDS Proxy는 애플리케이션과 데이터베이스 사이에서 커넥션 풀링을 수행하여 Lambda처럼 짧은 시간에 급증하는 연결 요청을 완화하고, 실제 데이터베이스에 대한 연결 수를 안정적으로 유지시켜 연결 고갈 문제를 해결합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q026",
+      "taskId": "2.2",
+      "type": "single",
+      "question": "프로덕션 RDS 인스턴스가 위치한 가용 영역에 장애가 발생했습니다. Multi-AZ로 배포된 RDS는 이 상황에서 어떻게 동작합니까?",
+      "choices": [
+        "RDS가 자동으로 대기 인스턴스(standby)로 장애 조치하여 서비스를 계속 제공한다",
+        "관리자가 수동으로 새 인스턴스를 생성할 때까지 서비스가 완전히 중단된다",
+        "읽기 전용 복제본이 자동으로 쓰기 가능한 기본 인스턴스로 승격되어야만 복구된다",
+        "데이터가 영구적으로 손실된다"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Multi-AZ RDS는 동기식 복제를 사용하는 대기 인스턴스를 다른 가용 영역에 유지하며, 기본 인스턴스나 AZ에 장애가 발생하면 DNS 엔드포인트를 통해 자동으로 대기 인스턴스로 장애 조치하여 수동 개입 없이 서비스를 지속합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q027",
+      "taskId": "2.2",
+      "type": "multi",
+      "question": "고가용성 아키텍처를 설계할 때 지켜야 할 원칙으로 옳은 것을 모두 고르세요.",
+      "choices": [
+        "단일 장애점(SPOF)을 제거하기 위해 자원을 최소 2개 이상의 가용 영역에 분산 배치한다",
+        "모든 컴퓨팅 자원을 하나의 가용 영역에 집중시켜 관리 편의성을 높인다",
+        "상태 확인(Health Check)을 통해 비정상 인스턴스를 감지하고 트래픽에서 자동으로 제외한다",
+        "장애 조치를 대비해 여러 리전 또는 AZ에 걸친 복제/백업 전략을 마련한다",
+        "확장성을 포기하더라도 항상 수직 확장만 사용한다"
+      ],
+      "answer": [
+        0,
+        2,
+        3
+      ],
+      "explanation": "고가용성 설계는 다중 AZ 분산, 자동 상태 확인 기반 제외, 리전/AZ 간 복제 및 백업을 핵심으로 합니다. 자원을 하나의 AZ에 집중시키거나 수직 확장만 고집하는 것은 단일 장애점을 만들고 확장성을 저해하므로 원칙에 반합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q028",
+      "taskId": "2.2",
+      "type": "single",
+      "question": "마이크로서비스로 구성된 주문 처리 시스템에서 특정 요청이 유독 느리다는 사용자 불만이 접수되었습니다. 어떤 서비스 호출 구간에서 지연이 발생하는지 추적하고 시각화하려면 어떤 서비스를 사용해야 합니까?",
+      "choices": [
+        "AWS X-Ray",
+        "Amazon Route 53",
+        "AWS Transfer Family",
+        "Amazon Polly"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "X-Ray는 분산 애플리케이션의 요청 흐름을 추적하는 서비스 맵과 트레이스를 제공하여 어느 서비스 호출 구간에서 지연이나 오류가 발생하는지 시각적으로 분석할 수 있게 해줍니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q029",
+      "taskId": "2.2",
+      "type": "single",
+      "question": "회사는 대규모 리전 장애 조치 훈련을 앞두고, DR 리전으로 트래픽이 전환될 때 EC2 On-Demand 인스턴스 한도나 Elastic IP 한도 초과로 확장이 실패하지 않을지 우려하고 있습니다. 이를 사전에 점검하고 조정하기 위해 사용해야 하는 서비스는 무엇입니까?",
+      "choices": [
+        "Service Quotas",
+        "AWS Step Functions",
+        "Amazon Comprehend",
+        "AWS Transfer Family"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Service Quotas는 계정/리전별 서비스 한도(예: EC2 인스턴스 수, Elastic IP 수)를 조회하고 상승 요청을 관리하는 서비스로, DR 전환 시 한도 초과로 인한 확장 실패를 예방하기 위해 사전에 점검해야 합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q030",
+      "taskId": "2.2",
+      "type": "single",
+      "question": "운영팀은 실행 중인 서버에 SSH로 접속해 패치나 설정을 직접 변경하는 대신, 변경 사항이 반영된 새 AMI를 만들어 새 인스턴스로 교체 배포하고 기존 인스턴스는 종료하는 방식을 표준화하려고 합니다. 이 접근 방식을 무엇이라고 부릅니까?",
+      "choices": [
+        "불변 인프라(Immutable Infrastructure)",
+        "가변 인프라(Mutable Infrastructure)",
+        "파일럿 라이트",
+        "블루/그린 없는 인플레이스 배포"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "불변 인프라는 이미 배포된 인스턴스를 직접 수정하지 않고, 변경 사항을 반영한 새 이미지로 신규 인스턴스를 배포한 뒤 기존 인스턴스를 교체·폐기하는 방식으로, 설정 드리프트를 방지하고 롤백을 쉽게 만듭니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q031",
+      "taskId": "2.2",
+      "type": "multi",
+      "question": "Amazon S3의 내구성과 재해 대비 복제 관련 기능으로 옳은 것을 모두 고르세요.",
+      "choices": [
+        "버저닝(Versioning)을 활성화하면 객체의 이전 버전을 보관해 실수로 삭제·덮어쓴 경우에도 복구할 수 있다",
+        "교차 리전 복제(CRR)를 설정하면 객체가 다른 리전의 버킷으로 자동 복제되어 리전 장애에 대비할 수 있다",
+        "S3는 단일 가용 영역에만 데이터를 저장하므로 별도 복제 설정이 없으면 AZ 장애에 취약하다",
+        "S3 Standard 스토리지 클래스는 여러 가용 영역에 걸쳐 객체를 자동으로 저장해 높은 내구성을 제공한다",
+        "S3에는 버전 관리나 복제와 같은 데이터 보호 기능이 전혀 없다"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "S3는 버저닝으로 이전 버전 보관, CRR로 다른 리전 자동 복제를 지원하며, S3 Standard 클래스는 기본적으로 하나의 리전 내 여러 AZ에 걸쳐 객체를 저장해 매우 높은 내구성(11 9's)을 제공합니다. 따라서 단일 AZ에만 저장한다거나 데이터 보호 기능이 없다는 설명은 틀렸습니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q032",
+      "taskId": "2.2",
+      "type": "single",
+      "question": "웹 티어가 두 개의 가용 영역에 걸쳐 ALB 뒤에 배치되어 있습니다. 한 AZ의 모든 대상 인스턴스가 상태 확인에 실패하면 ALB는 어떻게 동작합니까?",
+      "choices": [
+        "해당 AZ로의 트래픽 전송을 중단하고 정상 상태인 다른 AZ의 인스턴스로만 트래픽을 라우팅한다",
+        "정상 인스턴스가 없는 AZ에도 계속 동일한 비율로 트래픽을 보낸다",
+        "ALB 자체가 자동으로 재시작되며 서비스가 전체 중단된다",
+        "DNS 캐시가 만료될 때까지 최대 24시간 동안 응답하지 않는다"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "ALB는 등록된 대상에 대해 지속적으로 상태 확인을 수행하며, 특정 AZ의 모든 대상이 비정상으로 판정되면 해당 대상으로의 트래픽 전송을 중단하고 정상 상태인 다른 AZ의 대상으로만 트래픽을 분산하여 가용성을 유지합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q033",
+      "taskId": "2.2",
+      "type": "single",
+      "question": "고객 지원 시스템은 접수된 텍스트 문의의 감정(긍정/부정)을 자동으로 분석하고, 처리 결과를 음성으로 안내 방송해야 합니다. 직접 머신러닝 모델을 구축하지 않고 관리형 서비스를 활용하려면 어떤 조합이 적합합니까?",
+      "choices": [
+        "Amazon Comprehend로 감정 분석을 수행하고 Amazon Polly로 텍스트를 음성으로 변환한다",
+        "Amazon Route 53으로 감정을 분석하고 AWS X-Ray로 음성을 합성한다",
+        "AWS Transfer Family로 감정을 분석하고 Secrets Manager로 음성을 합성한다",
+        "Amazon SQS로 감정을 분석하고 SNS로 음성을 합성한다"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Amazon Comprehend는 자연어 처리 기반 감정 분석(sentiment analysis)을 제공하는 관리형 AI 서비스이고, Amazon Polly는 텍스트를 음성으로 변환(TTS)하는 관리형 서비스입니다. 나머지 조합의 서비스들은 각각 DNS, 트레이싱, 파일 전송, 큐잉/알림 서비스로 이 용도와 무관합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d2-q034",
+      "taskId": "2.2",
+      "type": "multi",
+      "question": "재해 복구 아키텍처를 설계할 때 반드시 고려해야 할 사항으로 옳은 것을 모두 고르세요.",
+      "choices": [
+        "비즈니스 요구 사항에 따른 목표 RTO와 RPO를 먼저 정의하고 이에 맞는 전략을 선택한다",
+        "DR 전략의 비용은 일반적으로 RTO/RPO가 짧아질수록 증가한다는 트레이드오프를 이해한다",
+        "DR 리전에서도 필요한 Service Quotas(인스턴스, IP 등) 한도를 사전에 검증한다",
+        "모든 워크로드에 예외 없이 가장 비싼 액티브-액티브 전략만 적용한다",
+        "DR 전환 및 복구 절차를 정기적으로 테스트하여 실제 장애 시 절차가 동작함을 검증한다"
+      ],
+      "answer": [
+        0,
+        1,
+        2,
+        4
+      ],
+      "explanation": "DR 설계는 목표 RTO/RPO 정의, 비용-복구속도 트레이드오프 이해, 사전 Service Quotas 검증, 정기적인 DR 훈련(테스트)을 포함해야 합니다. 모든 워크로드에 무조건 가장 비싼 전략을 적용하는 것은 비효율적이며, 워크로드별 중요도에 따라 적절한 전략을 차등 적용하는 것이 바람직합니다.",
+      "domainId": "d2"
+    },
+    {
+      "id": "saa-d3-q001",
+      "taskId": "3.1",
+      "type": "single",
+      "question": "여러 개의 Linux EC2 인스턴스가 여러 가용 영역에 걸쳐 동시에 동일한 파일 세트를 읽고 쓸 수 있어야 하며, POSIX 파일 시스템 시맨틱스와 자동 용량 확장이 필요합니다. 가장 적합한 스토리지 서비스는 무엇입니까?",
+      "choices": [
+        "Multi-Attach가 활성화된 io2 EBS 볼륨",
+        "Amazon EFS",
+        "s3fs로 마운트한 Amazon S3 버킷",
+        "Amazon FSx for Windows File Server"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Amazon EFS는 여러 AZ의 다수 Linux 인스턴스가 동시에 마운트하여 사용할 수 있는 완전관리형 POSIX 호환 공유 파일 시스템으로, 사용량에 따라 자동으로 확장/축소됩니다. EBS는 기본적으로 단일 인스턴스용이며(Multi-Attach도 동일 AZ 내 제한적 사용), S3는 파일 시스템 시맨틱스를 제공하지 않고, FSx for Windows는 SMB 기반이라 Linux 다중 접근에 적합하지 않습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q002",
+      "taskId": "3.1",
+      "type": "single",
+      "question": "대규모 온라인 트랜잭션 데이터베이스가 최대 16TiB 볼륨에서 64,000 IOPS와 서브 밀리초 지연시간, 99.999% 내구성을 요구합니다. 가장 적합한 EBS 볼륨 타입은 무엇입니까?",
+      "choices": [
+        "gp3",
+        "st1",
+        "io2 Block Express",
+        "sc1"
+      ],
+      "answer": [
+        2
+      ],
+      "explanation": "io2 Block Express는 볼륨당 최대 256,000 IOPS와 서브 밀리초 지연시간, 99.999% 내구성을 제공하여 고성능 트랜잭션 데이터베이스에 적합합니다. gp3는 최대 16,000 IOPS로 부족할 수 있고, st1/sc1은 HDD 기반으로 순차 처리량에 최적화되어 있어 낮은 지연시간의 랜덤 IOPS 워크로드에는 적합하지 않습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q003",
+      "taskId": "3.1",
+      "type": "multi",
+      "question": "규정 준수를 위해 몇 개월에서 몇 년간 거의 접근하지 않지만 완전히 삭제할 수는 없는 아카이브 데이터를 가장 비용 효율적으로 저장하려고 합니다. 검색 시간이 분~시간 단위이거나 최대 12시간까지 허용되는 경우에 사용할 수 있는 스토리지 클래스를 모두 고르십시오.",
+      "choices": [
+        "S3 Glacier Deep Archive",
+        "S3 Glacier Flexible Retrieval",
+        "S3 Standard",
+        "S3 Standard-IA",
+        "S3 One Zone-IA"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "S3 Glacier Flexible Retrieval은 분~시간 단위 검색을, S3 Glacier Deep Archive는 최대 12시간 검색으로 가장 저렴한 비용을 제공하여 장기 규정 준수 아카이브에 적합합니다. S3 Standard와 Standard-IA, One Zone-IA는 밀리초 단위 검색을 제공하지만 장기 보관 비용 효율성이 Glacier 계열보다 낮습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q004",
+      "taskId": "3.1",
+      "type": "single",
+      "question": "빅데이터 처리 클러스터가 대용량 로그 파일에 대해 순차적인 대량 읽기/쓰기 처리량을 요구하지만 매우 높은 IOPS는 필요하지 않습니다. 비용 효율적인 EBS 볼륨 타입은 무엇입니까?",
+      "choices": [
+        "gp2",
+        "st1(처리량 최적화 HDD)",
+        "sc1(콜드 HDD)",
+        "io1"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "st1(Throughput Optimized HDD)은 대용량 순차 처리량이 중요한 빅데이터, 로그 처리, 데이터 웨어하우스 워크로드에 최적화되어 있고 gp2/io1보다 비용이 저렴합니다. sc1은 처리량이 더 낮아 접근 빈도가 매우 낮은 콜드 데이터에만 적합합니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q005",
+      "taskId": "3.1",
+      "type": "multi",
+      "question": "온프레미스 애플리케이션이 로컬 캐시를 유지하면서 클라우드 기반 파일 공유를 사용해야 하는 요구사항과, 기존 테이프 백업 프로세스를 변경 없이 클라우드로 이전해야 하는 요구사항이 각각 있습니다. 이 두 요구사항에 맞는 AWS Storage Gateway 유형을 모두 고르십시오.",
+      "choices": [
+        "File Gateway",
+        "Volume Gateway (Stored)",
+        "Tape Gateway",
+        "Amazon FSx for Windows File Server",
+        "AWS Snowball Edge"
+      ],
+      "answer": [
+        0,
+        2
+      ],
+      "explanation": "File Gateway는 NFS/SMB 인터페이스로 로컬 캐시를 유지하며 S3 기반 파일 공유를 제공하고, Tape Gateway는 기존 백업 소프트웨어의 가상 테이프 라이브러리(VTL) 인터페이스를 그대로 사용하면서 데이터를 S3/Glacier로 이전합니다. Volume Gateway는 iSCSI 블록 스토리지용이며 FSx와 Snowball은 이 시나리오에 해당하지 않습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q006",
+      "taskId": "3.1",
+      "type": "single",
+      "question": "향후 트래픽 증가로 초당 수천 건의 PUT/GET 요청이 발생할 것으로 예상되는 객체 저장소를 별도의 프리픽스 설계 없이도 자동으로 확장 처리할 수 있는 서비스는 무엇입니까?",
+      "choices": [
+        "Amazon S3",
+        "gp3 EBS 볼륨",
+        "Amazon EFS",
+        "Amazon FSx for Lustre"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Amazon S3는 요청률에 따라 자동으로 파티셔닝을 확장하여 프리픽스당 초당 최소 3,500 PUT/COPY/POST/DELETE 및 5,500 GET/HEAD 요청을 지원하며 필요시 자동으로 추가 확장됩니다. EBS, EFS, FSx는 파일/블록 스토리지로 이러한 대규모 객체 요청 확장 패턴에 적합하지 않습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q007",
+      "taskId": "3.2",
+      "type": "single",
+      "question": "수천 개의 Docker 기반 배치 작업을 작업 간 종속성을 관리하면서 실행해야 하며, 클러스터 프로비저닝과 스케일링을 직접 관리하고 싶지 않습니다. 가장 적합한 서비스는 무엇입니까?",
+      "choices": [
+        "AWS Batch",
+        "Amazon EMR",
+        "AWS Fargate 단독 구성",
+        "EC2 Auto Scaling 그룹 직접 관리"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "AWS Batch는 컴퓨팅 리소스 프로비저닝, 작업 큐잉, 우선순위 지정, 재시도, 작업 종속성 관리를 완전관리형으로 자동화하여 대규모 배치 작업 실행에 최적화되어 있습니다. EMR은 빅데이터 프레임워크 실행에 특화되어 있고, Fargate나 EC2 Auto Scaling 단독으로는 배치 작업 스케줄링과 종속성 관리를 직접 구현해야 합니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q008",
+      "taskId": "3.2",
+      "type": "multi",
+      "question": "트래픽이 급증하는 주문 처리 시스템에서 프로듀서와 컨슈머 계층을 느슨하게 결합하고 부하에 따라 안정적으로 확장하려고 합니다. 적절한 설계 방식을 모두 고르십시오.",
+      "choices": [
+        "Amazon SQS 대기열을 도입하여 프로듀서와 컨슈머를 분리한다",
+        "SQS 대기열의 ApproximateNumberOfMessagesVisible 지표를 기반으로 컨슈머 Auto Scaling 정책을 구성한다",
+        "모든 요청을 동기식 REST API 호출로 직접 연결한다",
+        "단일 대형 EC2 인스턴스로 컴퓨팅을 수직 확장한다",
+        "Amazon SNS를 사용해 여러 구독자에게 이벤트를 팬아웃한다"
+      ],
+      "answer": [
+        0,
+        1,
+        4
+      ],
+      "explanation": "SQS로 계층을 분리하고 대기열 깊이 지표로 컨슈머를 Auto Scaling하며, SNS로 이벤트를 여러 구독자에게 팬아웃하는 것은 느슨한 결합과 탄력적 확장을 구현하는 표준 패턴입니다. 동기식 직접 호출이나 단일 인스턴스 수직 확장은 급증하는 트래픽에 취약하고 확장성이 낮습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q009",
+      "taskId": "3.2",
+      "type": "single",
+      "question": "CPU 집약적인 이미지 인코딩 작업을 수행하는 Lambda 함수의 실행 시간이 너무 길어 지연시간 요구사항을 충족하지 못하고 있습니다. 실행 속도를 개선하기 위해 가장 먼저 조정해야 할 설정은 무엇입니까?",
+      "choices": [
+        "함수의 타임아웃 값을 늘린다",
+        "함수의 메모리 할당량을 늘린다",
+        "예약된 동시 실행 수를 늘린다",
+        "런타임 버전만 변경한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Lambda는 메모리 할당량에 비례하여 CPU와 네트워크 대역폭을 할당하므로, CPU 바운드 작업의 경우 메모리를 늘리면 실행 시간이 단축될 수 있습니다. 타임아웃을 늘리는 것은 실행 자체를 빠르게 하지 않고, 동시 실행 수는 처리량과 관련이 있을 뿐 개별 실행 속도와는 무관합니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q010",
+      "taskId": "3.2",
+      "type": "single",
+      "question": "한 기업이 Kubernetes 매니페스트와 Helm 차트로 관리되는 컨테이너 워크로드를 AWS로 이전하면서 향후 멀티클라우드 이식성을 유지하고 싶어합니다. 가장 적합한 컨테이너 오케스트레이션 서비스는 무엇입니까?",
+      "choices": [
+        "Amazon ECS",
+        "Amazon EKS",
+        "AWS Batch",
+        "AWS Elastic Beanstalk"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Amazon EKS는 표준 Kubernetes API와 도구(kubectl, Helm 등)를 그대로 사용할 수 있어 기존 Kubernetes 매니페스트를 재사용하고 멀티클라우드 이식성을 유지하는 데 적합합니다. ECS는 AWS 네이티브 오케스트레이터로 Kubernetes 호환성이 없고, Batch와 Elastic Beanstalk는 이 요구사항에 맞지 않습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q011",
+      "taskId": "3.2",
+      "type": "multi",
+      "question": "EC2 Auto Scaling의 대상 추적(Target Tracking) 정책에서 확장/축소 기준으로 사용할 수 있는 지표를 모두 고르십시오.",
+      "choices": [
+        "평균 CPU 사용률",
+        "평균 네트워크 인/아웃 트래픽",
+        "사용자 지정 CloudWatch 지표(예: SQS 대기열 깊이)",
+        "EBS 볼륨 ID",
+        "Route 53 상태 확인 ID"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "대상 추적 정책은 평균 CPU 사용률, 평균 네트워크 트래픽, 그리고 SQS 대기열 깊이 같은 사용자 지정 CloudWatch 지표를 기준으로 인스턴스 수를 자동 조정할 수 있습니다. EBS 볼륨 ID나 Route 53 상태 확인 ID는 스케일링 지표가 아니라 식별자입니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q012",
+      "taskId": "3.2",
+      "type": "single",
+      "question": "컨테이너화된 웹 애플리케이션을 ECS에서 운영하되, 서버 인스턴스의 패치, 용량 관리, 클러스터 스케일링을 전혀 관리하고 싶지 않습니다. 어떤 ECS 실행 유형을 선택해야 합니까?",
+      "choices": [
+        "EC2 실행 유형",
+        "Fargate 실행 유형",
+        "온프레미스에 배포된 ECS Anywhere",
+        "Amazon EMR과 통합된 실행 유형"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "AWS Fargate는 서버리스 컴퓨팅 엔진으로 EC2 인스턴스나 클러스터의 프로비저닝, 패치, 확장을 직접 관리할 필요 없이 컨테이너만 정의하면 실행됩니다. EC2 실행 유형은 인스턴스 관리 책임이 남아있고, ECS Anywhere와 EMR은 이 요구사항과 관련이 없습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q013",
+      "taskId": "3.2",
+      "type": "multi",
+      "question": "Amazon EMR을 사용하는 것이 적절한 사용 사례를 모두 고르십시오.",
+      "choices": [
+        "Spark/Hadoop을 이용한 대규모 분산 데이터 처리 및 ETL",
+        "페타바이트급 클릭스트림 데이터 분석",
+        "온라인 트랜잭션 처리(OLTP) 시스템 구축",
+        "일시적(transient) 클러스터를 사용한 주기적 배치 분석 작업",
+        "단일 EC2 인스턴스에서의 소규모 웹 서버 호스팅"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "EMR은 Spark/Hadoop 기반 대규모 분산 데이터 처리, 페타바이트급 데이터 분석, 그리고 필요할 때만 클러스터를 띄우는 일시적 배치 작업에 적합합니다. OLTP 시스템이나 단순 웹 서버 호스팅은 EMR의 사용 사례가 아니며 각각 RDS/Aurora, EC2/컨테이너 서비스가 적합합니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q014",
+      "taskId": "3.3",
+      "type": "single",
+      "question": "모바일 게임의 플레이어 프로필 서비스가 초당 수백만 건의 키-값 조회를 처리해야 하며 단일 자릿수 밀리초 지연시간과 사실상 무제한의 처리량 확장이 필요합니다. 가장 적합한 데이터베이스는 무엇입니까?",
+      "choices": [
+        "Amazon RDS for MySQL",
+        "Amazon DynamoDB",
+        "Amazon Aurora",
+        "Amazon Redshift"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "DynamoDB는 완전관리형 NoSQL 데이터베이스로 단일 자릿수 밀리초 지연시간과 파티션 분산을 통한 사실상 무제한의 읽기/쓰기 확장을 제공하여 대규모 키-값 조회 워크로드에 최적화되어 있습니다. RDS와 Aurora는 관계형 워크로드에, Redshift는 데이터 웨어하우징 분석에 적합합니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q015",
+      "taskId": "3.3",
+      "type": "single",
+      "question": "DynamoDB 테이블을 사용하는 추천 서비스에서 반복적으로 조회되는 항목에 대한 응답 시간을 마이크로초 단위로 낮추고 싶습니다. 가장 적합한 캐싱 솔루션은 무엇입니까?",
+      "choices": [
+        "Amazon ElastiCache for Redis를 애플리케이션 앞단에 별도 구성",
+        "Amazon DynamoDB Accelerator(DAX)",
+        "Amazon RDS Proxy",
+        "Amazon CloudFront"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "DAX는 DynamoDB 전용 인메모리 캐시로 DynamoDB API와 완전히 호환되며 마이크로초 단위의 응답 시간을 제공하도록 특별히 설계되었습니다. ElastiCache Redis도 캐시로 사용할 수 있지만 애플리케이션 코드 변경과 캐시 무효화 로직이 추가로 필요하며, RDS Proxy와 CloudFront는 이 시나리오에 해당하지 않습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q016",
+      "taskId": "3.3",
+      "type": "multi",
+      "question": "캐싱 계층으로 ElastiCache for Memcached 대신 ElastiCache for Redis를 선택해야 하는 요구사항을 모두 고르십시오.",
+      "choices": [
+        "세션 상태 복제 및 자동 장애 조치가 필요한 경우",
+        "정렬된 집합(Sorted Set) 등 고급 자료구조가 필요한 경우",
+        "단순 키-값 캐싱만 필요하고 데이터 지속성이 필요 없는 경우",
+        "멀티스레드로 수평적 확장(샤딩)만 하면 되는 단순 캐시인 경우",
+        "Pub/Sub 메시징 기능이 필요한 경우"
+      ],
+      "answer": [
+        0,
+        1,
+        4
+      ],
+      "explanation": "Redis는 복제와 Multi-AZ 자동 장애 조치, 정렬된 집합 등 다양한 자료구조, Pub/Sub 메시징을 지원하여 이러한 요구사항에 적합합니다. 단순 캐싱과 데이터 지속성이 필요 없는 멀티스레드 샤딩 워크로드는 오히려 Memcached가 더 적합한 선택입니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q017",
+      "taskId": "3.3",
+      "type": "single",
+      "question": "서버리스 애플리케이션이 트래픽 급증 시 수천 개의 동시 실행 환경에서 RDS 데이터베이스에 직접 연결하여 연결 수 초과 오류가 자주 발생하고 있습니다. 이 문제를 완화하기 위해 애플리케이션과 RDS 사이에 두어야 할 서비스는 무엇입니까?",
+      "choices": [
+        "Amazon ElastiCache",
+        "Amazon RDS Proxy",
+        "Amazon Route 53",
+        "Application Load Balancer"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "RDS Proxy는 연결 풀링을 통해 다수의 애플리케이션 연결을 소수의 데이터베이스 연결로 관리하여 연결 폭주 문제를 완화하고, 장애 조치 시간도 단축시킵니다. ElastiCache는 데이터 캐싱용이고, Route 53과 ALB는 연결 폭주 문제를 직접 해결하지 못합니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q018",
+      "taskId": "3.3",
+      "type": "multi",
+      "question": "온프레미스 Oracle 데이터베이스를 Amazon Aurora PostgreSQL로 마이그레이션하려고 합니다. 스키마 구조가 달라 이기종 마이그레이션에 해당합니다. 필요한 AWS 도구를 모두 고르십시오.",
+      "choices": [
+        "AWS Schema Conversion Tool(SCT)",
+        "AWS Database Migration Service(DMS)",
+        "AWS Direct Connect",
+        "AWS Storage Gateway",
+        "Amazon Redshift"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "이기종 마이그레이션에서는 AWS SCT로 Oracle 스키마와 저장 프로시저를 PostgreSQL 호환 형식으로 변환하고, AWS DMS로 실제 데이터를 최소 다운타임으로 이전합니다. Direct Connect, Storage Gateway, Redshift는 이 마이그레이션 작업에 필요한 핵심 도구가 아닙니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q019",
+      "taskId": "3.3",
+      "type": "single",
+      "question": "뉴스 웹사이트의 기사 조회 트래픽이 쓰기보다 압도적으로 많은 읽기 집약적 워크로드입니다. RDS 데이터베이스의 읽기 처리량을 수평으로 확장하기 위해 사용해야 할 기능은 무엇입니까?",
+      "choices": [
+        "Multi-AZ 대기 인스턴스 추가",
+        "읽기 전용 복제본(Read Replica)",
+        "예약 인스턴스 구매",
+        "프로비저닝된 IOPS 볼륨으로 변경"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "읽기 전용 복제본은 읽기 트래픽을 여러 복제본으로 분산시켜 읽기 처리량을 수평으로 확장하는 기능입니다. Multi-AZ는 고가용성과 장애 조치를 위한 것으로 대기 인스턴스는 일반적으로 읽기 트래픽을 처리하지 않으며, 예약 인스턴스와 IOPS 볼륨 변경은 읽기 확장성과 직접 관련이 없습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q020",
+      "taskId": "3.4",
+      "type": "single",
+      "question": "전 세계 사용자에게 정적 이미지와 캐시 가능한 API 응답을 짧은 지연시간으로 제공하려고 합니다. 가장 적합한 서비스는 무엇입니까?",
+      "choices": [
+        "AWS Global Accelerator",
+        "Amazon CloudFront",
+        "AWS Direct Connect",
+        "AWS Transit Gateway"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "CloudFront는 전 세계 엣지 로케이션에 캐시 가능한 콘텐츠를 캐싱하여 사용자에게 낮은 지연시간으로 콘텐츠를 제공하는 CDN 서비스로 이 시나리오에 가장 적합합니다. Global Accelerator는 캐시 불가능한 TCP/UDP 트래픽에, Direct Connect와 Transit Gateway는 네트워크 연결 및 라우팅에 사용되는 서비스입니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q021",
+      "taskId": "3.4",
+      "type": "multi",
+      "question": "실시간 멀티플레이어 게임 서버가 전 세계 플레이어에게 캐시할 수 없는 UDP 트래픽을 낮은 지연시간으로 전달해야 하며, 리전 장애 시 자동으로 정상 리전으로 전환되어야 합니다. 적합한 설계 요소를 모두 고르십시오.",
+      "choices": [
+        "AWS Global Accelerator를 사용한다",
+        "Anycast IP를 통해 가장 가까운 AWS 엣지 위치로 트래픽을 라우팅한다",
+        "콘텐츠를 CloudFront 캐시에 저장하여 지연시간을 줄인다",
+        "비정상 엔드포인트에서 정상 엔드포인트로 자동 장애 조치한다",
+        "Route 53 지리적 위치 라우팅만 사용하고 상태 확인은 사용하지 않는다"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "Global Accelerator는 애니캐스트 IP로 사용자를 가장 가까운 정상 엔드포인트로 라우팅하고 상태 확인 기반의 자동 장애 조치를 제공하여 캐시 불가능한 실시간 UDP/TCP 트래픽에 적합합니다. CloudFront는 캐시 가능한 콘텐츠에 사용되고, 상태 확인 없는 지리적 라우팅만으로는 자동 장애 조치가 이루어지지 않습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q022",
+      "taskId": "3.4",
+      "type": "single",
+      "question": "마이크로서비스 아키텍처에서 URL 경로(/api/orders, /api/users)에 따라 서로 다른 백엔드 대상 그룹으로 HTTP 요청을 라우팅해야 합니다. 어떤 로드밸런서를 사용해야 합니까?",
+      "choices": [
+        "Network Load Balancer",
+        "Application Load Balancer",
+        "Gateway Load Balancer",
+        "Classic Load Balancer"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "ALB는 계층 7에서 동작하며 URL 경로, 호스트 헤더, HTTP 헤더 등을 기반으로 서로 다른 대상 그룹에 요청을 라우팅할 수 있어 마이크로서비스 라우팅에 적합합니다. NLB는 계층 4에서 동작하여 경로 기반 라우팅을 지원하지 않고, GWLB는 어플라이언스 트래픽 삽입용이며, Classic Load Balancer는 이러한 세밀한 라우팅 기능을 지원하지 않습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q023",
+      "taskId": "3.4",
+      "type": "single",
+      "question": "금융 회사가 온프레미스 데이터센터와 VPC 사이에 일관되게 낮은 지연시간과 10Gbps의 안정적인 전용 대역폭이 필요한 연결을 구축하려고 합니다. 가장 적합한 연결 옵션은 무엇입니까?",
+      "choices": [
+        "Site-to-Site VPN",
+        "AWS Direct Connect",
+        "인터넷 게이트웨이를 통한 퍼블릭 연결",
+        "VPC 피어링만 구성"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "AWS Direct Connect는 전용 네트워크 연결을 통해 1/10/100Gbps의 일관된 대역폭과 낮은 지연시간을 제공하여 금융권처럼 안정적인 성능이 중요한 하이브리드 연결에 적합합니다. VPN은 인터넷을 경유하여 성능이 가변적이고, 인터넷 게이트웨이나 VPC 피어링만으로는 온프레미스 전용 연결을 구성할 수 없습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q024",
+      "taskId": "3.4",
+      "type": "multi",
+      "question": "여러 파트너 SaaS 서비스와 연동해야 하는데, 트래픽이 인터넷을 거치지 않고 CIDR이 겹치는 VPC 환경에서도 안전하게 특정 서비스에만 연결되어야 합니다. AWS PrivateLink 도입이 적절한 상황을 모두 고르십시오.",
+      "choices": [
+        "인터넷 게이트웨이를 통하지 않고 AWS 서비스 또는 파트너 SaaS에 비공개로 연결해야 하는 경우",
+        "VPC 피어링 없이 다른 VPC의 특정 서비스에만 접근하고 싶은 경우",
+        "두 VPC의 모든 서브넷 간에 전체 라우팅을 허용하고 싶은 경우",
+        "CIDR이 겹치는 VPC 간에도 특정 서비스에 연결해야 하는 경우",
+        "전 세계 모든 리전 간 회사 데이터센터 백본을 구축하려는 경우"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "PrivateLink는 인터페이스 엔드포인트를 통해 인터넷 노출 없이 특정 서비스에만 비공개로 연결하며, VPC 피어링과 달리 전체 네트워크 라우팅을 개방하지 않고 CIDR이 겹치는 환경에서도 동작합니다. 전체 서브넷 간 라우팅이 필요하면 VPC 피어링이나 Transit Gateway가, 글로벌 백본 구축에는 Direct Connect나 Transit Gateway가 더 적합합니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q025",
+      "taskId": "3.4",
+      "type": "single",
+      "question": "회사가 수십 개의 VPC와 여러 온프레미스 사이트를 상호 연결하면서 라우팅 정책을 중앙에서 관리하고 VPC 피어링의 복잡한 메시 구조를 피하고 싶습니다. 가장 적합한 서비스는 무엇입니까?",
+      "choices": [
+        "다수의 VPC 피어링 연결",
+        "AWS Transit Gateway",
+        "AWS PrivateLink",
+        "Direct Connect Gateway 단독 구성"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Transit Gateway는 다수의 VPC와 온프레미스 네트워크를 허브 앤 스포크 구조로 연결하여 중앙에서 라우팅을 관리할 수 있게 하며, VPC 피어링의 N:N 메시 복잡성을 피할 수 있습니다. VPC 피어링을 다수 구성하면 관리가 매우 복잡해지고, PrivateLink는 서비스 단위 연결에, Direct Connect Gateway는 여러 리전 연결에 특화되어 있습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q026",
+      "taskId": "3.5",
+      "type": "single",
+      "question": "데이터 분석팀이 S3에 저장된 로그 데이터에 대해 서버를 프로비저닝하지 않고 표준 SQL로 애드혹 쿼리를 실행하고 스캔한 데이터양에 대해서만 비용을 지불하고 싶습니다. 가장 적합한 서비스는 무엇입니까?",
+      "choices": [
+        "Amazon Redshift 프로비저닝 클러스터",
+        "Amazon Athena",
+        "Amazon EMR",
+        "AWS Glue ETL 작업"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Amazon Athena는 서버리스 대화형 쿼리 서비스로 S3 데이터에 대해 표준 SQL을 실행하며 스캔한 데이터양을 기준으로 과금되어 애드혹 분석에 적합합니다. Redshift는 클러스터 프로비저닝이 필요하고, EMR과 Glue는 대규모 ETL/분산 처리에 더 적합합니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q027",
+      "taskId": "3.5",
+      "type": "single",
+      "question": "여러 소스 시스템에서 유입되는 데이터의 스키마를 자동으로 탐색하여 카탈로그화하고, 코드를 최소화한 서버리스 방식으로 데이터를 변환하고 싶습니다. 가장 적합한 서비스는 무엇입니까?",
+      "choices": [
+        "AWS Glue",
+        "AWS DataSync",
+        "Amazon Kinesis Data Firehose",
+        "AWS Lake Formation"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "AWS Glue는 크롤러로 다양한 소스의 스키마를 자동 탐색하여 Glue Data Catalog에 등록하고, 서버리스 ETL 작업으로 데이터를 변환합니다. DataSync는 데이터 전송용, Firehose는 스트리밍 데이터 전달용, Lake Formation은 권한 관리에 특화되어 있습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q028",
+      "taskId": "3.5",
+      "type": "multi",
+      "question": "실시간 스트리밍 데이터 처리 요구사항에 맞는 서비스 선택으로 옳은 것을 모두 고르십시오.",
+      "choices": [
+        "재처리(replay)와 다중 커스텀 컨슈머가 필요한 경우 Kinesis Data Streams를 사용한다",
+        "완전관리형으로 코드 작성 없이 스트리밍 데이터를 S3/Redshift/OpenSearch로 전달하려면 Kinesis Data Firehose를 사용한다",
+        "실시간 스트림에 대해 SQL 또는 Apache Flink로 즉시 분석하려면 Kinesis Data Analytics를 사용한다",
+        "모든 스트리밍 요구사항에 Amazon Athena만으로 충분하다",
+        "전송 중인 데이터를 변환 없이 그대로 저장해야 한다면 Firehose는 절대 사용할 수 없다"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "Kinesis Data Streams는 데이터 보관과 재처리, 다중 커스텀 컨슈머에 적합하고, Firehose는 코드 없이 대상 저장소로 자동 전달하며, Data Analytics는 SQL/Flink 기반 실시간 분석에 사용됩니다. Athena는 스트리밍 서비스가 아니라 S3에 저장된 데이터에 대한 쿼리 서비스이며, Firehose는 변환 없이 원본 그대로 전달하는 것도 지원합니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q029",
+      "taskId": "3.5",
+      "type": "single",
+      "question": "온프레미스 NFS 파일 서버에 있는 수십 테라바이트의 데이터를 Amazon S3로 신속하고 자동화된 방식으로 온라인 전송 및 지속적인 동기화를 하고 싶습니다. 가장 적합한 서비스는 무엇입니까?",
+      "choices": [
+        "AWS Snowball Edge",
+        "AWS DataSync",
+        "AWS Storage Gateway Tape Gateway",
+        "AWS Direct Connect 단독 구성"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "AWS DataSync는 온프레미스 NFS/SMB 스토리지와 AWS 스토리지 서비스 간의 데이터 전송을 자동화하고 가속화하며, 지속적인 동기화 작업을 스케줄링할 수 있습니다. Snowball Edge는 오프라인 물리 전송에 적합하고, Tape Gateway는 테이프 백업 워크플로우용이며, Direct Connect는 연결 자체이지 전송 자동화 기능을 제공하지 않습니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q030",
+      "taskId": "3.5",
+      "type": "multi",
+      "question": "회사가 여러 부서가 공동으로 사용할 중앙 데이터 레이크를 구축하면서 세분화된 접근 통제와 분석/시각화 기능을 함께 제공하려고 합니다. 적절한 아키텍처 구성 요소를 모두 고르십시오.",
+      "choices": [
+        "Amazon S3를 데이터 레이크의 중앙 스토리지로 사용한다",
+        "AWS Glue Data Catalog로 메타데이터를 관리한다",
+        "AWS Lake Formation으로 세분화된 데이터 접근 권한을 중앙에서 관리한다",
+        "Amazon QuickSight로 분석 결과를 시각화한다",
+        "모든 사용자에게 S3 버킷에 대한 관리자 권한을 직접 부여하여 접근을 단순화한다"
+      ],
+      "answer": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "explanation": "S3를 중앙 스토리지로, Glue Data Catalog로 메타데이터를, Lake Formation으로 세분화된 권한을, QuickSight로 시각화를 담당하는 조합은 거버넌스가 갖춰진 데이터 레이크의 표준 구성입니다. 모든 사용자에게 관리자 권한을 부여하는 것은 최소 권한 원칙에 위배되어 보안상 부적절합니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d3-q031",
+      "taskId": "3.5",
+      "type": "single",
+      "question": "페타바이트 규모의 원시 데이터에 대해 Spark 기반의 복잡한 대규모 변환 작업을 수행해야 하며, 클러스터 인스턴스 유형과 노드 수를 세밀하게 튜닝해야 합니다. 가장 적합한 서비스는 무엇입니까?",
+      "choices": [
+        "Amazon Athena",
+        "AWS Glue Studio",
+        "Amazon EMR",
+        "Amazon QuickSight"
+      ],
+      "answer": [
+        2
+      ],
+      "explanation": "Amazon EMR은 Spark/Hadoop 클러스터의 인스턴스 유형, 노드 수, 구성을 세밀하게 제어할 수 있어 페타바이트급 대규모 변환 작업에 적합합니다. Athena와 QuickSight는 각각 쿼리와 시각화에 특화되어 있고, Glue Studio는 서버리스 ETL로 세밀한 클러스터 튜닝의 자유도가 EMR보다 제한적입니다.",
+      "domainId": "d3"
+    },
+    {
+      "id": "saa-d4-q001",
+      "taskId": "4.1",
+      "type": "single",
+      "question": "한 미디어 회사는 원본 동영상 파일을 S3에 저장한다. 업로드 후 30일 이내에는 자주 조회되지만 30일 이후에는 접근 빈도가 급격히 줄어들고, 이후의 접근 패턴은 예측하기 어렵다. 스토리지 비용을 최소화하면서 운영 오버헤드도 줄이려면 어떤 방법이 가장 적합한가?",
+      "choices": [
+        "모든 객체를 S3 Standard에 유지하고 담당자가 수동으로 접근 로그를 모니터링한다",
+        "업로드 즉시 모든 객체를 S3 Glacier Deep Archive로 이동시킨다",
+        "30일 경과 후 객체를 S3 Intelligent-Tiering으로 전환하는 수명주기 규칙을 설정한다",
+        "30일 경과 후 객체를 Amazon EFS Standard로 마이그레이션한다"
+      ],
+      "answer": [
+        2
+      ],
+      "explanation": "S3 Intelligent-Tiering은 객체별 접근 패턴을 자동으로 모니터링해 가장 비용 효율적인 계층으로 이동시키므로, 접근 빈도를 예측하기 어려운 상황에서 별도 운영 부담 없이 비용을 최적화할 수 있다. Deep Archive는 저렴하지만 복원 지연이 커서 예측 불가능한 접근 패턴에는 적합하지 않다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q002",
+      "taskId": "4.1",
+      "type": "single",
+      "question": "대량의 데이터를 순차적으로 스캔하는 빅데이터 배치 분석 워크로드가 있다. 자주 접근하지는 않지만 실행 시 높은 처리량(throughput)이 중요하다. 비용 효율성을 극대화할 EBS 볼륨 유형은?",
+      "choices": [
+        "범용 SSD(gp3)",
+        "프로비저닝된 IOPS SSD(io2 Block Express)",
+        "처리량 최적화 HDD(st1)",
+        "콜드 HDD(sc1)"
+      ],
+      "answer": [
+        2
+      ],
+      "explanation": "st1은 순차적 대용량 처리량 중심 워크로드에 최적화되어 있으며 SSD 계열보다 GB당 비용이 저렴하다. sc1은 더 저렴하지만 처리량이 낮아 빅데이터 배치 분석처럼 처리량이 중요한 워크로드에는 적합하지 않다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q003",
+      "taskId": "4.1",
+      "type": "multi",
+      "question": "한 조직이 서비스별/태그별 비용을 매일 시각적으로 확인하고, 예산 초과 시 알림을 받고, 시간 단위의 상세 사용량 데이터를 S3에 적재해 Athena로 분석하려고 한다. 이 요구사항을 충족하는 데 사용할 AWS 도구를 모두 고르시오.",
+      "choices": [
+        "AWS Cost Explorer",
+        "AWS Budgets",
+        "Cost and Usage Report(CUR)",
+        "AWS Trusted Advisor",
+        "AWS Config"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "Cost Explorer는 서비스/태그별 비용 시각화와 예측을, Budgets는 임계값 초과 시 알림을, CUR은 가장 상세한 시간 단위 비용/사용량 데이터를 S3에 제공해 Athena/QuickSight 분석을 가능하게 한다. Trusted Advisor는 비용 절감 권고사항 위주이고, Config는 리소스 구성 변경 이력 추적 서비스로 비용 데이터 목적이 아니다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q004",
+      "taskId": "4.1",
+      "type": "single",
+      "question": "한 연구기관이 대용량 공개 데이터셋을 S3에 게시하여 전 세계 연구자들이 다운로드하도록 하려고 한다. 데이터 전송 비용을 게시 기관이 부담하지 않고 다운로드하는 요청자가 부담하도록 하려면 어떤 기능을 사용해야 하는가?",
+      "choices": [
+        "버킷 정책으로 퍼블릭 읽기 권한만 부여한다",
+        "버킷에 Requester Pays를 활성화한다",
+        "Amazon CloudFront 배포를 생성한다",
+        "S3 Transfer Acceleration을 활성화한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Requester Pays를 활성화하면 객체를 다운로드하는 요청자의 계정에 데이터 전송 요금이 청구되어, 대규모 공개 데이터셋을 게시하는 기관이 전송 비용 부담 없이 데이터를 공유할 수 있다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q005",
+      "taskId": "4.1",
+      "type": "multi",
+      "question": "Amazon EFS 비용 최적화와 관련된 설명으로 옳은 것을 모두 고르시오.",
+      "choices": [
+        "EFS Lifecycle Management를 활성화하면 일정 기간 접근이 없는 파일이 자동으로 IA 스토리지 클래스로 이동한다",
+        "EFS Standard와 EFS IA는 처리량 모드와 관계없이 항상 GB당 비용이 동일하다",
+        "EFS One Zone 스토리지 클래스는 단일 가용 영역에만 저장되어 다중 AZ에 저장되는 Standard보다 저렴하다",
+        "EFS는 사전 프로비저닝 없이 사용량에 따라 자동으로 확장/축소되므로 용량 산정에 따른 과잉 프로비저닝 비용이 발생하지 않는다"
+      ],
+      "answer": [
+        0,
+        2,
+        3
+      ],
+      "explanation": "EFS IA는 Standard보다 GB당 저장 비용이 낮으므로 두 클래스의 비용이 동일하다는 설명은 틀렸다. One Zone은 단일 AZ 저장으로 더 저렴하고, Lifecycle Management는 미접근 파일을 자동으로 IA로 옮기며, EFS는 온디맨드로 확장되는 파일 시스템이라 사전 용량 산정이 필요 없다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q006",
+      "taskId": "4.1",
+      "type": "multi",
+      "question": "온프레미스 환경과 AWS 간 데이터를 저비용으로 이전하거나 하이브리드 접근을 지원하는 데 사용되는 스토리지 관련 서비스를 모두 고르시오.",
+      "choices": [
+        "AWS DataSync",
+        "AWS Transfer Family",
+        "AWS Storage Gateway",
+        "Amazon FSx for Lustre",
+        "AWS Direct Connect"
+      ],
+      "answer": [
+        0,
+        1,
+        2
+      ],
+      "explanation": "DataSync는 대용량 데이터의 온라인 이전을 자동화하고, Transfer Family는 SFTP/FTPS 기반 파일 교환을 관리형으로 제공하며, Storage Gateway는 온프레미스 애플리케이션이 클라우드 스토리지를 로컬처럼 사용하도록 캐싱 계층을 제공한다. FSx for Lustre는 고성능 파일 시스템이고 Direct Connect는 네트워크 연결 서비스로, 하이브리드 스토리지 전송 서비스 자체는 아니다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q007",
+      "taskId": "4.1",
+      "type": "single",
+      "question": "규정 준수를 위해 EBS 볼륨의 스냅샷을 매일 생성하되 7일이 지난 스냅샷은 자동으로 삭제되도록 하여 백업 스토리지 비용을 최소화하려고 한다. 가장 적합한 방법은?",
+      "choices": [
+        "관리자가 매일 수동으로 스냅샷을 생성하고 무기한 보관한다",
+        "Amazon Data Lifecycle Manager(DLM)로 스냅샷 생성 정책과 7일 보존 규칙을 설정한다",
+        "스냅샷 대신 매일 EBS 볼륨 전체를 S3에 수동 업로드한다",
+        "RDS Multi-AZ를 활성화하여 자동으로 스냅샷을 대체한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Data Lifecycle Manager는 스냅샷 생성 스케줄과 보존 기간을 정책으로 자동화해, 지정된 보존 기간이 지난 스냅샷을 자동으로 삭제함으로써 관리 부담과 스토리지 비용을 동시에 줄여준다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q008",
+      "taskId": "4.2",
+      "type": "single",
+      "question": "상태 비저장(stateless) 배치 렌더링 작업으로, 작업이 중단되면 다른 인스턴스에서 재시작할 수 있는 워크로드가 있다. 컴퓨팅 비용을 최소화하는 가장 적합한 구매 옵션은?",
+      "choices": [
+        "On-Demand Instances",
+        "3년 약정 Reserved Instances",
+        "Spot Instances",
+        "Dedicated Hosts"
+      ],
+      "answer": [
+        2
+      ],
+      "explanation": "Spot Instance는 유휴 용량을 최대 90%까지 할인된 가격으로 제공하지만 언제든 회수될 수 있다. 중단을 허용하고 재시작이 가능한 무상태 배치 워크로드에 가장 적합한 저비용 옵션이다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q009",
+      "taskId": "4.2",
+      "type": "multi",
+      "question": "EC2 예약 기반 할인 옵션(Reserved Instances, Savings Plans)에 대한 설명으로 옳은 것을 모두 고르시오.",
+      "choices": [
+        "Standard Reserved Instance는 인스턴스 패밀리와 리전이 고정되어 변경이 제한적이지만 Convertible RI보다 할인율이 높다",
+        "Compute Savings Plans는 인스턴스 패밀리, 크기, 리전, OS와 무관하게 약정한 시간당 사용 금액만 지불하면 할인이 적용된다",
+        "동일 계정에서 Savings Plans와 Reserved Instances는 동시에 함께 사용할 수 없다",
+        "Spot Instance는 약정 없이 유휴 용량을 최대 90%까지 할인된 가격에 사용할 수 있지만 언제든 회수될 수 있다"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "Reserved Instances와 Savings Plans는 서로 다른 워크로드 구간에 각각 적용하며 동시에 병행 사용이 가능하므로 세 번째 설명은 틀렸다. Standard RI는 유연성이 낮은 대신 할인율이 높고, Compute Savings Plans는 EC2 구성 변경에 유연하게 적용되며, Spot은 약정 없는 최대 할인 옵션이지만 회수 위험이 있다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q010",
+      "taskId": "4.2",
+      "type": "multi",
+      "question": "트래픽이 급격히 변하고 사용량을 예측하기 어려운 이벤트 기반 웹 API가 있다. 유휴 시간의 컴퓨팅 비용을 없애고 서버 관리 오버헤드도 최소화하려고 할 때 적합한 조합을 모두 고르시오.",
+      "choices": [
+        "AWS Lambda",
+        "AWS Fargate",
+        "3년 약정 예약 인스턴스로 고정 용량의 EC2 운영",
+        "온디맨드 EC2 오토 스케일링 그룹을 상시 최소 1대 이상 유지",
+        "Dedicated Host"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "Lambda와 Fargate는 실제 사용한 컴퓨팅 자원만큼만 과금되는 서버리스 모델로, 유휴 시간에는 비용이 발생하지 않고 서버 프로비저닝/패치 부담도 없다. 예약 인스턴스 고정 운영이나 상시 유지되는 EC2는 트래픽이 없을 때도 비용이 발생한다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q011",
+      "taskId": "4.2",
+      "type": "single",
+      "question": "초당 수백만 건의 TCP 연결을 초저지연으로 처리해야 하고, 클라이언트에 고정 IP를 제공해야 하는 워크로드에 가장 적합하면서 비용 대비 효율적인 로드밸런서는?",
+      "choices": [
+        "Application Load Balancer(ALB)",
+        "Network Load Balancer(NLB)",
+        "Gateway Load Balancer(GWLB)",
+        "Classic Load Balancer"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "NLB는 계층 4에서 동작하며 초저지연, 초당 수백만 요청 처리, 고정 IP(Elastic IP) 지원에 최적화되어 있다. ALB는 계층 7 콘텐츠 기반 라우팅에 적합하지만 이 요구사항에는 NLB가 더 적합하다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q012",
+      "taskId": "4.2",
+      "type": "single",
+      "question": "개발/테스트 환경의 EC2 인스턴스는 평일 업무 시간(09시~18시)에만 사용된다. 이 환경의 컴퓨팅 비용을 최소화하는 가장 적합한 방법은?",
+      "choices": [
+        "3년 약정 Reserved Instance를 구매한다",
+        "인스턴스를 상시 실행 상태로 두고 On-Demand 요금을 지불한다",
+        "EventBridge와 Lambda(또는 Instance Scheduler)로 업무 외 시간에 인스턴스를 자동 중지/시작한다",
+        "Spot Instance로 상시 실행하여 중단 위험을 감수한다"
+      ],
+      "answer": [
+        2
+      ],
+      "explanation": "업무 시간에만 필요한 비프로덕션 워크로드는 사용하지 않는 시간에 인스턴스를 중지하는 것이 가장 효과적인 비용 절감 방법이다. EventBridge 스케줄과 Lambda 또는 Instance Scheduler로 자동화하면 관리 부담 없이 상시 가동 비용을 제거할 수 있다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q013",
+      "taskId": "4.2",
+      "type": "multi",
+      "question": "EC2 최대 절전 모드(Hibernate)에 대한 설명으로 옳은 것을 모두 고르시오.",
+      "choices": [
+        "중지 시 메모리(RAM) 상태가 EBS 루트 볼륨에 저장되어 재시작 시 부팅 및 애플리케이션 재초기화 시간과 비용을 절감한다",
+        "최대 절전 모드로 중지된 동안 인스턴스 사용 요금은 청구되지 않지만 연결된 EBS 스토리지 요금은 계속 청구된다",
+        "인스턴스의 RAM 크기나 인스턴스 패밀리와 관계없이 모든 EC2 인스턴스에서 제한 없이 지원된다",
+        "On-Demand 및 Reserved Instance뿐 아니라 Spot Instance에서도 사용할 수 있다"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "최대 절전 모드는 지원되는 인스턴스 패밀리와 특정 RAM 크기 이하(예: 150GiB 이하)에서만 지원되므로 제한이 없다는 설명은 틀렸다. 나머지 설명은 모두 올바르며, 특히 Spot Instance의 최대 절전 모드는 중단 시 재초기화 비용을 줄이는 데 유용하다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q014",
+      "taskId": "4.2",
+      "type": "single",
+      "question": "마이크로서비스를 컨테이너로 운영하되 서버 프로비저닝과 패치를 직접 관리하고 싶지 않고, 사용한 vCPU와 메모리만큼만 과금받고 싶다. 가장 적합한 서비스는?",
+      "choices": [
+        "EC2 Auto Scaling으로 직접 관리하는 ECS 클러스터",
+        "AWS Fargate",
+        "EC2 Spot Fleet 기반 셀프 관리 컨테이너 클러스터",
+        "AWS Outposts"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Fargate는 서버리스 컨테이너 실행 환경으로 서버 프로비저닝, 패치, 클러스터 관리가 필요 없으며 태스크가 사용한 vCPU/메모리 기준으로만 과금되어 컨테이너 운영의 관리 오버헤드와 유휴 비용을 동시에 줄인다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q015",
+      "taskId": "4.3",
+      "type": "single",
+      "question": "읽기 위주 트래픽이 많은 관계형 데이터베이스에서 동일한 쿼리 결과가 반복적으로 조회되어 DB 인스턴스 크기를 계속 늘려야 하는 상황이다. 인스턴스 비용을 늘리지 않고 이 문제를 해결하는 가장 적합한 방법은?",
+      "choices": [
+        "DB 인스턴스 클래스를 한 단계 더 큰 크기로 업그레이드한다",
+        "Amazon ElastiCache를 애플리케이션과 DB 사이에 두어 자주 조회되는 결과를 캐싱한다",
+        "읽기 복제본을 10개로 확장한다",
+        "Multi-AZ 대기 인스턴스를 읽기 트래픽 처리에도 사용한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "반복되는 동일 쿼리 결과를 캐싱하면 DB에 도달하는 요청 자체가 줄어들어 인스턴스 크기 증설 없이 부하를 흡수할 수 있다. 읽기 복제본 확장은 비용이 선형적으로 증가하고, Multi-AZ 대기 인스턴스는 읽기 트래픽 처리용으로 사용되지 않는다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q016",
+      "taskId": "4.3",
+      "type": "single",
+      "question": "신규 서비스의 DynamoDB 테이블은 아직 트래픽 패턴이 알려지지 않았고 스파이크가 잦을 것으로 예상된다. 초기 단계에서 비용 관리에 가장 적합한 용량 모드는?",
+      "choices": [
+        "Provisioned Capacity를 수동으로 넉넉하게 설정",
+        "On-Demand Capacity Mode",
+        "Provisioned Capacity를 최대치로 고정",
+        "DynamoDB Accelerator(DAX)만 도입하고 용량 모드는 임의로 설정"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "On-Demand Capacity Mode는 실제 요청량에 따라 자동으로 용량을 확장/축소하고 사용한 만큼만 과금되므로, 트래픽 패턴을 예측하기 어려운 초기 단계에서 과잉 프로비저닝 비용을 피할 수 있다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q017",
+      "taskId": "4.3",
+      "type": "single",
+      "question": "트래픽 패턴이 안정적이고 예측 가능한 대규모 DynamoDB 테이블에서 On-Demand 모드 대비 비용을 낮추려면 어떤 방법이 가장 적합한가?",
+      "choices": [
+        "On-Demand Capacity Mode를 계속 유지한다",
+        "Provisioned Capacity와 Application Auto Scaling을 함께 사용한다",
+        "모든 항목에 TTL만 설정하고 용량 모드는 변경하지 않는다",
+        "읽기 복제본을 추가한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "트래픽이 안정적이고 예측 가능한 경우 Provisioned Capacity가 On-Demand보다 단가가 낮으며, Application Auto Scaling을 함께 사용하면 트래픽 변화에도 대응하면서 On-Demand보다 낮은 비용을 유지할 수 있다. DynamoDB는 읽기 복제본 개념이 없다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q018",
+      "taskId": "4.3",
+      "type": "multi",
+      "question": "트랜잭션량에 스파이크가 잦은 Aurora 클러스터에서 유휴 시간의 비용을 줄이면서 운영 부담도 최소화하려는 조합으로 옳은 것을 모두 고르시오.",
+      "choices": [
+        "Aurora Serverless v2로 전환하여 ACU 단위로 자동 확장/축소되도록 한다",
+        "Aurora Auto Scaling으로 읽기 복제본 수를 트래픽에 따라 자동 조정한다",
+        "3년 약정 RDS 예약 인스턴스로 고정 용량을 구매한다",
+        "항상 가장 큰 인스턴스 클래스로 고정 프로비저닝한다"
+      ],
+      "answer": [
+        0,
+        1
+      ],
+      "explanation": "트래픽 변동이 큰 워크로드에는 ACU 단위로 자동 확장/축소되는 Aurora Serverless v2와, 읽기 트래픽에 따라 복제본 수를 조정하는 Auto Scaling 조합이 유휴 비용을 줄이는 데 적합하다. 예약 인스턴스나 고정된 대형 인스턴스는 변동이 큰 워크로드에서 과잉 프로비저닝을 유발한다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q019",
+      "taskId": "4.3",
+      "type": "single",
+      "question": "라이선스 비용이 큰 상용 Oracle 데이터베이스를 오픈소스 엔진으로 전환하는 이기종(heterogeneous) 마이그레이션을 통해 라이선스 비용을 절감하려고 한다. 이때 필요한 AWS 서비스 조합은?",
+      "choices": [
+        "AWS DMS만 사용한다",
+        "AWS Schema Conversion Tool(SCT)로 스키마를 변환하고 AWS DMS로 데이터를 복제한다",
+        "AWS Backup만 사용해 백업을 이전한다",
+        "RDS 읽기 복제본만 생성하면 충분하다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "이기종 마이그레이션은 소스와 대상 엔진이 다르므로 SCT로 스키마와 코드 객체를 변환한 뒤 DMS로 데이터를 지속 복제해야 한다. DMS만으로는 스키마 구조 차이를 해결할 수 없다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q020",
+      "taskId": "4.3",
+      "type": "single",
+      "question": "수백만 개의 IoT 센서에서 발생하는 시계열 데이터를 저장하고 시간 범위 기반 쿼리를 빈번하게 수행해야 하며 비용 효율성이 중요하다. 가장 적합한 데이터베이스는?",
+      "choices": [
+        "Amazon Timestream",
+        "Amazon RDS for MySQL",
+        "Amazon DynamoDB(자동 계층화 없이 단독 사용)",
+        "Amazon Redshift"
+      ],
+      "answer": [
+        0
+      ],
+      "explanation": "Timestream은 시계열 데이터에 특화되어 최근 데이터는 메모리 계층에, 오래된 데이터는 자기 저장 계층에 자동으로 배치해 저장 비용을 최적화하고 시간 범위 쿼리 성능도 뛰어나다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q021",
+      "taskId": "4.4",
+      "type": "single",
+      "question": "프라이빗 서브넷의 여러 EC2 인스턴스가 S3 버킷에 매우 빈번하게 접근하며, 아웃바운드 트래픽은 NAT Gateway를 경유한다. NAT Gateway의 데이터 처리 요금이 크게 발생하고 있다면 이를 줄이는 가장 효과적인 방법은?",
+      "choices": [
+        "각 가용 영역마다 NAT Gateway를 추가로 배치한다",
+        "S3용 Gateway VPC 엔드포인트를 추가한다",
+        "NAT Gateway를 NAT Instance로 교체한다",
+        "온프레미스와의 Direct Connect 연결을 추가한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "S3용 Gateway VPC 엔드포인트를 사용하면 S3로 향하는 트래픽이 NAT Gateway나 인터넷을 거치지 않고 VPC 내부 경로로 직접 전달되어 NAT Gateway의 데이터 처리 비용이 사라진다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q022",
+      "taskId": "4.4",
+      "type": "single",
+      "question": "3개의 가용 영역에 걸쳐 배포된 워크로드의 고가용성을 유지하면서 NAT Gateway 관련 비용도 함께 고려해야 한다. 일반적으로 권장되는 아키텍처는?",
+      "choices": [
+        "VPC 전체에 단일 NAT Gateway 하나만 배치한다",
+        "가용 영역마다 하나씩 NAT Gateway를 배치해 AZ 장애 격리와 교차 AZ 전송 비용을 회피한다",
+        "NAT Gateway 대신 인터넷 게이트웨이만 프라이빗 서브넷에 연결한다",
+        "가용 영역마다 NAT Instance를 6대씩 배치한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "AZ마다 NAT Gateway를 배치하면 특정 AZ 장애가 다른 AZ의 아웃바운드 트래픽에 영향을 주지 않고, 각 AZ의 트래픽이 같은 AZ의 NAT Gateway를 사용하므로 교차 AZ 데이터 전송 비용도 발생하지 않는다. 단일 NAT Gateway는 더 저렴하지만 가용성 저하와 교차 AZ 전송 비용이라는 트레이드오프가 있다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q023",
+      "taskId": "4.4",
+      "type": "multi",
+      "question": "데이터 전송 비용을 최소화하기 위한 네트워크 아키텍처 설계 원칙으로 옳은 것을 모두 고르시오.",
+      "choices": [
+        "가능하면 서로 통신이 잦은 리소스를 같은 가용 영역에 배치한다",
+        "AWS 서비스에 접근할 때는 VPC 엔드포인트를 사용해 인터넷/NAT Gateway 경유를 피한다",
+        "지연 시간을 낮추기 위해 모든 트래픽을 여러 리전에 상시 전체 복제한다",
+        "CloudFront로 정적 콘텐츠를 캐싱해 오리진으로 향하는 데이터 전송량을 줄인다",
+        "항상 Direct Connect만 사용하고 VPN은 사용하지 않는다"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "같은 AZ 배치, VPC 엔드포인트 활용, CDN 캐싱은 모두 데이터 전송량과 경로를 줄여 비용을 절감하는 검증된 방법이다. 모든 트래픽을 리전 간 상시 전체 복제하는 것은 오히려 리전 간 전송 비용을 크게 늘리며, Direct Connect 전용 사용은 상황에 따라 VPN보다 항상 비용 효율적인 것은 아니다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q024",
+      "taskId": "4.4",
+      "type": "single",
+      "question": "온프레미스 데이터센터에서 AWS로 수십 Gbps 규모의 트래픽을 안정적이고 일관된 지연 시간으로 지속적으로 전송해야 하며, 장기적으로 전송 비용도 절감하고자 한다. 가장 적합한 연결 방식은?",
+      "choices": [
+        "Site-to-Site VPN",
+        "AWS Direct Connect 전용 연결",
+        "인터넷 게이트웨이를 통한 퍼블릭 인터넷 전송",
+        "Transit Gateway만 단독으로 사용"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "Direct Connect는 인터넷을 거치지 않는 전용 회선으로 대용량 트래픽에서 안정적인 대역폭과 일관된 지연 시간을 제공하며, 데이터 전송량이 많을수록 인터넷 기반 VPN보다 GB당 비용이 낮아지는 경우가 많다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q025",
+      "taskId": "4.4",
+      "type": "single",
+      "question": "회사가 20개의 VPC를 상호 연결해야 하며 향후 VPC 수가 계속 늘어날 것으로 예상된다. 관리 복잡도와 비용 효율성을 함께 고려할 때 VPC Peering과 비교해 더 적합한 선택은?",
+      "choices": [
+        "20개 VPC를 모두 완전 메시(full mesh) 구조로 VPC Peering 연결한다",
+        "Transit Gateway를 사용해 허브-스포크 구조로 연결한다",
+        "각 VPC마다 별도의 인터넷 게이트웨이를 만들어 퍼블릭하게 연결한다",
+        "AWS PrivateLink로 모든 VPC 쌍을 개별 연결한다"
+      ],
+      "answer": [
+        1
+      ],
+      "explanation": "VPC 수가 많아질수록 완전 메시 Peering은 연결 수가 기하급수적으로 증가해 관리가 어려워진다. Transit Gateway는 허브 역할을 하며 각 VPC가 한 번만 연결하면 되므로 대규모 환경에서 관리 비용과 복잡도 측면에서 더 효율적이다.",
+      "domainId": "d4"
+    },
+    {
+      "id": "saa-d4-q026",
+      "taskId": "4.4",
+      "type": "multi",
+      "question": "전 세계 사용자에게 정적/동적 콘텐츠를 제공하는 웹 애플리케이션의 네트워크 비용과 지연 시간을 함께 최적화하려는 조합으로 옳은 것을 모두 고르시오.",
+      "choices": [
+        "Amazon CloudFront를 오리진 앞단에 배치해 엣지에서 콘텐츠를 캐싱한다",
+        "Route 53 지연 시간 기반 라우팅으로 사용자를 가장 가까운 리전으로 분산한다",
+        "모든 리전에서 전체 데이터를 상시 완전 복제하여 리전 간 전송 비용 증가를 감수한다",
+        "대용량 사용자 업로드 시나리오에서 S3 Transfer Acceleration으로 업로드 속도를 개선한다",
+        "오리진에 항상 퍼블릭 인터넷으로 직접 연결하고 캐싱 계층은 두지 않는다"
+      ],
+      "answer": [
+        0,
+        1,
+        3
+      ],
+      "explanation": "CloudFront 캐싱은 오리진 전송량과 지연을 동시에 줄이고, Route 53 지연 시간 기반 라우팅은 사용자를 가까운 리전으로 유도해 전송 경로를 최적화하며, Transfer Acceleration은 대용량 업로드 시나리오에 한해 속도를 개선하는 유용한 옵션이다. 전체 데이터의 상시 완전 복제와 캐싱 없는 직접 연결은 불필요한 전송 비용과 지연을 유발한다.",
+      "domainId": "d4"
+    }
+  ]
+};
