@@ -170,6 +170,40 @@ blockquote.example {
   background: var(--bg); border-radius: 0 8px 8px 0; color: var(--muted); font-size: 14px;
 }
 
+.concept-block { margin-top: 22px; }
+.concept-block h3 {
+  font-size: 14px; margin: 0 0 10px; display: flex; align-items: center; gap: 7px;
+}
+.concept-block h3::before { font-size: 15px; line-height: 1; }
+.compare-block h3::before { content: "⇄"; color: var(--accent); }
+.pitfall-block h3::before { content: "!"; font-weight: 900; color: var(--danger); }
+
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table.compare {
+  width: 100%; border-collapse: collapse; font-size: 13px; min-width: 480px;
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+}
+table.compare th, table.compare td {
+  border-bottom: 1px solid var(--border); padding: 8px 11px; text-align: left; vertical-align: top;
+}
+table.compare thead th { background: var(--bg); font-weight: 700; white-space: nowrap; }
+table.compare tbody th { font-weight: 600; white-space: nowrap; color: var(--fg); }
+table.compare tbody tr:last-child th, table.compare tbody tr:last-child td { border-bottom: none; }
+table.compare td { color: var(--muted); }
+
+.pitfall-block ul {
+  list-style: none; padding: 0; margin: 0;
+  border: 1px solid var(--border); border-radius: 8px; background: var(--bg);
+}
+.pitfall-block li {
+  padding: 9px 13px 9px 30px; font-size: 13.5px; position: relative;
+  border-bottom: 1px solid var(--border);
+}
+.pitfall-block li:last-child { border-bottom: none; }
+.pitfall-block li::before {
+  content: "△"; position: absolute; left: 11px; top: 9px; color: var(--danger); font-size: 12px;
+}
+
 .btn {
   display:inline-flex; align-items:center; justify-content:center; gap:6px;
   background: var(--accent); color: var(--accent-fg); border:none; border-radius:10px;

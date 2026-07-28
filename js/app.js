@@ -282,6 +282,36 @@
   }
 
   // ---------- concepts ----------
+  function renderCompare(c) {
+    if (!c || !c.headers || !c.rows) return "";
+    var head = c.headers.map(function (h) { return "<th>" + esc(h) + "</th>"; }).join("");
+    var body = c.rows.map(function (row) {
+      var cells = row.map(function (cell, i) {
+        return i === 0
+          ? '<th scope="row">' + esc(cell) + "</th>"
+          : "<td>" + esc(cell) + "</td>";
+      }).join("");
+      return "<tr>" + cells + "</tr>";
+    }).join("");
+    return (
+      '<div class="concept-block compare-block">' +
+      "<h3>" + esc(c.caption || "비교 정리") + "</h3>" +
+      '<div class="table-scroll"><table class="compare">' +
+      "<thead><tr>" + head + "</tr></thead><tbody>" + body + "</tbody>" +
+      "</table></div></div>"
+    );
+  }
+
+  function renderPitfalls(list) {
+    if (!list || !list.length) return "";
+    var items = list.map(function (p) { return "<li>" + esc(p) + "</li>"; }).join("");
+    return (
+      '<div class="concept-block pitfall-block">' +
+      "<h3>시험 함정 · 혼동 포인트</h3>" +
+      "<ul>" + items + "</ul></div>"
+    );
+  }
+
   function viewConcepts(cert, domainId, taskId) {
     var d = data(cert);
     if (!domainId) {
@@ -321,6 +351,8 @@
     var example = task.concept.example
       ? '<blockquote class="example">' + esc(task.concept.example) + "</blockquote>"
       : "";
+    var compare = renderCompare(task.concept.compare);
+    var pitfalls = renderPitfalls(task.concept.pitfalls);
 
     return (
       "<h1>" + esc(d.name) + '</h1><p class="muted">개념학습</p>' +
@@ -332,6 +364,8 @@
       "<h2>" + esc(task.title) + "</h2>" +
       "<p>" + esc(task.concept.summary) + "</p>" +
       '<ul class="key-points">' + kp + "</ul>" +
+      compare +
+      pitfalls +
       example +
       '<div class="concept-nav-btns">' +
       (prev ? '<a class="btn secondary" href="#/' + cert + "/concepts/" + prev.domain.id + "/" + prev.task.taskId + '">← ' + esc(prev.task.title) + "</a>" : "<span></span>") +
