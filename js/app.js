@@ -175,8 +175,34 @@
     window.scrollTo(0, 0);
   }
 
+  // Shows the "swipe" label only while a compare table actually overflows, and
+  // the right-edge fade only while there is more content to scroll to.
+  function updateTableScrollHints() {
+    var wraps = document.querySelectorAll(".table-scroll-wrap");
+    Array.prototype.forEach.call(wraps, function (wrap) {
+      var sc = wrap.querySelector(".table-scroll");
+      if (!sc) return;
+      var overflow = sc.scrollWidth - sc.clientWidth;
+      var scrollable = overflow > 1;
+      var block = wrap.parentNode;
+      if (block && block.classList) block.classList.toggle("is-scrollable", scrollable);
+      wrap.classList.toggle("hint-right", scrollable && sc.scrollLeft < overflow - 1);
+    });
+  }
+
+  function bindTableScrollHints() {
+    var scrollers = document.querySelectorAll(".table-scroll-wrap > .table-scroll");
+    Array.prototype.forEach.call(scrollers, function (sc) {
+      sc.addEventListener("scroll", updateTableScrollHints, { passive: true });
+    });
+    updateTableScrollHints();
+  }
+
+  window.addEventListener("resize", updateTableScrollHints);
+
   function afterRender(parts) {
     if (examTimerHandle) { clearInterval(examTimerHandle); examTimerHandle = null; }
+    bindTableScrollHints();
     var cert = parts[0];
     var section = parts[1];
     if (cert === "glossary") bindAllGlossary();
@@ -293,12 +319,15 @@
       }).join("");
       return "<tr>" + cells + "</tr>";
     }).join("");
+    var caption = c.caption || "비교 정리";
     return (
       '<div class="concept-block compare-block">' +
-      "<h3>" + esc(c.caption || "비교 정리") + "</h3>" +
-      '<div class="table-scroll"><table class="compare">' +
+      "<h3>" + esc(caption) + '<span class="scroll-hint" aria-hidden="true">↔ 좌우 스크롤</span></h3>' +
+      '<div class="table-scroll-wrap">' +
+      '<div class="table-scroll" tabindex="0" role="region" aria-label="' + esc(caption) + ' 표 (좌우로 스크롤할 수 있습니다)">' +
+      '<table class="compare">' +
       "<thead><tr>" + head + "</tr></thead><tbody>" + body + "</tbody>" +
-      "</table></div></div>"
+      "</table></div></div></div>"
     );
   }
 

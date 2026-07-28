@@ -146,22 +146,25 @@ button { font-family: inherit; }
 .domain-bar-row .bar > span { display:block; height:100%; background: var(--accent2); }
 .domain-bar-row .pct { width:38px; text-align:right; color: var(--muted); }
 
-.layout-sidebar { display:grid; grid-template-columns: 260px 1fr; gap: 20px; align-items:start; }
-@media (max-width: 800px) { .layout-sidebar { grid-template-columns: 1fr; } }
+/* minmax(0, 1fr) keeps the content column from being blown out by the
+   min-content width of wide children (e.g. table.compare's min-width) */
+.layout-sidebar { display:grid; grid-template-columns: 260px minmax(0, 1fr); gap: 20px; align-items:start; }
 
-.side-nav { background: var(--bg-elev); border:1px solid var(--border); border-radius: var(--radius); padding: 10px; position: sticky; top: 68px; max-height: calc(100vh - 90px); overflow:auto; }
+.side-nav { background: var(--bg-elev); border:1px solid var(--border); border-radius: var(--radius); padding: 10px; position: sticky; top: 68px; max-height: calc(100vh - 90px); overflow:auto; min-width: 0; }
 .side-nav .domain-group { margin-bottom: 6px; }
 .side-nav .domain-title { font-weight:700; font-size:13px; padding:8px 10px; color: var(--muted); display:flex; justify-content:space-between; }
 .side-nav a.task-link {
   display:flex; align-items:center; gap:8px; text-decoration:none; color: var(--fg);
   font-size: 13.5px; padding:7px 10px; border-radius:8px;
+  min-width: 0; overflow-wrap: anywhere;
 }
 .side-nav a.task-link:hover { background: var(--bg); }
 .side-nav a.task-link.active { background: var(--accent); color: var(--accent-fg); font-weight:600; }
 .side-nav .check { width:14px; height:14px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; }
 .side-nav a.task-link.read .check { background: var(--success); border-color: var(--success); }
 
-.concept-nav-btns { display:flex; justify-content:space-between; margin-top:22px; gap:10px; }
+.concept-nav-btns { display:flex; flex-wrap:wrap; justify-content:space-between; margin-top:22px; gap:10px; }
+.concept-nav-btns .btn { min-width: 0; max-width: 100%; }
 
 .key-points { padding-left: 20px; }
 .key-points li { margin-bottom: 6px; }
@@ -178,10 +181,37 @@ blockquote.example {
 .compare-block h3::before { content: "⇄"; color: var(--accent); }
 .pitfall-block h3::before { content: "!"; font-weight: 900; color: var(--danger); }
 
-.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+/* the frame lives on the scroll container, not the table: an `overflow` on the
+   table would become the scrollport and break the sticky first column below */
+.table-scroll {
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border); border-radius: 8px;
+}
+.table-scroll:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* scroll affordance: a right-edge fade + a label, only while the table overflows.
+   No left fade — the frozen first column already marks that edge. */
+.table-scroll-wrap { position: relative; }
+.table-scroll-wrap::after {
+  content: ""; position: absolute; top: 1px; bottom: 1px; right: 1px; width: 30px;
+  border-radius: 0 8px 8px 0;
+  background: linear-gradient(to left, var(--bg-elev), transparent);
+  pointer-events: none; opacity: 0; transition: opacity .15s ease;
+}
+.table-scroll-wrap.hint-right::after { opacity: 1; }
+
+.compare-block .scroll-hint { display: none; }
+.compare-block.is-scrollable .scroll-hint {
+  display: inline-block; margin-left: auto; flex-shrink: 0;
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 999px; padding: 1px 8px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .table-scroll-wrap::after { transition: none; }
+}
 table.compare {
   width: 100%; border-collapse: collapse; font-size: 13px; min-width: 480px;
-  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
 }
 table.compare th, table.compare td {
   border-bottom: 1px solid var(--border); padding: 8px 11px; text-align: left; vertical-align: top;
@@ -190,6 +220,16 @@ table.compare thead th { background: var(--bg); font-weight: 700; white-space: n
 table.compare tbody th { font-weight: 600; white-space: nowrap; color: var(--fg); }
 table.compare tbody tr:last-child th, table.compare tbody tr:last-child td { border-bottom: none; }
 table.compare td { color: var(--muted); }
+
+/* freeze the row-label column so it stays readable while scrolling sideways */
+table.compare thead th:first-child,
+table.compare tbody th { position: sticky; left: 0; }
+table.compare tbody th { z-index: 1; background: var(--bg-elev); }
+table.compare thead th:first-child { z-index: 2; }
+/* separator only while the column is actually frozen; border-collapse drops
+   borders on sticky cells, hence the inset shadow */
+.compare-block.is-scrollable table.compare thead th:first-child,
+.compare-block.is-scrollable table.compare tbody th { box-shadow: inset -1px 0 0 var(--border); }
 
 .pitfall-block ul {
   list-style: none; padding: 0; margin: 0;
@@ -300,3 +340,44 @@ h3 { font-size: 16px; }
 .mt-0 { margin-top: 0; }
 .section-title { display:flex; align-items:center; justify-content:space-between; margin-bottom: 6px; }
 hr.sep { border:none; border-top:1px solid var(--border); margin: 20px 0; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 800px) {
+  .layout-sidebar { grid-template-columns: minmax(0, 1fr); }
+  /* the concept text comes first; the task list becomes a plain block below it
+     so it no longer sits above the lesson as a full-height nested scroll box */
+  .layout-sidebar > .card { order: 1; }
+  .layout-sidebar > .side-nav { order: 2; position: static; top: auto; max-height: none; overflow: visible; }
+}
+
+@media (max-width: 560px) {
+  #topbar { padding: 10px 14px; gap: 8px; }
+  #topbar .brand { flex-shrink: 0; }
+  #topbar .crumb { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  #app { padding: 16px 12px 56px; }
+  .card { padding: 16px 14px; }
+
+  .tabs a { padding: 9px 10px; font-size: 13.5px; }
+
+  /* stack the prev/next buttons: their labels are full task titles */
+  .concept-nav-btns { flex-direction: column; }
+  .concept-nav-btns .btn { width: 100%; }
+  .concept-nav-btns > span:empty { display: none; }
+
+  table.compare { min-width: 420px; }
+  /* the frozen column must not eat the screen: labels like
+     "Glacier Flexible Retrieval" are 196px wide when kept on one line */
+  table.compare thead th:first-child,
+  table.compare tbody th {
+    white-space: normal; min-width: 96px; max-width: 112px;
+  }
+
+  .domain-bar-row { flex-wrap: wrap; }
+  .domain-bar-row .name { width: 100%; }
+
+  .stat { min-width: 100px; }
+  .result-hero { padding: 22px 14px; }
+  .result-hero .score { font-size: 38px; }
+  .svc-grid { grid-template-columns: minmax(0, 1fr); }
+}
