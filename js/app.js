@@ -136,6 +136,9 @@
     if (parts.length === 0) {
       crumb.textContent = "";
       html = viewHome();
+    } else if (parts[0] === "glossary") {
+      crumb.textContent = "서비스 사전";
+      html = viewAllGlossary();
     } else {
       var cert = parts[0];
       if (CERTS.indexOf(cert) === -1) {
@@ -176,7 +179,8 @@
     if (examTimerHandle) { clearInterval(examTimerHandle); examTimerHandle = null; }
     var cert = parts[0];
     var section = parts[1];
-    if (cert && section === "glossary") bindGlossary(cert);
+    if (cert === "glossary") bindAllGlossary();
+    if (CERTS.indexOf(cert) !== -1 && section === "glossary") bindGlossary(cert);
     if (cert && section === "exam" && session && session.kind === "exam" && session.cert === cert && session.phase === "active") {
       startExamTimer();
     }
@@ -219,9 +223,13 @@
     }).join("");
 
     return (
-      "<h1>AWS 자격증 스터디</h1>" +
+      "<h1>AWS 스터디</h1>" +
       '<p class="muted">Cloud Practitioner와 Solutions Architect - Associate 시험을 위한 개념 학습, 퀴즈, 모의고사 도구입니다. 모든 진행 상황은 이 브라우저에 저장됩니다.</p>' +
-      '<div class="cert-cards">' + cards + "</div>"
+      '<div class="cert-cards">' + cards + "</div>" +
+      '<a class="home-link" href="#/glossary">' +
+      "<div><b>서비스 사전</b><p>두 시험 범위의 AWS 서비스 " + allServices().length + "개를 한곳에서 검색합니다</p></div>" +
+      '<span class="arrow">→</span>' +
+      "</a>"
     );
   }
 
@@ -695,6 +703,65 @@
   }
 
   // ---------- glossary ----------
+  // 두 자격증의 서비스 목록을 이름 기준으로 합치고, 설명은 더 자세한 쪽을 남긴다.
+  function allServices() {
+    var byName = {};
+    var merged = [];
+    CERTS.forEach(function (cert) {
+      data(cert).services.forEach(function (s) {
+        var e = byName[s.name];
+        if (!e) {
+          e = byName[s.name] = { name: s.name, category: s.category, oneLiner: s.oneLiner, certs: [] };
+          merged.push(e);
+        } else if (s.oneLiner.length > e.oneLiner.length) {
+          e.oneLiner = s.oneLiner;
+        }
+        if (e.certs.indexOf(cert) === -1) e.certs.push(cert);
+      });
+    });
+    return merged.sort(function (a, b) { return a.name.localeCompare(b.name); });
+  }
+
+  function viewAllGlossary() {
+    var list = allServices();
+    var categories = [];
+    list.forEach(function (s) { if (categories.indexOf(s.category) === -1) categories.push(s.category); });
+    categories.sort(function (a, b) { return a.localeCompare(b); });
+    var catOptions = '<option value="all">전체 카테고리</option>' + categories.map(function (c) { return '<option value="' + esc(c) + '">' + esc(c) + "</option>"; }).join("");
+    var certOptions = '<option value="all">전체 자격증</option>' + CERTS.map(function (c) { return '<option value="' + esc(c) + '">' + esc(data(c).code) + "</option>"; }).join("");
+    return (
+      '<h1>서비스 사전</h1><p class="muted">CLF-C02 · SAA-C03 시험 범위 · 총 ' + list.length + "개 서비스</p>" +
+      '<div class="glossary-toolbar">' +
+      '<input type="search" id="svc-search" placeholder="서비스 이름 또는 설명 검색...">' +
+      '<select id="svc-cat">' + catOptions + "</select>" +
+      '<select id="svc-cert">' + certOptions + "</select>" +
+      "</div>" +
+      '<div class="svc-grid" id="svc-grid">' + renderSvcCards(list) + "</div>"
+    );
+  }
+  function bindAllGlossary() {
+    var list = allServices();
+    var search = document.getElementById("svc-search");
+    var catSel = document.getElementById("svc-cat");
+    var certSel = document.getElementById("svc-cert");
+    if (!search) return;
+    function refresh() {
+      var term = search.value.trim().toLowerCase();
+      var cat = catSel.value;
+      var cert = certSel.value;
+      var filtered = list.filter(function (s) {
+        var matchTerm = !term || s.name.toLowerCase().indexOf(term) !== -1 || s.oneLiner.toLowerCase().indexOf(term) !== -1;
+        var matchCat = cat === "all" || s.category === cat;
+        var matchCert = cert === "all" || s.certs.indexOf(cert) !== -1;
+        return matchTerm && matchCat && matchCert;
+      });
+      document.getElementById("svc-grid").innerHTML = renderSvcCards(filtered);
+    }
+    search.addEventListener("input", refresh);
+    catSel.addEventListener("change", refresh);
+    certSel.addEventListener("change", refresh);
+  }
+
   function viewGlossary(cert) {
     var d = data(cert);
     var categories = [];
@@ -713,7 +780,10 @@
   function renderSvcCards(list) {
     if (!list.length) return '<div class="empty-state">검색 결과가 없습니다.</div>';
     return list.map(function (s) {
-      return '<div class="svc-card"><div class="name">' + esc(s.name) + '</div><span class="cat">' + esc(s.category) + '</span><div class="one">' + esc(s.oneLiner) + "</div></div>";
+      var badges = s.certs
+        ? '<span class="svc-certs">' + s.certs.map(function (c) { return "<b>" + esc(data(c).code) + "</b>"; }).join("") + "</span>"
+        : "";
+      return '<div class="svc-card"><div class="name">' + esc(s.name) + '</div><span class="cat">' + esc(s.category) + "</span>" + badges + '<div class="one">' + esc(s.oneLiner) + "</div></div>";
     }).join("");
   }
   function bindGlossary(cert) {

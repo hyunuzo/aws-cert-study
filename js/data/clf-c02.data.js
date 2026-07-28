@@ -663,82 +663,82 @@ window.APP_DATA.clf = {
     },
     {
       "name": "AWS Auto Scaling",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "EC2, ECS, DynamoDB, Aurora 등 여러 리소스에 걸쳐 애플리케이션을 모니터링하고 수요에 맞게 용량을 자동으로 조정해 안정적인 성능을 최저 비용으로 유지해주는 서비스이다."
     },
     {
       "name": "AWS CloudFormation",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "JSON/YAML 템플릿으로 AWS 리소스를 코드로 정의하고 스택 단위로 일관되게 프로비저닝·관리할 수 있게 해주는 인프라형코드(IaC) 서비스이다."
     },
     {
       "name": "AWS CloudTrail",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "AWS 계정 내에서 사용자, 역할, 서비스가 수행한 API 호출과 활동 내역을 이벤트로 기록하여 감사, 보안 모니터링, 운영 문제 해결을 지원하는 서비스이다."
     },
     {
       "name": "Amazon CloudWatch",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "AWS 리소스와 애플리케이션의 로그, 지표, 이벤트를 실시간으로 수집·모니터링하고 알람과 대시보드를 통해 운영 상태를 파악할 수 있게 해주는 서비스이다."
     },
     {
       "name": "AWS Compute Optimizer",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "머신러닝을 이용해 리소스 사용 이력을 분석하고 EC2, Lambda 등에 더 적합한(비용 효율적인) 구성을 추천해주는 서비스이다."
     },
     {
       "name": "AWS Config",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "AWS 리소스의 구성을 지속적으로 기록하고 평가하여 원하는 구성 규칙 준수 여부를 확인하고 변경 이력을 추적할 수 있게 해주는 서비스이다."
     },
     {
       "name": "AWS Control Tower",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "다중 계정 AWS 환경을 모범 사례에 따라 자동으로 설정하고 거버넌스를 지속적으로 관리해주는 서비스로, AWS Organizations를 기반으로 랜딩 존을 구축한다."
     },
     {
       "name": "AWS Health Dashboard",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "AWS 서비스의 전반적인 상태와 사용자 계정 리소스에 영향을 줄 수 있는 이벤트를 개인화된 알림으로 제공하는 대시보드이다."
     },
     {
       "name": "AWS License Manager",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "Microsoft, SAP, Oracle 등 소프트웨어 라이선스 사용을 중앙에서 추적·관리하여 라이선스 규정 위반 위험을 줄여주는 서비스이다."
     },
     {
       "name": "AWS Management Console",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "웹 브라우저를 통해 AWS 서비스와 리소스를 시각적으로 조회하고 관리할 수 있게 해주는 통합 웹 기반 인터페이스이다."
     },
     {
       "name": "AWS Organizations",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "여러 AWS 계정을 하나의 조직으로 묶어 중앙에서 관리하는 계정 관리 서비스로, 통합 결제와 서비스 제어 정책(SCP)을 통한 거버넌스를 제공한다."
     },
     {
       "name": "AWS Service Catalog",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "조직에서 승인된 IT 서비스(CloudFormation 템플릿 등)의 카탈로그를 만들어 사용자가 표준화된 리소스만 셀프서비스로 배포하도록 통제하는 서비스이다."
     },
     {
       "name": "Service Quotas",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "AWS 서비스별 할당량(제한)을 한 곳에서 조회하고 필요 시 상향 조정을 요청할 수 있게 해주는 서비스이다."
     },
     {
       "name": "AWS Systems Manager",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "온프레미스 서버와 AWS 리소스를 한곳에서 볼 수 있게 해주고, 패치 관리, 실행 명령(Run Command), 파라미터 저장 등 운영 작업을 자동화하는 통합 관리 서비스이다."
     },
     {
       "name": "AWS Trusted Advisor",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "비용 최적화, 성능, 보안, 내결함성, 서비스 한도 등 다섯 가지 범주에 걸쳐 AWS 환경을 실시간으로 점검하고 모범 사례에 따른 개선 권장 사항을 제공하는 서비스이다."
     },
     {
       "name": "AWS Well-Architected Tool",
-      "category": "AWS 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "AWS Well-Architected Framework의 6가지 기둥(운영 우수성, 보안, 안정성, 성능 효율성, 비용 최적화, 지속 가능성)을 기준으로 워크로드를 검토하고 개선 사항을 파악할 수 있게 해주는 무료 도구이다."
     },
     {

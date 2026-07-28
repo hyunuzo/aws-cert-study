@@ -402,22 +402,22 @@ window.APP_DATA.saa = {
     },
     {
       "name": "AWS Budgets",
-      "category": "AWS Cost Management",
+      "category": "클라우드 재무 관리",
       "oneLiner": "비용, 사용량, 예약 인스턴스/절감형 플랜 사용률에 대해 예산 임계값을 설정하고 초과 시 알림을 받을 수 있는 서비스이다."
     },
     {
       "name": "AWS Cost and Usage Report",
-      "category": "AWS Cost Management",
+      "category": "클라우드 재무 관리",
       "oneLiner": "가장 상세한 수준의 AWS 비용 및 사용량 데이터를 제공하는 리포트로, S3에 저장한 뒤 Athena나 Redshift 등으로 정밀 분석할 수 있다."
     },
     {
       "name": "AWS Cost Explorer",
-      "category": "AWS Cost Management",
+      "category": "클라우드 재무 관리",
       "oneLiner": "비용과 사용량 추이를 시각화하고 향후 지출을 예측하는 도구로, 서비스·태그·계정별로 세분화해 비용 최적화 기회를 찾을 수 있다."
     },
     {
       "name": "절감형 플랜(Savings Plans)",
-      "category": "AWS Cost Management",
+      "category": "클라우드 재무 관리",
       "oneLiner": "1년 또는 3년 동안 시간당 일정 사용 금액을 약정하는 대가로 온디맨드 대비 최대 72%까지 할인받는 유연한 요금제로, 인스턴스 유형이나 리전 변경에도 할인이 적용된다."
     },
     {
@@ -531,28 +531,23 @@ window.APP_DATA.saa = {
       "oneLiner": "MySQL, PostgreSQL, MariaDB, Oracle, SQL Server, Db2 등 여러 엔진을 지원하는 관리형 관계형 데이터베이스 서비스로, 프로비저닝·백업·패치·Multi-AZ 장애 조치 같은 운영 작업을 자동화한다."
     },
     {
-      "name": "Amazon Redshift",
-      "category": "데이터베이스",
-      "oneLiner": "페타바이트급 완전관리형 데이터 웨어하우스로, 컬럼형 저장과 분산 처리를 통해 대규모 데이터셋에 대한 복잡한 분석 쿼리를 빠르게 실행한다."
-    },
-    {
       "name": "AWS X-Ray",
       "category": "개발자 도구",
       "oneLiner": "분산 애플리케이션에서 요청이 여러 서비스를 거치는 경로를 추적·시각화하는 서비스로, 마이크로서비스 간 지연시간과 오류의 근본 원인을 분석하는 데 사용된다."
     },
     {
       "name": "AWS Amplify",
-      "category": "프런트 엔드 웹 및 모바일",
+      "category": "프런트엔드 웹 및 모바일",
       "oneLiner": "웹·모바일 애플리케이션을 빠르게 구축, 배포, 호스팅할 수 있는 풀스택 개발 플랫폼으로, 인증·API·스토리지 같은 백엔드 기능을 손쉽게 연동할 수 있다."
     },
     {
       "name": "Amazon API Gateway",
-      "category": "프런트 엔드 웹 및 모바일",
+      "category": "프런트엔드 웹 및 모바일",
       "oneLiner": "REST, HTTP, WebSocket API를 생성·게시·모니터링·보안 관리하는 완전관리형 서비스로, Lambda나 다른 AWS 서비스 앞단에서 인증·스로틀링·요청 변환을 처리하는 서버리스 API 게이트웨이로 자주 쓰인다."
     },
     {
       "name": "AWS Device Farm",
-      "category": "프런트 엔드 웹 및 모바일",
+      "category": "프런트엔드 웹 및 모바일",
       "oneLiner": "실제 및 가상의 다양한 모바일 기기에서 애플리케이션을 테스트할 수 있는 앱 테스트 서비스이다."
     },
     {
@@ -602,92 +597,92 @@ window.APP_DATA.saa = {
     },
     {
       "name": "AWS Auto Scaling",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "EC2뿐 아니라 ECS, DynamoDB, Aurora 등 여러 리소스의 스케일링 정책을 하나의 통합 콘솔에서 설정·관리하는 서비스이다."
     },
     {
       "name": "AWS CLI",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "명령줄에서 AWS 서비스를 제어·자동화할 수 있는 통합 명령줄 인터페이스 도구이다."
     },
     {
       "name": "AWS CloudFormation",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "템플릿(코드)으로 AWS 인프라를 정의해 일관되고 반복 가능하게 프로비저닝·관리하는 코드형 인프라(IaC) 서비스이다."
     },
     {
       "name": "AWS CloudTrail",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "AWS 계정에서 발생한 API 호출과 사용자 활동을 기록해 감사, 보안 분석, 규정 준수를 지원하는 서비스이다."
     },
     {
       "name": "Amazon CloudWatch",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "AWS 리소스와 애플리케이션의 로그, 메트릭, 이벤트를 수집·모니터링하고 임계값 기반 알람으로 자동 대응을 트리거하는 관측 가능성 서비스이다."
     },
     {
       "name": "AWS Compute Optimizer",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "실제 리소스 사용 이력을 머신러닝으로 분석해 EC2, EBS, Lambda 등의 비용·성능 최적 구성을 추천하는 서비스이다."
     },
     {
       "name": "AWS Config",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "AWS 리소스의 구성 변경 이력을 지속적으로 기록·평가해 규정 준수 여부를 확인하고 구성 드리프트를 탐지하는 서비스이다."
     },
     {
       "name": "AWS Control Tower",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "여러 AWS 계정으로 구성된 랜딩존을 모범 사례에 따라 자동으로 설정하고 가드레일(정책)을 적용해 멀티 계정 거버넌스를 간소화하는 서비스이다."
     },
     {
       "name": "AWS Health Dashboard",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "AWS 서비스 상태와 사용자 계정 리소스에 영향을 주는 이벤트를 개인화해 알려주는 대시보드이다."
     },
     {
       "name": "AWS License Manager",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "온프레미스와 클라우드 전반에 걸쳐 소프트웨어 라이선스를 중앙에서 추적·관리해 라이선스 위반 위험을 줄이는 서비스이다."
     },
     {
       "name": "Amazon Managed Grafana",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "Grafana 기반의 완전관리형 데이터 시각화 서비스로, 여러 데이터 소스의 운영 메트릭과 로그를 대시보드로 시각화한다."
     },
     {
       "name": "Amazon Managed Service for Prometheus",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "Prometheus와 호환되는 완전관리형 모니터링 서비스로, 컨테이너 환경의 메트릭을 안전하게 수집·저장·쿼리할 수 있다."
     },
     {
       "name": "AWS Management Console",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "AWS 리소스를 생성하고 관리할 수 있는 웹 기반 그래픽 사용자 인터페이스이다."
     },
     {
       "name": "AWS Organizations",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "여러 AWS 계정을 조직 단위(OU)로 그룹화해 중앙에서 관리하고, 서비스 제어 정책(SCP)으로 계정 전반의 권한 가드레일을 적용하는 서비스이다."
     },
     {
       "name": "AWS Service Catalog",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "조직에서 승인한 IT 서비스(CloudFormation 템플릿 등)의 카탈로그를 만들어, 사용자가 표준화되고 규정을 준수하는 리소스만 셀프서비스로 배포하도록 하는 서비스이다."
     },
     {
       "name": "AWS Systems Manager",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "EC2 및 온프레미스 서버에 대한 패치, 구성, 실행 명령, 파라미터 저장 등을 통합 제공하는 운영 관리 서비스로, Session Manager를 통해 SSH 없이 안전한 접속도 지원한다."
     },
     {
       "name": "AWS Trusted Advisor",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "비용 최적화, 보안, 내결함성, 성능, 서비스 한도 등 영역에서 모범 사례에 따라 계정을 점검하고 개선 권장 사항을 제공하는 서비스이다."
     },
     {
       "name": "AWS Well-Architected Tool",
-      "category": "AWS의 관리 및 거버넌스",
+      "category": "관리 및 거버넌스",
       "oneLiner": "AWS Well-Architected 프레임워크의 6가지 기둥(운영 우수성, 보안, 안정성, 성능 효율성, 비용 최적화, 지속 가능성)에 따라 워크로드를 검토하고 개선 사항을 식별하는 무료 도구이다."
     },
     {
@@ -874,11 +869,6 @@ window.APP_DATA.saa = {
       "name": "IAM",
       "category": "보안, ID 및 규정 준수",
       "oneLiner": "AWS 리소스에 대한 접근을 안전하게 제어하는 서비스로, 사용자·그룹·역할과 정책을 통해 누가 무엇에 대해 어떤 작업을 할 수 있는지(인증과 권한 부여)를 관리한다."
-    },
-    {
-      "name": "AWS AppSync",
-      "category": "서버리스",
-      "oneLiner": "GraphQL/실시간 API를 완전관리형으로 제공하는 서버리스 서비스로, 여러 데이터 소스를 하나의 API로 통합하고 서버 관리 없이 실시간 구독 기능을 제공한다."
     },
     {
       "name": "AWS Fargate",

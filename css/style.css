@@ -109,6 +109,18 @@ button { font-family: inherit; }
 .cert-card h2 { margin: 4px 0 6px; font-size: 20px; }
 .cert-card p { margin: 0; color: var(--muted); font-size: 14px; }
 
+.home-link {
+  display: flex; align-items: center; gap: 12px; margin-top: 18px;
+  text-decoration: none; color: inherit;
+  background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 18px 22px; box-shadow: var(--shadow); transition: transform .12s ease, box-shadow .12s ease;
+}
+.home-link:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(20,25,40,.12), 0 14px 30px rgba(20,25,40,.10); }
+.home-link > div { flex: 1; }
+.home-link b { font-size: 16px; }
+.home-link p { margin: 4px 0 0; color: var(--muted); font-size: 14px; }
+.home-link .arrow { color: var(--muted); font-size: 18px; }
+
 .progress-row { display:flex; align-items:center; gap:10px; margin-top:14px; }
 .progress-bar { flex:1; height:8px; background: var(--border); border-radius: 999px; overflow:hidden; }
 .progress-bar > span { display:block; height:100%; background: var(--accent); border-radius: 999px; }
@@ -241,7 +253,9 @@ table.domain-table td, table.domain-table th { padding:8px 10px; border-bottom:1
 .svc-card { border:1px solid var(--border); border-radius:10px; padding:12px 14px; background: var(--bg-elev); }
 .svc-card .name { font-weight:700; font-size:14px; margin-bottom:2px; }
 .svc-card .cat { font-size:11px; color: var(--muted); margin-bottom:6px; display:inline-block; }
-.svc-card .one { font-size:13px; color: var(--fg); }
+.svc-card .one { font-size:13px; color: var(--fg); margin-top:6px; }
+.svc-card .svc-certs { display:inline-flex; gap:4px; margin-left:6px; vertical-align:middle; }
+.svc-card .svc-certs b { font-size:10px; font-weight:700; padding:2px 6px; border-radius:999px; background: var(--border); color: var(--muted); }
 
 .empty-state { text-align:center; padding: 40px 20px; color: var(--muted); }
 
