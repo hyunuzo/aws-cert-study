@@ -59,7 +59,7 @@ window.APP_DATA.saa = {
             "keyPoints": [
               "AWS 관리형 키 vs 고객 관리형 키(CMK): 키 정책 세밀도, 교체 주기 제어, 감사 로그 수준의 차이",
               "키 정책(Key Policy)은 KMS 키에 대한 리소스 기반 정책으로, IAM 정책과 함께 반드시 검토해야 하는 접근 제어 계층",
-              "CloudHSM/커스텀 키 스토어: 단일 테넌트 하드웨어, 완전한 키 소유권, FIPS 140-2 Level 3 등 높은 규제 요구 시 사용",
+              "CloudHSM/커스텀 키 스토어: 단일 테넌트 하드웨어, 완전한 키 소유권, FIPS 140-3 Level 3 등 높은 규제 요구 시 사용",
               "전송 중 암호화: ACM으로 발급한 인증서를 ALB/CloudFront에 연결하고 DNS 검증 시 자동 갱신 활용",
               "S3 Object Lock(Governance/Compliance 모드)로 WORM 요구사항 충족, Compliance 모드는 루트 사용자도 삭제 불가",
               "백업/복구 전략: 자동 백업+PITR(짧은 RPO), 다중 AZ(고가용성 목적, 백업의 대체가 아님), Cross-Region Replication(리전 재해 대비)",
@@ -356,9 +356,9 @@ window.APP_DATA.saa = {
       "oneLiner": "Elasticsearch/OpenSearch 기반의 관리형 검색 및 분석 서비스로, 로그 분석, 전문(全文) 검색, 실시간 모니터링 대시보드 구축에 주로 사용된다."
     },
     {
-      "name": "Amazon Quick(QuickSight)",
+      "name": "Amazon QuickSight",
       "category": "분석",
-      "oneLiner": "완전관리형 서버리스 BI 서비스로, 다양한 데이터 소스를 연결해 대화형 대시보드를 만들고 조직 전체에 사용량 기반 요금으로 공유할 수 있다."
+      "oneLiner": "완전관리형 서버리스 BI 서비스로, 다양한 데이터 소스를 연결해 대화형 대시보드를 만들고 조직 전체에 사용량 기반 요금으로 공유할 수 있다(2025년 Amazon Quick Suite로 리브랜딩되어 BI 기능은 Quick Suite 내 'Quick Sight'로 제공되지만, 시험에서는 QuickSight로 출제된다)."
     },
     {
       "name": "Amazon Redshift",
@@ -406,7 +406,7 @@ window.APP_DATA.saa = {
       "oneLiner": "비용, 사용량, 예약 인스턴스/절감형 플랜 사용률에 대해 예산 임계값을 설정하고 초과 시 알림을 받을 수 있는 서비스이다."
     },
     {
-      "name": "AWS Cost and Usage Report",
+      "name": "AWS Cost and Usage Reports",
       "category": "클라우드 재무 관리",
       "oneLiner": "가장 상세한 수준의 AWS 비용 및 사용량 데이터를 제공하는 리포트로, S3에 저장한 뒤 Athena나 Redshift 등으로 정밀 분석할 수 있다."
     },
@@ -418,7 +418,7 @@ window.APP_DATA.saa = {
     {
       "name": "절감형 플랜(Savings Plans)",
       "category": "클라우드 재무 관리",
-      "oneLiner": "1년 또는 3년 동안 시간당 일정 사용 금액을 약정하는 대가로 온디맨드 대비 최대 72%까지 할인받는 유연한 요금제로, 인스턴스 유형이나 리전 변경에도 할인이 적용된다."
+      "oneLiner": "1년 또는 3년 동안 시간당 일정 사용 금액($/시간)을 약정하는 대가로 온디맨드보다 저렴한 요금을 적용받는 요금제이다. Compute Savings Plans는 인스턴스 패밀리·크기·리전·OS·테넌시 변경은 물론 Fargate·Lambda 사용량까지 자동 적용되며 최대 66% 절감, EC2 Instance Savings Plans는 특정 리전의 특정 인스턴스 패밀리로 약정을 고정하는 대신 최대 72% 절감된다(그 외 Database·SageMaker AI Savings Plans도 있음)."
     },
     {
       "name": "AWS Batch",
@@ -513,7 +513,7 @@ window.APP_DATA.saa = {
     {
       "name": "Amazon ElastiCache",
       "category": "데이터베이스",
-      "oneLiner": "Redis 또는 Memcached 호환 완전관리형 인메모리 캐시 서비스로, 데이터베이스 앞단에 배치해 읽기 지연시간을 낮추고 부하를 줄이는 데 사용된다."
+      "oneLiner": "Valkey, Memcached, Redis OSS 엔진을 지원하는 완전관리형 인메모리 캐시 서비스로, 데이터베이스 앞단에 배치해 읽기 지연시간을 낮추고 부하를 줄이는 데 사용된다."
     },
     {
       "name": "Amazon Keyspaces",
@@ -663,7 +663,7 @@ window.APP_DATA.saa = {
     {
       "name": "AWS Organizations",
       "category": "관리 및 거버넌스",
-      "oneLiner": "여러 AWS 계정을 조직 단위(OU)로 그룹화해 중앙에서 관리하고, 서비스 제어 정책(SCP)으로 계정 전반의 권한 가드레일을 적용하는 서비스이다."
+      "oneLiner": "여러 AWS 계정을 조직 단위(OU)로 그룹화해 중앙에서 관리하고, 서비스 제어 정책(SCP)과 리소스 제어 정책(RCP)으로 계정 전반의 권한 가드레일을 적용하는 서비스이다."
     },
     {
       "name": "AWS Service Catalog",
@@ -688,7 +688,7 @@ window.APP_DATA.saa = {
     {
       "name": "Amazon Elastic Transcoder",
       "category": "미디어 서비스",
-      "oneLiner": "비디오·오디오 파일을 웹, 모바일 등 다양한 기기에서 재생 가능한 형식으로 변환하는 완전관리형 미디어 트랜스코딩 서비스이다."
+      "oneLiner": "비디오·오디오 파일을 웹, 모바일 등 다양한 기기에서 재생 가능한 형식으로 변환하는 완전관리형 미디어 트랜스코딩 서비스이다. 단, 2025년 11월 13일 지원이 종료되어 더 이상 사용할 수 없으며, 현재는 AWS Elemental MediaConvert가 이 역할을 대체한다."
     },
     {
       "name": "Amazon Kinesis Video Streams",
@@ -706,19 +706,19 @@ window.APP_DATA.saa = {
       "oneLiner": "온프레미스 스토리지와 S3, EFS, FSx 등 AWS 스토리지 서비스 간 대용량 데이터를 자동화하여 빠르고 안전하게 전송하는 서비스이다."
     },
     {
-      "name": "AWS DMS",
+      "name": "AWS Database Migration Service(AWS DMS)",
       "category": "마이그레이션 및 전송",
       "oneLiner": "온프레미스 및 클라우드 데이터베이스를 동일하거나 다른 엔진으로 최소 다운타임에 마이그레이션하는 데이터베이스 마이그레이션 서비스로, 지속적 복제(CDC)를 지원한다."
     },
     {
       "name": "AWS Snow Family",
       "category": "마이그레이션 및 전송",
-      "oneLiner": "네트워크 대역폭이 제한적이거나 페타바이트급 데이터를 물리적으로 이동해야 할 때 사용하는 엣지 컴퓨팅·데이터 전송 디바이스(Snowcone, Snowball Edge, Snowmobile) 제품군이다."
+      "oneLiner": "네트워크 대역폭이 제한적이거나 페타바이트급 데이터를 물리적으로 이동해야 할 때 사용하는 엣지 컴퓨팅·데이터 전송 디바이스 제품군이다. 시험에서는 Snowcone·Snowball Edge·Snowmobile로 출제되지만, 실제로는 Snowcone이 2024년 11월 단산되고 2025년 11월부터 신규 고객 주문이 중단되었으며 Snowball은 2026년 12월 31일 지원 종료 예정이다(대안: DataSync, AWS Data Transfer Terminal, Outposts)."
     },
     {
       "name": "AWS Transfer Family",
       "category": "마이그레이션 및 전송",
-      "oneLiner": "SFTP, FTPS, FTP 프로토콜을 그대로 사용해 S3 또는 EFS로 파일을 안전하게 전송할 수 있게 하는 완전관리형 파일 전송 서비스이다."
+      "oneLiner": "SFTP, FTPS, FTP, AS2 프로토콜과 브라우저 기반 전송을 그대로 사용해 S3 또는 EFS로 파일을 안전하게 전송할 수 있게 하는 완전관리형 파일 전송 서비스이다."
     },
     {
       "name": "AWS Client VPN",
@@ -788,7 +788,7 @@ window.APP_DATA.saa = {
     {
       "name": "AWS CloudHSM",
       "category": "보안, ID 및 규정 준수",
-      "oneLiner": "FIPS 140-2 검증된 전용 하드웨어 보안 모듈(HSM)을 제공하는 서비스로, 고객이 암호화 키에 대한 완전한 단독 통제권을 가져야 하는 규제 요구사항이 있을 때 사용한다."
+      "oneLiner": "FIPS 140-3 Level 3 검증된 전용 하드웨어 보안 모듈(HSM)을 제공하는 서비스로, 고객이 암호화 키에 대한 완전한 단독 통제권을 가져야 하는 규제 요구사항이 있을 때 사용한다."
     },
     {
       "name": "Amazon Cognito",
@@ -823,7 +823,7 @@ window.APP_DATA.saa = {
     {
       "name": "Amazon Inspector",
       "category": "보안, ID 및 규정 준수",
-      "oneLiner": "EC2 인스턴스, 컨테이너 이미지, Lambda 함수의 소프트웨어 취약점과 의도치 않은 네트워크 노출을 자동으로 지속 스캔하는 서비스이다."
+      "oneLiner": "EC2 인스턴스, ECR 컨테이너 이미지, Lambda 함수, 코드 리포지토리(Code Security)의 소프트웨어 취약점과 의도치 않은 네트워크 노출을 자동으로 지속 스캔하는 서비스이다."
     },
     {
       "name": "AWS KMS",
@@ -858,7 +858,7 @@ window.APP_DATA.saa = {
     {
       "name": "AWS Shield",
       "category": "보안, ID 및 규정 준수",
-      "oneLiner": "DDoS 공격으로부터 애플리케이션을 보호하는 관리형 서비스로, Standard는 모든 고객에게 기본 제공되고 Advanced는 고급 탐지·대응, 24/7 DDoS 대응팀 지원, 확장 비용 보호를 추가로 제공한다."
+      "oneLiner": "DDoS 공격으로부터 애플리케이션을 보호하는 관리형 서비스로, Standard는 모든 고객에게 기본 제공되고 Advanced는 고급 탐지·대응, 24/7 Shield 대응팀(SRT) 지원, DDoS 비용 보호를 추가로 제공한다(SRT 에스컬레이션은 Business/Enterprise 지원 플랜 필요)."
     },
     {
       "name": "AWS WAF",
@@ -866,7 +866,7 @@ window.APP_DATA.saa = {
       "oneLiner": "SQL 삽입, 크로스 사이트 스크립팅 등 일반적인 웹 공격으로부터 웹 애플리케이션을 보호하는 웹 애플리케이션 방화벽으로, CloudFront, ALB, API Gateway 등에 웹 ACL 규칙을 적용한다."
     },
     {
-      "name": "IAM",
+      "name": "AWS IAM",
       "category": "보안, ID 및 규정 준수",
       "oneLiner": "AWS 리소스에 대한 접근을 안전하게 제어하는 서비스로, 사용자·그룹·역할과 정책을 통해 누가 무엇에 대해 어떤 작업을 할 수 있는지(인증과 권한 부여)를 관리한다."
     },
@@ -896,7 +896,7 @@ window.APP_DATA.saa = {
       "oneLiner": "여러 EC2 인스턴스와 온프레미스 서버에서 동시에 마운트할 수 있는 완전관리형 확장형 NFS 파일 스토리지 서비스로, 용량이 자동으로 늘고 줄어든다."
     },
     {
-      "name": "Amazon FSx(모든 유형)",
+      "name": "Amazon FSx",
       "category": "스토리지",
       "oneLiner": "Windows File Server, Lustre, NetApp ONTAP, OpenZFS 등 다양한 파일 시스템을 완전관리형으로 제공하는 서비스로, 워크로드 특성(고성능 컴퓨팅, 윈도우 호환성 등)에 맞는 파일 스토리지를 선택할 수 있다."
     },

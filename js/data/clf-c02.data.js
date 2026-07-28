@@ -164,7 +164,7 @@ window.APP_DATA.clf = {
               "AWS Shield Standard: 모든 고객에게 무료로 기본 제공되는 DDoS 방어",
               "AWS Shield Advanced: 유료 옵션으로 더 정교한 DDoS 방어와 24/7 대응팀(DRT) 지원",
               "Amazon GuardDuty: VPC 흐름 로그, DNS 로그, CloudTrail 이벤트 등을 분석해 위협 탐지",
-              "AWS Trusted Advisor: 보안·비용 최적화·성능·내결함성·서비스 한도 등 관점에서 계정을 점검하고 권장 사항 제공",
+              "AWS Trusted Advisor: 보안·비용 최적화·성능·내결함성·서비스 한도·운영 우수성 6개 범주 관점에서 계정을 점검하고 권장 사항 제공",
               "AWS Marketplace: 타사 보안 벤더(방화벽, 안티바이러스 등)의 소프트웨어를 검색·구매·배포",
               "AWS Knowledge Center: 자주 묻는 기술 질문에 대한 공식 답변 모음",
               "AWS Security Blog: 최신 보안 기능, 모범 사례, 위협 동향에 대한 공식 게시물"
@@ -381,14 +381,14 @@ window.APP_DATA.clf = {
           "taskId": "4.3",
           "title": "AWS 기술 리소스 및 AWS 지원 옵션 파악",
           "concept": {
-            "summary": "AWS는 공식 웹사이트의 백서, 블로그, 아키텍처 모범 사례 가이드 같은 무료 기술 리소스와, AWS re:Post·Knowledge Center 같은 커뮤니티/지식 기반 리소스를 제공합니다. 유료 지원이 필요한 경우 Basic, Developer, Business, Enterprise On-Ramp, Enterprise 5가지 AWS Support 플랜 중에서 조직의 규모와 필요한 응답 속도에 맞는 플랜을 선택할 수 있습니다. Trusted Advisor는 비용, 보안, 성능, 내결함성, 서비스 한도 관점에서 계정을 자동 점검해 권장 사항을 제공하고, AWS Health Dashboard/API는 서비스 상태 및 계정에 영향을 주는 이벤트를 알려줍니다. 이 외에도 부정 사용이나 약관 위반을 다루는 Trust & Safety 팀, 그리고 파트너 네트워크(APN)를 통한 ISV·시스템 통합 사업자·Marketplace 솔루션, Professional Services와 Solutions Architect의 기술 자문 지원이 있습니다.",
+            "summary": "AWS는 공식 웹사이트의 백서, 블로그, 아키텍처 모범 사례 가이드 같은 무료 기술 리소스와, AWS re:Post·Knowledge Center 같은 커뮤니티/지식 기반 리소스를 제공합니다. 유료 지원이 필요한 경우 Basic, Developer, Business, Enterprise On-Ramp, Enterprise 5가지 AWS Support 플랜 중에서 조직의 규모와 필요한 응답 속도에 맞는 플랜을 선택할 수 있습니다. Trusted Advisor는 비용 최적화, 보안, 성능, 내결함성, 서비스 한도, 운영 우수성 6개 범주 관점에서 계정을 자동 점검해 권장 사항을 제공하고, AWS Health Dashboard/API는 서비스 상태 및 계정에 영향을 주는 이벤트를 알려줍니다. 이 외에도 부정 사용이나 약관 위반을 다루는 Trust & Safety 팀, 그리고 파트너 네트워크(APN)를 통한 ISV·시스템 통합 사업자·Marketplace 솔루션, Professional Services와 Solutions Architect의 기술 자문 지원이 있습니다.",
             "keyPoints": [
               "Basic 지원: 모든 AWS 계정에 무료로 포함, 계정/결제 지원과 제한된 Trusted Advisor 핵심 점검, Personal Health Dashboard 접근은 가능하나 기술 지원 케이스는 불가",
               "Developer 지원: 유료, 업무 시간 중 이메일 기반 기술 문의, 일반 안내 응답 목표 24시간 이내, 개발/테스트 단계의 소규모 팀에 적합",
               "Business 지원: 24/7 전화/채팅/이메일 기술 지원, 프로덕션 시스템 다운 시 1시간 이내 응답, 전체 Trusted Advisor 점검, Health API 접근, 프로덕션 워크로드 운영 조직에 적합",
               "Enterprise On-Ramp: Business의 혜택에 더해 담당 TAM 풀(Technical Account Manager pool)과 컨시어지 지원팀 제공, 비즈니스 크리티컬 시스템 다운 시 30분 이내 응답",
               "Enterprise 지원: 전담 TAM(Technical Account Manager) 배정, 비즈니스 크리티컬 시스템 다운 시 15분 이내 응답, Well-Architected 검토 등 대규모 미션 크리티컬 조직을 위한 최상위 플랜",
-              "AWS Trusted Advisor: 비용 최적화, 보안, 내결함성, 성능, 서비스 한도 5개 범주에서 계정을 점검해 개선 권장 사항 제시, 무료 계정은 핵심 점검 일부만, Business/Enterprise 이상은 전체 점검 제공",
+              "AWS Trusted Advisor: 비용 최적화, 보안, 내결함성, 성능, 서비스 한도, 운영 우수성 6개 범주에서 계정을 점검해 개선 권장 사항 제시, 무료 계정은 핵심 점검 일부만, Business/Enterprise 이상은 전체 점검 제공",
               "AWS Health Dashboard/Health API: 서비스 전반의 상태(Service Health Dashboard)와 내 계정 리소스에 영향을 미치는 이벤트(Personal Health Dashboard)를 구분해 제공, Health API는 Business 이상 플랜에서 프로그래밍 방식 접근 가능",
               "Trust & Safety 팀: AWS 리소스의 부정 사용, 피싱, 저작권 침해 등 약관 위반 신고 및 조사를 담당(일반 기술 지원과는 별도 채널)",
               "AWS 파트너 네트워크(APN): AWS Marketplace(소프트웨어 구매/배포), ISV 파트너, 시스템 통합 사업자(SI) 등으로 구성되어 검증된 솔루션과 전문 구현 서비스를 제공",
@@ -529,7 +529,7 @@ window.APP_DATA.clf = {
     {
       "name": "AWS Support",
       "category": "고객 지원",
-      "oneLiner": "Basic, Developer, Business, Enterprise On-Ramp, Enterprise 등 다양한 등급의 요금제를 통해 기술 지원, 응답 시간 SLA, 전담 지원 등을 제공하는 서비스이다."
+      "oneLiner": "Basic, Developer, Business, Enterprise On-Ramp, Enterprise 등 다양한 등급의 요금제를 통해 기술 지원, 응답 시간 SLA, 전담 지원 등을 제공하는 서비스이다(시험 기준은 이 5단계이나, 현재 AWS는 Basic·Business Support+·Enterprise·Unified Operations로 개편 중이며 Developer/Business/Enterprise On-Ramp는 2027년 1월 1일 종료 예정)."
     },
     {
       "name": "Amazon Aurora",
@@ -549,7 +549,7 @@ window.APP_DATA.clf = {
     {
       "name": "Amazon ElastiCache",
       "category": "데이터베이스",
-      "oneLiner": "Redis 또는 Memcached와 호환되는 완전관리형 인메모리 캐싱 서비스로, 데이터베이스 앞단에 배치해 읽기 성능을 크게 향상시킨다."
+      "oneLiner": "Valkey, Memcached, Redis OSS 엔진을 지원하는 완전관리형 인메모리 캐싱 서비스로, 데이터베이스 앞단에 배치해 읽기 성능을 크게 향상시킨다."
     },
     {
       "name": "Amazon Neptune",
@@ -714,7 +714,7 @@ window.APP_DATA.clf = {
     {
       "name": "AWS Organizations",
       "category": "관리 및 거버넌스",
-      "oneLiner": "여러 AWS 계정을 하나의 조직으로 묶어 중앙에서 관리하는 계정 관리 서비스로, 통합 결제와 서비스 제어 정책(SCP)을 통한 거버넌스를 제공한다."
+      "oneLiner": "여러 AWS 계정을 하나의 조직으로 묶어 중앙에서 관리하는 계정 관리 서비스로, 통합 결제와 서비스 제어 정책(SCP)·리소스 제어 정책(RCP)을 통한 거버넌스를 제공한다."
     },
     {
       "name": "AWS Service Catalog",
@@ -734,7 +734,7 @@ window.APP_DATA.clf = {
     {
       "name": "AWS Trusted Advisor",
       "category": "관리 및 거버넌스",
-      "oneLiner": "비용 최적화, 성능, 보안, 내결함성, 서비스 한도 등 다섯 가지 범주에 걸쳐 AWS 환경을 실시간으로 점검하고 모범 사례에 따른 개선 권장 사항을 제공하는 서비스이다."
+      "oneLiner": "비용 최적화, 성능, 보안, 내결함성, 서비스 한도, 운영 우수성 여섯 가지 범주에 걸쳐 AWS 환경을 실시간으로 점검하고 모범 사례에 따른 개선 권장 사항을 제공하는 서비스이다."
     },
     {
       "name": "AWS Well-Architected Tool",
@@ -774,7 +774,7 @@ window.APP_DATA.clf = {
     {
       "name": "AWS Snow Family",
       "category": "마이그레이션 및 전송",
-      "oneLiner": "네트워크가 제한적이거나 대용량 데이터를 물리적 장치로 안전하게 AWS에 반입·반출하기 위한 휴대용 스토리지/컴퓨팅 디바이스 제품군(Snowcone, Snowball, Snowmobile 등)이다."
+      "oneLiner": "네트워크가 제한적이거나 대용량 데이터를 물리적 장치로 안전하게 AWS에 반입·반출하기 위한 휴대용 스토리지/컴퓨팅 디바이스 제품군이다. 시험에서는 Snowcone·Snowball Edge·Snowmobile로 출제되지만, 실제로는 Snowcone이 2024년 11월 단산되고 2025년 11월부터 신규 고객 주문이 중단되었으며 Snowball은 2026년 12월 31일 지원 종료 예정이다(대안: DataSync, AWS Data Transfer Terminal, Outposts)."
     },
     {
       "name": "Amazon API Gateway",
@@ -849,7 +849,7 @@ window.APP_DATA.clf = {
     {
       "name": "AWS CloudHSM",
       "category": "보안, ID 및 규정 준수",
-      "oneLiner": "FIPS 140-2 검증된 전용 하드웨어 보안 모듈(HSM)을 클라우드에서 제공하여 암호화 키를 고객이 단독으로 제어·관리할 수 있게 해주는 서비스이다."
+      "oneLiner": "FIPS 140-3 Level 3 검증된 전용 하드웨어 보안 모듈(HSM)을 클라우드에서 제공하여 암호화 키를 고객이 단독으로 제어·관리할 수 있게 해주는 서비스이다."
     },
     {
       "name": "Amazon Cognito",
@@ -889,7 +889,7 @@ window.APP_DATA.clf = {
     {
       "name": "Amazon Inspector",
       "category": "보안, ID 및 규정 준수",
-      "oneLiner": "EC2 인스턴스, 컨테이너 이미지, Lambda 함수의 소프트웨어 취약점과 의도치 않은 네트워크 노출을 자동으로 지속적으로 스캔해주는 보안 평가 서비스이다."
+      "oneLiner": "EC2 인스턴스, ECR 컨테이너 이미지, Lambda 함수, 코드 리포지토리(Code Security)의 소프트웨어 취약점과 의도치 않은 네트워크 노출을 자동으로 지속적으로 스캔해주는 보안 평가 서비스이다."
     },
     {
       "name": "AWS KMS",
@@ -1852,7 +1852,7 @@ window.APP_DATA.clf = {
       "choices": [
         "Shield Standard는 모든 AWS 고객에게 별도 비용 없이 기본 제공된다",
         "Shield는 주로 DDoS(분산 서비스 거부) 공격으로부터 보호하기 위한 서비스이다",
-        "Shield Advanced는 24/7 DDoS 대응팀(DRT)의 지원을 받을 수 있다",
+        "Shield Advanced는 24/7 Shield 대응팀(SRT)의 지원을 받을 수 있다(SRT 에스컬레이션은 Business/Enterprise 지원 플랜 필요)",
         "Shield는 SQL 인젝션과 같은 애플리케이션 취약점을 스캔하는 서비스이다",
         "Shield는 IAM 사용자 자격 증명을 관리하는 서비스이다"
       ],
@@ -2110,7 +2110,7 @@ window.APP_DATA.clf = {
       "answer": [
         0
       ],
-      "explanation": "AWS Trusted Advisor는 보안, 비용 최적화, 성능, 내결함성, 서비스 한도의 5가지 범주에서 계정을 점검하고 개선 권고를 제공합니다. GuardDuty, Shield, WAF는 각각 위협 탐지, DDoS 방어, 웹 방화벽에 특화된 서비스입니다.",
+      "explanation": "AWS Trusted Advisor는 보안, 비용 최적화, 성능, 내결함성, 서비스 한도, 운영 우수성의 6가지 범주에서 계정을 점검하고 개선 권고를 제공합니다. GuardDuty, Shield, WAF는 각각 위협 탐지, DDoS 방어, 웹 방화벽에 특화된 서비스입니다.",
       "domainId": "d2"
     },
     {
@@ -2572,7 +2572,7 @@ window.APP_DATA.clf = {
       "answer": [
         0
       ],
-      "explanation": "Amazon ElastiCache는 Redis 또는 Memcached 호환 인메모리 캐싱 서비스로, 자주 조회되는 데이터를 메모리에 저장해 데이터베이스 부하를 줄이고 응답 속도를 높인다.",
+      "explanation": "Amazon ElastiCache는 Valkey, Memcached, Redis OSS 엔진을 지원하는 인메모리 캐싱 서비스로, 자주 조회되는 데이터를 메모리에 저장해 데이터베이스 부하를 줄이고 응답 속도를 높인다.",
       "domainId": "d3"
     },
     {
@@ -3276,7 +3276,7 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "AWS Trusted Advisor와 AWS Health Dashboard에 대한 설명으로 옳은 것을 모두 고르시오. (2개 선택)",
       "choices": [
-        "Trusted Advisor는 비용 최적화, 보안, 성능, 내결함성, 서비스 한도 영역에서 계정을 점검하고 권장 사항을 제시한다",
+        "Trusted Advisor는 비용 최적화, 보안, 성능, 내결함성, 서비스 한도, 운영 우수성 영역에서 계정을 점검하고 권장 사항을 제시한다",
         "AWS Health Dashboard의 Personal Health Dashboard는 내 계정 리소스에 영향을 미치는 이벤트를 알려준다",
         "Trusted Advisor의 전체 점검 항목은 Basic(무료) 플랜에서도 아무 제한 없이 모두 제공된다",
         "Health API는 모든 Support 플랜에서 동일한 수준으로 제공된다",
@@ -3286,7 +3286,7 @@ window.APP_DATA.clf = {
         0,
         1
       ],
-      "explanation": "Trusted Advisor는 다섯 가지 범주에서 계정 상태를 점검해 개선을 권장하며, Personal Health Dashboard는 내 계정에 영향을 주는 개별 이벤트를 알려줍니다. Trusted Advisor의 전체 점검 항목은 Business/Enterprise 이상에서 제공되고, Basic 플랜은 제한된 핵심 점검만 제공하며, Health API는 Business 이상 플랜에서 프로그래밍 방식 접근이 가능합니다.",
+      "explanation": "Trusted Advisor는 여섯 가지 범주에서 계정 상태를 점검해 개선을 권장하며, Personal Health Dashboard는 내 계정에 영향을 주는 개별 이벤트를 알려줍니다. Trusted Advisor의 전체 점검 항목은 Business/Enterprise 이상에서 제공되고, Basic 플랜은 제한된 핵심 점검만 제공하며, Health API는 Business 이상 플랜에서 프로그래밍 방식 접근이 가능합니다.",
       "domainId": "d4"
     }
   ]
