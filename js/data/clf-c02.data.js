@@ -1961,7 +1961,7 @@ window.APP_DATA.clf = {
       "oneLiner": "온프레미스 환경과 AWS 클라우드 스토리지를 연결해주는 하이브리드 스토리지 서비스로, 온프레미스 애플리케이션이 클라우드 스토리지를 로컬처럼 사용할 수 있게 해준다."
     }
   ],
-  "questions": [
+  "questions":   [
     {
       "id": "clf-d1-q001",
       "taskId": "1.1",
@@ -1985,13 +1985,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 온라인 교육 플랫폼이 신규 강좌를 출시하는데, 얼마나 많은 사용자가 몰릴지 사전에 정확히 예측할 수 없어 서버 용량을 얼마나 준비해야 할지 고민하고 있습니다. 이 상황에서 AWS 클라우드가 제공하는 가장 핵심적인 이점은 무엇입니까?",
       "choices": [
-        "용량을 미리 추정할 필요가 없다는 이점",
         "온프레미스 대비 물리 보안 강화 이점",
+        "용량을 미리 추정할 필요가 없다는 이점",
         "라이선스를 그대로 가져와 사용할 수 있는 이점",
         "운영 우수성 기둥에서 제공하는 자동화 이점"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "수요를 예측하기 어려운 상황에서는 미리 최대 용량을 추정해 구매할 필요 없이 필요에 따라 리소스를 확장·축소할 수 있다는 것이 핵심 이점입니다. 물리 보안, BYOL 라이선싱, 운영 우수성 자동화는 이 시나리오의 핵심 쟁점(용량 예측의 어려움)과 직접 관련이 없습니다.",
       "domainId": "d1"
@@ -2002,13 +2002,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "AWS는 수많은 고객의 컴퓨팅 및 스토리지 수요를 하나로 통합하여 대규모로 하드웨어를 구매하고, 이를 통해 얻은 원가 절감분을 요금 인하 형태로 고객에게 지속적으로 전달합니다. 이 개념을 가장 정확히 설명하는 이점은 무엇입니까?",
       "choices": [
-        "규모의 경제",
-        "탄력성",
         "고가용성",
+        "탄력성",
+        "규모의 경제",
         "글로벌 인프라의 엣지 로케이션"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "다수 고객의 수요를 통합해 대량 구매로 원가를 낮추고 이를 요금 인하로 전달하는 것은 '규모의 경제(Economies of Scale)'의 정의입니다. 탄력성은 수요에 따른 자원 증감 능력, 고가용성은 장애에도 서비스가 지속되는 능력, 엣지 로케이션은 콘텐츠 전송 인프라를 가리키므로 이 설명과 맞지 않습니다.",
       "domainId": "d1"
@@ -2019,13 +2019,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 개발팀이 새로운 아이디어를 테스트하기 위해 몇 번의 클릭만으로 서버를 프로비저닝하고, 실험이 실패하면 큰 비용 부담 없이 즉시 리소스를 종료합니다. 이러한 업무 방식이 가능해진 것은 AWS 클라우드의 어떤 이점 덕분입니까?",
       "choices": [
-        "속도와 민첩성 증가",
+        "전 세계 리전 확장 속도",
         "고정 비용의 가변 비용 전환",
         "데이터센터 유지관리 비용 절감",
-        "전 세계 리전 확장 속도"
+        "속도와 민첩성 증가"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "리소스를 신속하게 프로비저닝하고 실패한 실험을 빠르게 폐기할 수 있는 능력은 '속도와 민첩성(Agility)' 이점을 의미합니다. 다른 보기들은 비용 구조 전환, 인프라 운영 부담 제거, 글로벌 배포 속도를 설명하는 것으로 이 시나리오의 핵심인 '실험 속도'와는 결이 다릅니다.",
       "domainId": "d1"
@@ -2053,13 +2053,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 글로벌 이커머스 기업이 아시아, 유럽, 북미 사용자에게 낮은 지연 시간으로 서비스를 제공하기 위해 각 대륙의 AWS 리전에 애플리케이션을 몇 시간 만에 배포했습니다. 이는 AWS 클라우드의 어떤 이점을 보여주는 사례입니까?",
       "choices": [
-        "몇 분 만에 전 세계로 배포할 수 있다는 이점",
         "온프레미스 대비 규정 준수 강화 이점",
+        "몇 분 만에 전 세계로 배포할 수 있다는 이점",
         "적정 규모 조정을 통한 비용 절감 이점",
         "운영 우수성 기둥의 게임 데이 이점"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "전 세계에 분산된 AWS 리전을 활용해 짧은 시간 내에 여러 대륙에 인프라를 배포하고 사용자와 가까운 곳에서 서비스를 제공하는 것은 '몇 분 만에 전 세계로 배포' 이점의 대표 사례입니다. 나머지 보기는 규정 준수, 비용 최적화, 운영 우수성 실천법으로 이 시나리오의 핵심(글로벌 배포 속도)과 직접적인 관련이 없습니다.",
       "domainId": "d1"
@@ -2070,15 +2070,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "한 회사가 미션 크리티컬 애플리케이션을 서로 다른 여러 가용 영역(Availability Zone)에 걸쳐 배포하려고 합니다. 이러한 다중 가용 영역 아키텍처를 통해 얻을 수 있는 이점으로 옳은 것을 모두 고르십시오.",
       "choices": [
-        "하나의 가용 영역에서 장애가 발생해도 다른 가용 영역의 서비스에 영향을 주지 않도록 장애를 격리할 수 있다",
         "여러 가용 영역에 리소스를 분산하여 고가용성 아키텍처를 구성할 수 있다",
         "모든 AWS 리전의 데이터가 자동으로 실시간 동기화된다",
         "다중 가용 영역을 사용하면 AWS 요금이 자동으로 할인된다",
-        "가용 영역을 여러 개 사용하면 IAM 권한 관리가 필요 없어진다"
+        "가용 영역을 여러 개 사용하면 IAM 권한 관리가 필요 없어진다",
+        "하나의 가용 영역에서 장애가 발생해도 다른 가용 영역의 서비스에 영향을 주지 않도록 장애를 격리할 수 있다"
       ],
       "answer": [
         0,
-        1
+        4
       ],
       "explanation": "여러 가용 영역에 걸친 배포는 물리적으로 분리된 위치에서 장애를 격리하고, 하나의 위치에 장애가 발생해도 서비스가 지속되는 고가용성을 확보하는 것이 핵심 이점입니다. 리전 간 자동 실시간 동기화, 자동 요금 할인, IAM 관리 불필요는 실제로 존재하지 않는 잘못된 설명입니다.",
       "domainId": "d1"
@@ -2089,15 +2089,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "AWS가 강조하는 클라우드 컴퓨팅의 핵심 이점에 대한 설명으로 옳은 것을 모두 고르십시오.",
       "choices": [
-        "선불로 대규모 하드웨어를 구매하는 대신 사용한 만큼 지불하는 가변 비용 모델을 활용할 수 있다",
-        "AWS의 대규모 구매력 덕분에 얻어지는 규모의 경제 효과를 요금 인하 형태로 누릴 수 있다",
         "AWS를 사용하려면 반드시 자체 물리 데이터센터를 별도로 구축하고 운영해야 한다",
         "특정 하드웨어 벤더의 장비를 직접 구매해 데이터센터에 설치해야만 서비스를 이용할 수 있다",
-        "전 세계 여러 리전을 활용해 사용자에게 가까운 위치에서 서비스를 제공할 수 있다"
+        "전 세계 여러 리전을 활용해 사용자에게 가까운 위치에서 서비스를 제공할 수 있다",
+        "선불로 대규모 하드웨어를 구매하는 대신 사용한 만큼 지불하는 가변 비용 모델을 활용할 수 있다",
+        "AWS의 대규모 구매력 덕분에 얻어지는 규모의 경제 효과를 요금 인하 형태로 누릴 수 있다"
       ],
       "answer": [
-        0,
-        1,
+        2,
+        3,
         4
       ],
       "explanation": "AWS 클라우드의 핵심 이점은 가변 비용 모델, 규모의 경제, 글로벌 리전을 통한 근접 서비스 제공입니다. 반면 AWS를 사용하기 위해 자체 데이터센터를 구축하거나 특정 하드웨어를 직접 구매해야 한다는 설명은 클라우드 컴퓨팅의 정의와 정반대되는 잘못된 진술입니다.",
@@ -2109,13 +2109,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 회사가 인프라 변경 사항을 코드로 관리하고, 작은 단위로 자주 배포하며, 변경 이후에도 문제를 신속히 감지하고 대응할 수 있는 절차를 마련하려고 합니다. 이는 AWS Well-Architected Framework의 어느 기둥과 가장 관련이 깊습니까?",
       "choices": [
-        "운영 우수성(Operational Excellence)",
-        "성능 효율성(Performance Efficiency)",
         "비용 최적화(Cost Optimization)",
+        "성능 효율성(Performance Efficiency)",
+        "운영 우수성(Operational Excellence)",
         "지속 가능성(Sustainability)"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "변경 관리를 코드화하고 소규모로 자주 배포하며 운영 절차를 지속적으로 개선하는 것은 운영 우수성 기둥의 핵심 주제입니다. 성능 효율성은 리소스 효율적 사용, 비용 최적화는 불필요한 지출 제거, 지속 가능성은 환경 영향 최소화에 초점을 두므로 이 시나리오와는 맞지 않습니다.",
       "domainId": "d1"
@@ -2126,13 +2126,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 금융 회사가 고객 데이터를 보호하기 위해 다단계 인증을 도입하고, 최소 권한 원칙에 따라 접근 권한을 부여하며, 저장 데이터와 전송 데이터를 모두 암호화하려고 합니다. 이 요구사항들은 Well-Architected Framework의 어느 기둥에 해당합니까?",
       "choices": [
-        "보안(Security)",
+        "운영 우수성(Operational Excellence)",
         "신뢰성(Reliability)",
         "성능 효율성(Performance Efficiency)",
-        "운영 우수성(Operational Excellence)"
+        "보안(Security)"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "다단계 인증, 최소 권한 원칙, 데이터 암호화는 모두 정보와 시스템을 보호하는 것을 목표로 하는 보안 기둥의 대표적인 실천 사례입니다. 신뢰성은 장애 복구, 성능 효율성은 리소스 효율, 운영 우수성은 운영 절차 개선에 초점을 맞추므로 이 시나리오와는 거리가 있습니다.",
       "domainId": "d1"
@@ -2160,13 +2160,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 데이터 분석 회사가 워크로드 특성에 맞는 컴퓨팅 리소스 유형을 선택하고, 트래픽이 적은 시간에는 서버리스 아키텍처로 전환하여 기술 변화에 맞춰 계속 효율을 유지하려고 합니다. 이는 어느 기둥에 해당합니까?",
       "choices": [
-        "성능 효율성(Performance Efficiency)",
         "비용 최적화(Cost Optimization)",
+        "성능 효율성(Performance Efficiency)",
         "신뢰성(Reliability)",
         "운영 우수성(Operational Excellence)"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "워크로드 요구사항에 맞는 리소스 유형을 선택하고 기술 발전에 따라 효율성을 유지하는 것은 성능 효율성 기둥의 정의입니다. 비용 최적화는 비용 절감 자체에, 신뢰성은 복구력에, 운영 우수성은 운영 절차 개선에 초점을 두므로 이 시나리오의 핵심(효율적 리소스 사용)과는 구분됩니다.",
       "domainId": "d1"
@@ -2177,13 +2177,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 스타트업이 사용하지 않는 유휴 EC2 인스턴스를 종료하고, 실제 사용률에 맞춰 인스턴스 유형을 다운사이징하며, 장기 사용이 예상되는 워크로드에는 예약 인스턴스를 활용하기로 했습니다. 이는 어느 기둥의 실천 사례입니까?",
       "choices": [
-        "비용 최적화(Cost Optimization)",
-        "지속 가능성(Sustainability)",
         "성능 효율성(Performance Efficiency)",
+        "지속 가능성(Sustainability)",
+        "비용 최적화(Cost Optimization)",
         "보안(Security)"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "유휴 리소스 제거, 적정 규모 조정, 예약 인스턴스 활용은 불필요한 비용을 없애 최저 비용으로 가치를 제공하는 비용 최적화 기둥의 대표 사례입니다. 지속 가능성은 환경 영향, 성능 효율성은 리소스 효율적 사용, 보안은 자산 보호에 초점을 두므로 이 시나리오와는 다릅니다.",
       "domainId": "d1"
@@ -2194,13 +2194,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 회사가 워크로드가 소비하는 에너지와 자원의 양을 측정하고, 재생 에너지 사용 비중이 높은 AWS 리전을 선택하여 환경에 미치는 영향을 최소화하려고 합니다. 이는 Well-Architected Framework의 어느 기둥에 해당합니까?",
       "choices": [
-        "지속 가능성(Sustainability)",
+        "신뢰성(Reliability)",
         "비용 최적화(Cost Optimization)",
         "운영 우수성(Operational Excellence)",
-        "신뢰성(Reliability)"
+        "지속 가능성(Sustainability)"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "워크로드가 환경에 미치는 영향(에너지, 자원 사용)을 최소화하는 것은 2021년에 추가된 지속 가능성 기둥의 정의입니다. 비용 최적화는 재무적 비용 절감에 초점을 두는 것으로 목적이 다르며, 운영 우수성과 신뢰성 역시 이 시나리오의 핵심(환경 영향)과는 관련이 없습니다.",
       "domainId": "d1"
@@ -2211,16 +2211,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "AWS Well-Architected Framework의 일반 설계 원칙(General Design Principles)으로 옳은 것을 모두 고르십시오.",
       "choices": [
+        "한 번 설계한 아키텍처는 변경하지 않고 그대로 유지하는 것을 목표로 한다",
+        "장애 대응 능력을 높이기 위해 수동 개입 절차를 최대한 늘린다",
         "용량을 추측하지 말고 필요에 따라 자동으로 확장 및 축소되도록 설계한다",
         "실제 운영 규모와 유사한 환경에서 시스템을 테스트한다",
-        "가능한 반복 작업은 자동화하여 아키텍처 실험 비용을 낮춘다",
-        "한 번 설계한 아키텍처는 변경하지 않고 그대로 유지하는 것을 목표로 한다",
-        "장애 대응 능력을 높이기 위해 수동 개입 절차를 최대한 늘린다"
+        "가능한 반복 작업은 자동화하여 아키텍처 실험 비용을 낮춘다"
       ],
       "answer": [
-        0,
-        1,
-        2
+        2,
+        3,
+        4
       ],
       "explanation": "Well-Architected Framework의 일반 설계 원칙은 용량 추측 지양, 실제 규모 테스트, 자동화를 통한 실험 비용 절감을 포함합니다. 아키텍처를 고정하고 변경하지 않는 것이나 수동 개입을 늘리는 것은 오히려 '아키텍처가 진화하도록 허용'하고 '자동화'하라는 원칙에 정면으로 배치되는 잘못된 설명입니다.",
       "domainId": "d1"
@@ -2231,17 +2231,17 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 Well-Architected Framework의 기둥과 그 설명이 올바르게 짝지어진 것을 모두 고르십시오.",
       "choices": [
+        "운영 우수성(Operational Excellence) - 컴퓨팅 리소스를 효율적으로 사용해 성능을 유지하는 능력",
         "보안(Security) - 정보, 시스템, 자산을 보호하고 위협을 탐지하는 능력",
         "신뢰성(Reliability) - 워크로드가 장애로부터 복구되고 수요를 동적으로 충족하는 능력",
         "성능 효율성(Performance Efficiency) - 사용한 만큼만 비용을 지불하도록 요금 체계를 설계하는 능력",
-        "지속 가능성(Sustainability) - IT 인력을 채용하고 조직 문화를 정착시키는 능력",
-        "운영 우수성(Operational Excellence) - 컴퓨팅 리소스를 효율적으로 사용해 성능을 유지하는 능력"
+        "지속 가능성(Sustainability) - IT 인력을 채용하고 조직 문화를 정착시키는 능력"
       ],
       "answer": [
-        0,
-        1
+        1,
+        2
       ],
-      "explanation": "보안과 신뢰성에 대한 설명은 정확합니다. 세 번째 보기는 성능 효율성이 아닌 비용 최적화에 대한 설명이고, 네 번째는 지속 가능성이 아닌 조직 관리에 관한 내용이며, 다섯 번째는 운영 우수성이 아닌 성능 효율성에 대한 설명이므로 각각 기둥과 설명이 잘못 짝지어져 있습니다.",
+      "explanation": "보안과 신뢰성에 대한 설명은 정확합니다. '사용한 만큼만 비용을 지불하도록 요금 체계를 설계'는 성능 효율성이 아니라 비용 최적화에 해당하고, 'IT 인력 채용과 조직 문화 정착'은 지속 가능성이 아니라 조직 관리 영역이며, '컴퓨팅 리소스를 효율적으로 사용해 성능을 유지'는 운영 우수성이 아니라 성능 효율성에 대한 설명이므로 각각 기둥과 설명이 잘못 짝지어져 있습니다.",
       "domainId": "d1"
     },
     {
@@ -2267,13 +2267,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 제조 기업이 클라우드 마이그레이션을 통해 자체 데이터센터의 전력 사용량을 줄이고, 탄소 배출량 감소 목표를 달성하며, 지속가능경영 보고서에 이러한 성과를 반영하려고 합니다. 이는 AWS CAF의 어떤 비즈니스 성과와 가장 관련이 깊습니까?",
       "choices": [
-        "ESG 성과 개선",
         "비즈니스 위험 감소",
+        "ESG 성과 개선",
         "수익 증대",
         "운영 효율성 향상"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "탄소 배출 감소와 지속가능경영 성과 개선은 AWS CAF의 'ESG(환경·사회·거버넌스) 성과 개선' 항목에 해당합니다. 나머지 보기는 각각 위험 완화, 매출 증대, 생산성 향상을 의미하므로 환경적 목표를 다루는 이 시나리오와는 부합하지 않습니다.",
       "domainId": "d1"
@@ -2284,13 +2284,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 리테일 기업이 클라우드의 데이터 분석 및 머신러닝 서비스를 활용해 신규 맞춤형 구독 서비스를 출시하여 새로운 매출원을 창출하려고 합니다. 이는 AWS CAF의 어떤 비즈니스 성과에 해당합니까?",
       "choices": [
-        "수익 증대",
-        "비즈니스 위험 감소",
         "ESG 성과 개선",
+        "비즈니스 위험 감소",
+        "수익 증대",
         "운영 효율성 향상"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "클라우드 기반 신규 디지털 서비스를 통해 새로운 매출을 창출하는 것은 AWS CAF의 '수익 증대' 성과에 해당합니다. 위험 감소, ESG 개선, 운영 효율성은 각각 규정 준수, 환경/사회적 영향, 생산성 향상에 초점을 두므로 매출 창출이라는 이 시나리오의 핵심과는 다릅니다.",
       "domainId": "d1"
@@ -2301,13 +2301,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 물류 회사가 반복적인 재고 관리 프로세스를 자동화하여 직원들이 더 적은 시간으로 더 많은 업무를 처리할 수 있도록 운영팀의 생산성을 높이려고 합니다. 이는 AWS CAF가 제시하는 어떤 비즈니스 성과에 해당합니까?",
       "choices": [
-        "운영 효율성 향상",
+        "ESG 성과 개선",
         "비즈니스 위험 감소",
         "수익 증대",
-        "ESG 성과 개선"
+        "운영 효율성 향상"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "프로세스 자동화를 통한 생산성 향상은 AWS CAF의 '운영 효율성 향상' 성과에 해당합니다. 비즈니스 위험 감소는 규정 준수와 손실 완화, 수익 증대는 매출 창출, ESG 성과 개선은 환경·사회적 영향에 초점을 두므로 이 시나리오와는 구분됩니다.",
       "domainId": "d1"
@@ -2335,13 +2335,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 회사가 온프레미스에서 운영 중인 관계형 데이터베이스를 서비스 중단 없이 Amazon RDS로 이전하고, 이전 기간 동안 소스와 대상 데이터베이스 간 데이터를 지속적으로 복제하고 싶어합니다. 이러한 요구사항에 가장 적합한 AWS 서비스는 무엇입니까?",
       "choices": [
-        "AWS Database Migration Service(DMS)",
         "AWS Snowball",
+        "AWS Database Migration Service(DMS)",
         "Amazon CloudFront",
         "AWS Application Discovery Service"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "AWS DMS는 소스 데이터베이스를 최소한의 다운타임으로 마이그레이션하고 지속적인 복제까지 지원하는 서비스입니다. AWS Snowball은 대용량 데이터의 물리적 전송용, CloudFront는 콘텐츠 전송 네트워크, Application Discovery Service는 마이그레이션 계획을 위한 자산 파악용이므로 이 시나리오에는 맞지 않습니다.",
       "domainId": "d1"
@@ -2352,15 +2352,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "6R 마이그레이션 전략 중 'Retain(유지)'과 'Retire(폐기)'에 대한 설명으로 옳은 것을 모두 고르십시오.",
       "choices": [
-        "Retain은 규정 준수나 기술적 제약 등의 이유로 특정 애플리케이션을 당장은 온프레미스에 그대로 남겨두는 전략이다",
         "Retire는 더 이상 필요하지 않다고 판단된 애플리케이션을 마이그레이션하지 않고 폐기하는 전략이다",
         "Retain은 반드시 모든 애플리케이션을 클라우드 네이티브로 재설계하는 것을 의미한다",
         "Retire는 데이터베이스를 지속적으로 복제하며 다운타임 없이 이전하는 전략이다",
-        "Retain과 Retire 모두 마이그레이션 대상에서 해당 애플리케이션을 실제로 이전하지 않는다는 공통점이 있다"
+        "Retain과 Retire 모두 마이그레이션 대상에서 해당 애플리케이션을 실제로 이전하지 않는다는 공통점이 있다",
+        "Retain은 규정 준수나 기술적 제약 등의 이유로 특정 애플리케이션을 당장은 온프레미스에 그대로 남겨두는 전략이다"
       ],
       "answer": [
         0,
-        1,
+        3,
         4
       ],
       "explanation": "Retain은 특정 이유로 온프레미스에 남겨두는 것, Retire는 불필요한 애플리케이션을 폐기하는 것이며 둘 다 실제 클라우드로의 이전이 일어나지 않는다는 공통점이 있습니다. 클라우드 네이티브 재설계는 Refactor, 지속적 복제를 통한 다운타임 없는 이전은 DMS를 활용한 마이그레이션 방식에 대한 설명이므로 이 두 전략과는 무관합니다.",
@@ -2372,16 +2372,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "대규모 마이그레이션 프로젝트를 준비하는 단계에서 활용할 수 있는 AWS 서비스 및 도구로 옳은 것을 모두 고르십시오.",
       "choices": [
-        "AWS Application Discovery Service를 사용해 온프레미스 서버와 애플리케이션 간 종속성을 파악한다",
-        "AWS Snowball을 사용해 네트워크로 전송하기 어려운 대용량 데이터를 물리적으로 옮긴다",
         "AWS Database Migration Service를 사용해 데이터베이스를 최소 다운타임으로 이전한다",
         "Amazon Rekognition을 사용해 마이그레이션 대상 서버 목록을 자동으로 생성한다",
-        "AWS Ground Station을 사용해 온프레미스 애플리케이션의 종속성을 분석한다"
+        "AWS Ground Station을 사용해 온프레미스 애플리케이션의 종속성을 분석한다",
+        "AWS Application Discovery Service를 사용해 온프레미스 서버와 애플리케이션 간 종속성을 파악한다",
+        "AWS Snowball을 사용해 네트워크로 전송하기 어려운 대용량 데이터를 물리적으로 옮긴다"
       ],
       "answer": [
         0,
-        1,
-        2
+        3,
+        4
       ],
       "explanation": "Application Discovery Service, Snowball, DMS는 각각 마이그레이션 준비(자산 파악), 대용량 데이터 이전, 데이터베이스 이전에 실제로 사용되는 서비스입니다. Amazon Rekognition은 이미지/영상 분석 서비스, AWS Ground Station은 위성 통신 서비스로 마이그레이션 준비와는 무관하므로 잘못된 보기입니다.",
       "domainId": "d1"
@@ -2392,13 +2392,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 회사가 매달 사용한 컴퓨팅 및 스토리지 자원에 대해서만 비용을 지불하고, 최대 예상 수요를 기준으로 하드웨어를 미리 구매하지 않기로 했습니다. 이는 클라우드 경제성의 어떤 개념을 보여주는 사례입니까?",
       "choices": [
-        "가변 비용(Variable Cost) 모델",
-        "규모의 경제",
         "적정 규모 조정(Right-sizing)",
+        "규모의 경제",
+        "가변 비용(Variable Cost) 모델",
         "BYOL(Bring Your Own License)"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "실제 사용한 만큼만 지불하고 미리 대규모 자본을 투입해 하드웨어를 구매하지 않는 것은 가변 비용 모델의 핵심 특징입니다. 규모의 경제는 대량 구매로 인한 단가 절감, 적정 규모 조정은 기존 리소스 사용률 최적화, BYOL은 라이선싱 전략으로 이 시나리오의 핵심과는 다릅니다.",
       "domainId": "d1"
@@ -2409,13 +2409,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 기업이 총소유비용(TCO)을 비교한 결과, 온프레미스 환경에서는 하드웨어 구매 외에도 전력, 냉각, 데이터센터 공간, 물리 보안 인력 등에 상당한 비용이 든다는 것을 확인했습니다. 클라우드로 전환하면 이러한 항목들이 어떻게 됩니까?",
       "choices": [
-        "AWS의 사용 요금(가변 비용)으로 대체되어 기업이 직접 관리할 필요가 없어진다",
+        "하드웨어 구매 비용만 사라지고 나머지 항목은 온프레미스와 동일하게 발생한다",
         "모든 항목이 그대로 유지되며 기업이 별도로 계속 관리해야 한다",
         "전력 및 냉각 비용만 사라지고 물리 보안 비용은 그대로 유지된다",
-        "하드웨어 구매 비용만 사라지고 나머지 항목은 온프레미스와 동일하게 발생한다"
+        "AWS의 사용 요금(가변 비용)으로 대체되어 기업이 직접 관리할 필요가 없어진다"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "클라우드로 전환하면 전력, 냉각, 물리 보안, 데이터센터 공간 등 온프레미스에서 발생하던 다양한 숨은 비용이 AWS의 사용 요금이라는 가변 비용으로 대체되어 기업이 직접 관리할 필요가 없어집니다. 일부 항목만 사라진다거나 모든 항목이 그대로 유지된다는 설명은 클라우드 경제성의 핵심 이점을 반영하지 못한 잘못된 설명입니다.",
       "domainId": "d1"
@@ -2443,13 +2443,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 회사가 클라우드 사용 현황을 분석한 결과, 여러 EC2 인스턴스의 CPU 및 메모리 사용률이 지속적으로 낮게 나타나 실제 필요보다 과다하게 프로비저닝되어 있음을 발견했습니다. 이 회사가 비용을 줄이기 위해 취해야 할 조치로 가장 적절한 것은 무엇입니까?",
       "choices": [
-        "사용률 데이터를 기반으로 인스턴스 유형을 더 작은 사양으로 적정 규모 조정(Right-sizing)한다",
         "모든 인스턴스를 온프레미스 데이터센터로 되돌린다",
+        "사용률 데이터를 기반으로 인스턴스 유형을 더 작은 사양으로 적정 규모 조정(Right-sizing)한다",
         "인스턴스 유형과 관계없이 예약 인스턴스로만 전환하면 자동으로 사용률이 최적화된다",
         "BYOL 라이선스를 추가로 구매해 소프트웨어 비용을 낮춘다"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "실제 사용률 데이터를 근거로 과다 프로비저닝된 리소스를 필요한 만큼으로 조정하는 것이 적정 규모 조정의 정의이며 이 시나리오에 가장 적합한 해법입니다. 온프레미스로 되돌리는 것은 문제 해결과 무관하고, 예약 인스턴스 전환 자체가 사용률을 최적화하지는 않으며, BYOL은 라이선싱 문제이지 사용률 문제와는 관련이 없습니다.",
       "domainId": "d1"
@@ -2460,13 +2460,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "AWS는 수백만 고객의 컴퓨팅 및 스토리지 수요를 통합해 대규모로 인프라를 구축하고 운영함으로써 단가를 낮추고, 이 절감분을 지속적인 요금 인하 형태로 고객에게 전달합니다. 이 개념을 가장 정확히 설명하는 용어는 무엇입니까?",
       "choices": [
-        "규모의 경제(Economies of Scale)",
-        "적정 규모 조정(Right-sizing)",
         "가변 비용(Variable Cost)",
+        "적정 규모 조정(Right-sizing)",
+        "규모의 경제(Economies of Scale)",
         "BYOL(Bring Your Own License)"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "대규모 수요 통합을 통해 단가를 낮추고 이를 고객에게 전달하는 것은 규모의 경제의 정의입니다. 적정 규모 조정은 개별 리소스 사용률 최적화, 가변 비용은 사용한 만큼 지불하는 요금 구조, BYOL은 라이선싱 전략을 의미하므로 이 설명과는 다릅니다.",
       "domainId": "d1"
@@ -2477,16 +2477,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "기업이 온프레미스에서 AWS 클라우드로 전환할 때 전체 비용 절감에 기여할 수 있는 요인으로 옳은 것을 모두 고르십시오.",
       "choices": [
+        "모든 상용 소프트웨어 라이선스를 AWS가 항상 무료로 제공한다",
+        "온프레미스 데이터센터 건설 비용을 AWS가 고객에게 별도로 청구한다",
         "반복적인 운영 작업을 자동화하여 관련 인건비와 인적 오류를 줄인다",
         "실제 사용률 데이터를 기반으로 리소스를 적정 규모로 조정한다",
-        "AWS의 대규모 구매력에 기반한 규모의 경제 효과를 요금 인하 형태로 누린다",
-        "모든 상용 소프트웨어 라이선스를 AWS가 항상 무료로 제공한다",
-        "온프레미스 데이터센터 건설 비용을 AWS가 고객에게 별도로 청구한다"
+        "AWS의 대규모 구매력에 기반한 규모의 경제 효과를 요금 인하 형태로 누린다"
       ],
       "answer": [
-        0,
-        1,
-        2
+        2,
+        3,
+        4
       ],
       "explanation": "자동화를 통한 인건비 절감, 적정 규모 조정, 규모의 경제는 클라우드 전환 시 실제로 비용 절감에 기여하는 요인입니다. AWS가 모든 소프트웨어 라이선스를 항상 무료로 제공한다는 설명과 온프레미스 데이터센터 건설 비용을 AWS가 별도로 청구한다는 설명은 실제 클라우드 경제성 개념과 맞지 않는 잘못된 진술입니다.",
       "domainId": "d1"
@@ -2497,16 +2497,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "AWS의 소프트웨어 라이선싱 전략인 License Included와 BYOL(Bring Your Own License)에 대한 설명으로 옳은 것을 모두 고르십시오.",
       "choices": [
+        "두 전략 모두 기업의 기존 라이선스 보유 현황에 따라 비용 효율성이 달라질 수 있다",
         "License Included는 소프트웨어 라이선스 비용이 AWS 사용 요금에 포함되어 있어 별도 라이선스 계약 없이 사용할 수 있다",
         "BYOL은 기업이 이미 보유하고 있는 소프트웨어 라이선스를 클라우드 환경으로 가져와 활용하는 방식이다",
         "BYOL을 사용하면 소프트웨어 벤더와의 라이선스 계약이나 준수 요건을 전혀 신경 쓸 필요가 없다",
-        "License Included 옵션을 선택하면 해당 소프트웨어를 항상 무제한으로 무료 사용할 수 있다",
-        "두 전략 모두 기업의 기존 라이선스 보유 현황에 따라 비용 효율성이 달라질 수 있다"
+        "License Included 옵션을 선택하면 해당 소프트웨어를 항상 무제한으로 무료 사용할 수 있다"
       ],
       "answer": [
         0,
         1,
-        4
+        2
       ],
       "explanation": "License Included는 라이선스 비용이 요금에 포함된 방식이고, BYOL은 기존 보유 라이선스를 재사용하는 방식이며, 두 전략의 비용 효율성은 기업이 이미 보유한 라이선스 현황에 따라 달라집니다. BYOL을 사용해도 라이선스 계약 및 준수 요건은 여전히 기업의 책임이며, License Included 역시 사용 요금 자체는 계속 청구되므로 '무료 무제한 사용'이라는 설명은 잘못되었습니다.",
       "domainId": "d1"
@@ -2517,13 +2517,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "AWS 공동 책임 모델에서 '클라우드의 보안(Security of the Cloud)'을 책임지는 주체는 누구인가?",
       "choices": [
-        "AWS",
+        "AWS와 고객이 동등하게 분담",
         "고객",
         "제3자 규정 준수 감사 기관",
-        "AWS와 고객이 동등하게 분담"
+        "AWS"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "클라우드 자체의 보안, 즉 물리적 데이터센터, 하드웨어, 네트워크, 가상화 인프라의 보안은 AWS의 책임입니다. 고객은 '클라우드 내 보안(Security in the Cloud)'을 담당합니다.",
       "domainId": "d2"
@@ -2551,13 +2551,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "Amazon RDS와 같은 관리형 데이터베이스 서비스를 사용할 때 AWS가 대신 책임지는 항목으로 가장 적절한 것은?",
       "choices": [
-        "데이터베이스 엔진 소프트웨어 패치 적용",
         "데이터베이스에 저장된 데이터의 암호화 여부 결정",
+        "데이터베이스 엔진 소프트웨어 패치 적용",
         "데이터베이스 접근을 허용할 사용자 관리",
         "애플리케이션에서 사용하는 SQL 쿼리 작성"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "RDS는 관리형 서비스이므로 AWS가 DB 엔진 패치, 백업 인프라, 하드웨어 유지보수를 담당합니다. 반면 데이터 암호화 여부 결정, 접근 관리, 애플리케이션 로직은 여전히 고객의 책임입니다.",
       "domainId": "d2"
@@ -2568,13 +2568,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "다음 중 서비스 관리 수준에 따른 공동 책임 모델 설명으로 가장 옳은 것은?",
       "choices": [
-        "서버리스 서비스일수록 AWS가 담당하는 인프라 관리 범위가 넓어져 고객의 책임이 줄어든다",
-        "모든 AWS 서비스는 서비스 종류와 관계없이 책임 분담 비율이 동일하다",
         "관리형 서비스를 사용하면 고객은 데이터 보안에 대한 책임에서 완전히 벗어난다",
+        "모든 AWS 서비스는 서비스 종류와 관계없이 책임 분담 비율이 동일하다",
+        "서버리스 서비스일수록 AWS가 담당하는 인프라 관리 범위가 넓어져 고객의 책임이 줄어든다",
         "IaaS 서비스는 서버리스 서비스보다 고객의 관리 부담이 적다"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "Lambda 같은 서버리스 서비스는 AWS가 서버, 런타임, OS까지 관리하므로 고객의 책임 범위가 EC2 같은 IaaS보다 좁아집니다. 다만 데이터 보안과 액세스 관리는 서비스 유형과 관계없이 항상 고객의 책임입니다.",
       "domainId": "d2"
@@ -2585,13 +2585,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 회사가 S3 버킷 정책을 잘못 구성하여 버킷이 인터넷에 공개되었고, 결과적으로 데이터가 유출되었습니다. 공동 책임 모델에 따르면 이 사고의 책임은 누구에게 있는가?",
       "choices": [
-        "버킷 정책 설정을 수행한 고객",
+        "S3 서비스 자체의 결함이므로 책임 소재가 없음",
         "AWS",
         "AWS와 고객이 조사 후 소송을 통해서만 결정됨",
-        "S3 서비스 자체의 결함이므로 책임 소재가 없음"
+        "버킷 정책 설정을 수행한 고객"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "S3 버킷 정책이나 액세스 제어 목록(ACL) 구성은 '클라우드 내 보안' 영역으로 고객의 책임입니다. AWS는 S3 인프라 자체의 가용성과 물리적 보안을 책임집니다.",
       "domainId": "d2"
@@ -2619,13 +2619,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "공동 책임 모델을 도입한 주된 목적으로 가장 적절한 것은?",
       "choices": [
-        "AWS와 고객 각각의 보안 책임 범위를 명확히 하여 보안 공백을 줄이기 위해",
         "고객이 모든 보안 업무를 AWS에 위임할 수 있도록 하기 위해",
+        "AWS와 고객 각각의 보안 책임 범위를 명확히 하여 보안 공백을 줄이기 위해",
         "AWS가 규정 준수 인증을 받을 필요가 없도록 하기 위해",
         "고객이 물리적 데이터센터에 직접 접근할 수 있도록 하기 위해"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "공동 책임 모델의 핵심 목적은 AWS와 고객 각자의 보안 책임 범위를 명확히 구분해 보안 공백이나 책임 소재 혼란을 방지하는 것입니다. 고객이 보안 책임에서 완전히 벗어나는 것이 아닙니다.",
       "domainId": "d2"
@@ -2636,15 +2636,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 AWS가 공동 책임 모델에서 책임지는 항목을 모두 고르시오.",
       "choices": [
-        "AWS 데이터센터의 물리적 보안",
         "글로벌 인프라(리전, 가용 영역, 엣지 로케이션)의 유지보수",
         "고객이 EC2에 설치한 애플리케이션의 취약점 관리",
         "고객 데이터의 암호화 키 사용 여부 결정",
-        "S3 버킷의 액세스 정책 구성"
+        "S3 버킷의 액세스 정책 구성",
+        "AWS 데이터센터의 물리적 보안"
       ],
       "answer": [
         0,
-        1
+        4
       ],
       "explanation": "데이터센터의 물리적 보안과 글로벌 인프라 유지보수는 AWS의 책임 영역입니다. 애플리케이션 취약점 관리, 암호화 여부 결정, 버킷 정책 구성은 모두 고객의 책임입니다.",
       "domainId": "d2"
@@ -2655,16 +2655,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 고객이 책임져야 하는 항목을 모두 고르시오.",
       "choices": [
-        "IAM 사용자 및 정책 관리",
-        "EC2 게스트 OS의 보안 패치(비관리형 서비스의 경우)",
         "데이터 분류 및 전송·저장 시 암호화 여부 결정",
         "AWS 글로벌 네트워크 인프라 유지보수",
-        "AWS 데이터센터의 물리적 접근 통제"
+        "AWS 데이터센터의 물리적 접근 통제",
+        "IAM 사용자 및 정책 관리",
+        "EC2 게스트 OS의 보안 패치(비관리형 서비스의 경우)"
       ],
       "answer": [
         0,
-        1,
-        2
+        3,
+        4
       ],
       "explanation": "IAM 관리, 게스트 OS 패치(비관리형 서비스), 데이터 분류·암호화 결정은 모두 고객의 책임입니다. 글로벌 네트워크 인프라와 데이터센터 물리적 접근 통제는 AWS의 책임입니다.",
       "domainId": "d2"
@@ -2675,15 +2675,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 관리형 서비스에 해당하여 AWS가 기본 인프라(OS, 런타임 등) 관리 책임을 더 많이 지는 서비스를 모두 고르시오.",
       "choices": [
+        "Amazon DynamoDB",
+        "AWS Outposts",
         "Amazon RDS",
         "AWS Lambda",
-        "Amazon EC2",
-        "Amazon DynamoDB",
-        "AWS Outposts"
+        "Amazon EC2"
       ],
       "answer": [
         0,
-        1,
+        2,
         3
       ],
       "explanation": "RDS, Lambda, DynamoDB는 AWS가 OS나 런타임, 서버 관리를 대신 담당하는 관리형 서비스입니다. EC2는 고객이 게스트 OS를 직접 관리하는 IaaS이며, Outposts는 온프레미스에 설치되는 하드웨어로 고객의 책임 범위가 더 넓습니다.",
@@ -2695,13 +2695,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "규정 준수 보고서(SOC, ISO 27001 등)와 AWS 계약 문서를 온디맨드로 다운로드할 수 있는 서비스는 무엇인가?",
       "choices": [
-        "AWS Artifact",
-        "AWS Config",
         "AWS CloudTrail",
+        "AWS Config",
+        "AWS Artifact",
         "AWS Trusted Advisor"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "AWS Artifact는 규정 준수 보고서와 계약 문서를 언제든 무료로 열람·다운로드할 수 있는 셀프서비스 포털입니다. CloudTrail, Config, Trusted Advisor는 각각 감사 로그, 구성 추적, 리소스 점검을 담당합니다.",
       "domainId": "d2"
@@ -2712,13 +2712,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "저장 데이터(data at rest)를 암호화할 때 AWS에서 암호화 키를 생성하고 관리하는 데 사용하는 서비스는?",
       "choices": [
-        "AWS Key Management Service(KMS)",
+        "AWS Config",
         "AWS CloudTrail",
         "Amazon Inspector",
-        "AWS Config"
+        "AWS Key Management Service(KMS)"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "AWS KMS는 저장 데이터 암호화에 사용되는 암호화 키를 생성, 관리, 교체할 수 있는 서비스입니다. CloudTrail은 API 호출 기록, Inspector는 취약점 스캔, Config는 리소스 구성 추적을 담당합니다.",
       "domainId": "d2"
@@ -2746,13 +2746,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "리소스의 구성 변경 이력을 추적하고 특정 규정 준수 규칙(예: '모든 EBS 볼륨은 암호화되어야 한다')을 위반하는 리소스를 자동으로 평가하는 서비스는?",
       "choices": [
-        "AWS Config",
         "AWS CloudTrail",
+        "AWS Config",
         "Amazon CloudWatch",
         "AWS Audit Manager"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "AWS Config는 리소스 구성 변경 이력을 기록하고 사전 정의된 규칙에 따라 규정 준수 여부를 평가합니다. CloudTrail은 API 호출 기록, CloudWatch는 모니터링, Audit Manager는 감사 증거 수집에 특화되어 있습니다.",
       "domainId": "d2"
@@ -2763,13 +2763,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "Amazon GuardDuty에 대한 설명으로 가장 적절한 것은?",
       "choices": [
-        "VPC 흐름 로그, DNS 로그, CloudTrail 이벤트 등을 분석해 악의적이거나 비정상적인 활동을 탐지하는 위협 탐지 서비스",
-        "웹 애플리케이션 계층의 SQL 인젝션 공격을 차단하는 방화벽 서비스",
         "리소스 구성 변경 이력만을 기록하는 서비스",
+        "웹 애플리케이션 계층의 SQL 인젝션 공격을 차단하는 방화벽 서비스",
+        "VPC 흐름 로그, DNS 로그, CloudTrail 이벤트 등을 분석해 악의적이거나 비정상적인 활동을 탐지하는 위협 탐지 서비스",
         "가상 서버의 운영체제 취약점을 스캔하는 서비스"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "GuardDuty는 다양한 로그 소스를 머신러닝으로 분석해 이상 징후와 위협을 탐지하는 서비스입니다. SQL 인젝션 차단은 WAF, 구성 이력 추적은 Config, 취약점 스캔은 Inspector의 역할입니다.",
       "domainId": "d2"
@@ -2780,13 +2780,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "다음 중 전송 중(in transit) 데이터를 보호하기 위해 일반적으로 사용하는 기술은?",
       "choices": [
-        "TLS/SSL을 통한 암호화 통신",
+        "EBS 스냅샷 생성",
         "S3 버킷 버전 관리",
         "IAM 액세스 키 교체",
-        "EBS 스냅샷 생성"
+        "TLS/SSL을 통한 암호화 통신"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "전송 중 데이터는 네트워크를 이동하는 동안의 데이터를 의미하며, TLS/SSL 같은 암호화 프로토콜로 보호합니다. 버전 관리, 액세스 키 교체, 스냅샷은 각각 다른 목적을 위한 기능입니다.",
       "domainId": "d2"
@@ -2814,16 +2814,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 계정의 보안 및 규정 준수 상태를 모니터링·감사하는 데 사용되는 서비스를 모두 고르시오.",
       "choices": [
+        "Amazon S3",
         "AWS CloudTrail",
         "Amazon CloudWatch",
         "AWS Config",
-        "Amazon EC2",
-        "Amazon S3"
+        "Amazon EC2"
       ],
       "answer": [
-        0,
         1,
-        2
+        2,
+        3
       ],
       "explanation": "CloudTrail, CloudWatch, Config는 각각 API 호출 기록, 모니터링/로그, 구성 변경 추적을 통해 거버넌스와 감사를 지원합니다. EC2와 S3는 컴퓨팅과 스토리지를 위한 서비스로 감사 도구가 아닙니다.",
       "domainId": "d2"
@@ -2834,16 +2834,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 AWS Shield에 대한 설명으로 옳은 것을 모두 고르시오.",
       "choices": [
-        "Shield Standard는 모든 AWS 고객에게 별도 비용 없이 기본 제공된다",
         "Shield는 주로 DDoS(분산 서비스 거부) 공격으로부터 보호하기 위한 서비스이다",
         "Shield Advanced는 24/7 Shield 대응팀(SRT)의 지원을 받을 수 있다(SRT 에스컬레이션은 Business/Enterprise 지원 플랜 필요)",
         "Shield는 SQL 인젝션과 같은 애플리케이션 취약점을 스캔하는 서비스이다",
-        "Shield는 IAM 사용자 자격 증명을 관리하는 서비스이다"
+        "Shield는 IAM 사용자 자격 증명을 관리하는 서비스이다",
+        "Shield Standard는 모든 AWS 고객에게 별도 비용 없이 기본 제공된다"
       ],
       "answer": [
         0,
         1,
-        2
+        4
       ],
       "explanation": "Shield Standard는 무료로 기본 제공되며, Shield의 핵심 목적은 DDoS 공격 방어입니다. Shield Advanced는 유료로 더 정교한 방어와 DRT 지원을 제공합니다. SQL 인젝션 스캔이나 IAM 관리는 Shield의 기능이 아닙니다.",
       "domainId": "d2"
@@ -2854,16 +2854,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 데이터 암호화와 관련하여 올바른 설명을 모두 고르시오.",
       "choices": [
-        "저장 데이터 암호화는 AWS KMS를 이용해 암호화 키를 관리할 수 있다",
-        "전송 중 데이터는 TLS와 같은 프로토콜로 보호할 수 있다",
         "암호화는 클라우드 보안의 이점 중 하나로 데이터 기밀성을 높인다",
         "암호화를 적용하면 IAM 정책 설정이 필요 없어진다",
-        "AWS는 모든 서비스에서 암호화 옵션을 전혀 제공하지 않는다"
+        "AWS는 모든 서비스에서 암호화 옵션을 전혀 제공하지 않는다",
+        "저장 데이터 암호화는 AWS KMS를 이용해 암호화 키를 관리할 수 있다",
+        "전송 중 데이터는 TLS와 같은 프로토콜로 보호할 수 있다"
       ],
       "answer": [
         0,
-        1,
-        2
+        3,
+        4
       ],
       "explanation": "KMS를 통한 저장 데이터 암호화와 TLS를 통한 전송 중 데이터 보호는 클라우드 보안의 대표적인 이점입니다. 암호화는 IAM을 통한 액세스 관리를 대체하지 않으며, AWS는 다양한 서비스에서 암호화 옵션을 제공합니다.",
       "domainId": "d2"
@@ -2874,13 +2874,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "AWS 계정을 처음 생성했을 때 만들어지는, 계정에 대한 모든 권한을 가진 계정은 무엇인가?",
       "choices": [
-        "루트 사용자",
         "IAM 사용자",
+        "루트 사용자",
         "IAM 역할",
         "게스트 사용자"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "루트 사용자는 계정 생성 시 이메일 주소로 만들어지는 계정으로, 해당 계정의 모든 리소스와 설정에 대한 무제한 권한을 가집니다. 일상 업무에는 IAM 사용자나 역할을 사용하는 것이 권장됩니다.",
       "domainId": "d2"
@@ -2891,13 +2891,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "루트 사용자 보호를 위한 모범 사례로 가장 적절한 것은?",
       "choices": [
-        "루트 사용자에 다중 인증(MFA)을 설정하고 일상 업무에는 사용하지 않는다",
-        "루트 사용자 자격 증명을 팀원 전체와 공유하여 편의성을 높인다",
         "루트 사용자로 매일 로그인하여 모든 리소스를 관리한다",
+        "루트 사용자 자격 증명을 팀원 전체와 공유하여 편의성을 높인다",
+        "루트 사용자에 다중 인증(MFA)을 설정하고 일상 업무에는 사용하지 않는다",
         "루트 사용자의 액세스 키를 애플리케이션 코드에 하드코딩해 사용한다"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "루트 사용자는 MFA로 보호하고 계정 종료 등 극히 제한된 작업에만 사용해야 합니다. 자격 증명 공유, 일상 업무 사용, 코드에 하드코딩은 모두 심각한 보안 위험을 초래합니다.",
       "domainId": "d2"
@@ -2908,13 +2908,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "최소 권한 원칙(Principle of Least Privilege)에 대한 설명으로 가장 옳은 것은?",
       "choices": [
-        "사용자나 역할에게 업무 수행에 필요한 최소한의 권한만 부여하는 것",
+        "루트 사용자 권한을 모든 IAM 사용자에게 동일하게 부여하는 것",
         "모든 사용자에게 관리자 권한을 부여해 업무 효율을 높이는 것",
         "가능한 한 많은 권한을 미리 부여해 향후 요청을 줄이는 것",
-        "루트 사용자 권한을 모든 IAM 사용자에게 동일하게 부여하는 것"
+        "사용자나 역할에게 업무 수행에 필요한 최소한의 권한만 부여하는 것"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "최소 권한 원칙은 보안 위험을 줄이기 위해 각 사용자나 역할에게 업무에 꼭 필요한 권한만 부여하는 것입니다. 불필요하게 넓은 권한을 미리 부여하는 것은 오히려 보안 사고 위험을 높입니다.",
       "domainId": "d2"
@@ -2942,13 +2942,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "애플리케이션이 데이터베이스에 접속할 때 필요한 비밀번호를 코드에 직접 넣지 않고 안전하게 저장하며 자동 교체(rotation)까지 지원받고 싶습니다. 가장 적절한 서비스는?",
       "choices": [
-        "AWS Secrets Manager",
         "AWS CloudTrail",
+        "AWS Secrets Manager",
         "Amazon Inspector",
         "AWS WAF"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "AWS Secrets Manager는 데이터베이스 자격 증명 등 비밀 정보를 안전하게 저장하고 정기적인 자동 교체 기능까지 제공합니다. CloudTrail, Inspector, WAF는 각각 감사, 취약점 스캔, 웹 방화벽 용도의 서비스입니다.",
       "domainId": "d2"
@@ -2959,13 +2959,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "다음 중 IAM 그룹을 활용한 권한 관리 방식으로 가장 바람직한 것은?",
       "choices": [
-        "동일한 업무를 수행하는 사용자들을 그룹으로 묶고 그룹에 정책을 연결한다",
-        "모든 사용자에게 개별적으로 동일한 정책을 반복해서 연결한다",
         "그룹을 사용하지 않고 각 사용자에게 루트 권한을 부여한다",
+        "모든 사용자에게 개별적으로 동일한 정책을 반복해서 연결한다",
+        "동일한 업무를 수행하는 사용자들을 그룹으로 묶고 그룹에 정책을 연결한다",
         "정책은 역할(Role)에만 연결할 수 있고 그룹에는 연결할 수 없다"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "업무가 비슷한 사용자들을 그룹으로 묶고 그룹 단위로 정책을 연결하면 권한 관리가 훨씬 효율적이고 일관성 있게 유지됩니다. 정책은 사용자, 그룹, 역할 모두에 연결할 수 있습니다.",
       "domainId": "d2"
@@ -2976,13 +2976,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "다음 중 루트 사용자만 수행할 수 있는 작업에 해당하는 것은?",
       "choices": [
-        "AWS 계정 종료",
+        "IAM 사용자 비밀번호 재설정",
         "S3 버킷 생성",
         "EC2 인스턴스 시작",
-        "IAM 사용자 비밀번호 재설정"
+        "AWS 계정 종료"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "AWS 계정 종료와 같이 계정 전체에 영향을 미치는 극히 제한된 작업은 루트 사용자만 수행할 수 있습니다. 나머지 작업들은 적절한 권한을 가진 IAM 사용자나 역할로도 수행할 수 있습니다.",
       "domainId": "d2"
@@ -2993,16 +2993,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 사용자 인증을 강화하는 방법으로 옳은 것을 모두 고르시오.",
       "choices": [
+        "모든 사용자에게 동일한 비밀번호를 공유하여 사용",
+        "루트 사용자 자격 증명으로 일상 업무 수행",
         "다중 인증(MFA) 활성화",
         "IAM Identity Center를 통한 페더레이션 로그인 구성",
-        "크로스 계정 역할을 이용한 임시 자격 증명 사용",
-        "모든 사용자에게 동일한 비밀번호를 공유하여 사용",
-        "루트 사용자 자격 증명으로 일상 업무 수행"
+        "크로스 계정 역할을 이용한 임시 자격 증명 사용"
       ],
       "answer": [
-        0,
-        1,
-        2
+        2,
+        3,
+        4
       ],
       "explanation": "MFA, 페더레이션 SSO, 크로스 계정 역할은 모두 인증을 강화하고 자격 증명 노출 위험을 줄이는 방법입니다. 비밀번호 공유와 루트 사용자의 일상적 사용은 심각한 보안 위험을 초래합니다.",
       "domainId": "d2"
@@ -3013,15 +3013,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 자격 증명 및 비밀 정보를 안전하게 저장·관리하는 데 사용할 수 있는 AWS 서비스를 모두 고르시오.",
       "choices": [
+        "AWS Config",
         "AWS Secrets Manager",
         "AWS Systems Manager Parameter Store",
         "Amazon GuardDuty",
-        "AWS Shield",
-        "AWS Config"
+        "AWS Shield"
       ],
       "answer": [
-        0,
-        1
+        1,
+        2
       ],
       "explanation": "Secrets Manager와 Systems Manager Parameter Store는 비밀번호, API 키 등의 자격 증명을 안전하게 저장하고 관리하는 데 사용됩니다. GuardDuty, Shield, Config는 각각 위협 탐지, DDoS 방어, 구성 추적을 위한 서비스입니다.",
       "domainId": "d2"
@@ -3032,16 +3032,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 페더레이션(Federation) 및 SSO와 관련된 설명으로 옳은 것을 모두 고르시오.",
       "choices": [
-        "페더레이션을 사용하면 기존 사내 자격 증명(예: Active Directory)으로 AWS 리소스에 접근할 수 있다",
         "IAM Identity Center는 여러 AWS 계정에 대한 SSO 접근을 중앙에서 관리할 수 있다",
         "페더레이션 사용자는 반드시 IAM 사용자 계정을 별도로 생성해야만 AWS에 접근할 수 있다",
         "크로스 계정 역할은 다른 계정의 신뢰할 수 있는 사용자에게 임시 자격 증명을 제공하는 방법 중 하나이다",
-        "페더레이션은 루트 사용자에게만 적용되는 기능이다"
+        "페더레이션은 루트 사용자에게만 적용되는 기능이다",
+        "페더레이션을 사용하면 기존 사내 자격 증명(예: Active Directory)으로 AWS 리소스에 접근할 수 있다"
       ],
       "answer": [
         0,
-        1,
-        3
+        2,
+        4
       ],
       "explanation": "페더레이션은 기존 사내 디렉터리 자격 증명으로 임시 보안 자격 증명을 발급받아 AWS에 접근하는 방식이며, 별도의 IAM 사용자 계정 생성이 필요하지 않습니다. IAM Identity Center는 여러 계정에 대한 SSO를 지원하고, 크로스 계정 역할도 대표적인 페더레이션 방식입니다.",
       "domainId": "d2"
@@ -3069,13 +3069,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "여러 개의 AWS 계정을 운영하는 조직이 모든 계정에 동일한 WAF 규칙과 보안 그룹 정책을 중앙에서 한 번에 적용하고 관리하고 싶습니다. 가장 적절한 서비스는?",
       "choices": [
-        "AWS Firewall Manager",
         "AWS Trusted Advisor",
+        "AWS Firewall Manager",
         "Amazon Inspector",
         "AWS Artifact"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "AWS Firewall Manager는 여러 계정과 리소스에 걸쳐 WAF 규칙, Shield Advanced 보호, 보안 그룹 정책 등을 중앙에서 일괄 관리할 수 있게 해줍니다. Trusted Advisor는 계정 점검, Inspector는 취약점 스캔, Artifact는 규정 준수 문서 제공 서비스입니다.",
       "domainId": "d2"
@@ -3086,13 +3086,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "계정의 보안, 비용 최적화, 성능, 내결함성, 서비스 한도 등을 점검하고 개선 권고 사항을 제공하는 서비스는?",
       "choices": [
-        "AWS Trusted Advisor",
-        "Amazon GuardDuty",
         "AWS Shield",
+        "Amazon GuardDuty",
+        "AWS Trusted Advisor",
         "AWS WAF"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "AWS Trusted Advisor는 보안, 비용 최적화, 성능, 내결함성, 서비스 한도, 운영 우수성의 6가지 범주에서 계정을 점검하고 개선 권고를 제공합니다. GuardDuty, Shield, WAF는 각각 위협 탐지, DDoS 방어, 웹 방화벽에 특화된 서비스입니다.",
       "domainId": "d2"
@@ -3103,13 +3103,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "타사(서드파티) 보안 소프트웨어(예: 방화벽, 안티바이러스 솔루션)를 검색하고 AWS 환경에 구매·배포할 수 있는 곳은?",
       "choices": [
-        "AWS Marketplace",
+        "AWS Config",
         "AWS Artifact",
         "AWS Trusted Advisor",
-        "AWS Config"
+        "AWS Marketplace"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "AWS Marketplace는 다양한 서드파티 소프트웨어 제품을 검색, 구매, 배포할 수 있는 디지털 카탈로그입니다. Artifact는 규정 준수 문서, Trusted Advisor는 계정 점검, Config는 구성 추적을 위한 서비스입니다.",
       "domainId": "d2"
@@ -3137,13 +3137,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "다음 중 대규모 DDoS(분산 서비스 거부) 공격으로부터 네트워크 및 애플리케이션 계층을 보호하기 위해 사용하는 서비스는?",
       "choices": [
-        "AWS Shield",
         "AWS WAF",
+        "AWS Shield",
         "Amazon Inspector",
         "AWS Config"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "AWS Shield는 DDoS 공격으로부터 네트워크와 애플리케이션을 보호하기 위해 설계된 서비스입니다. WAF는 애플리케이션 계층의 웹 공격 차단, Inspector는 취약점 스캔, Config는 구성 추적을 담당합니다.",
       "domainId": "d2"
@@ -3154,16 +3154,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 AWS가 제공하는 보안 관련 서비스를 모두 고르시오.",
       "choices": [
-        "AWS WAF",
-        "AWS Firewall Manager",
         "Amazon GuardDuty",
         "Amazon RDS",
-        "Amazon EC2"
+        "Amazon EC2",
+        "AWS WAF",
+        "AWS Firewall Manager"
       ],
       "answer": [
         0,
-        1,
-        2
+        3,
+        4
       ],
       "explanation": "WAF, Firewall Manager, GuardDuty는 모두 보안을 목적으로 제공되는 AWS 서비스입니다. RDS와 EC2는 각각 데이터베이스와 컴퓨팅을 위한 서비스로 보안 전용 서비스는 아닙니다.",
       "domainId": "d2"
@@ -3174,15 +3174,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 최신 보안 위협 동향이나 모범 사례에 대한 정보를 얻을 수 있는 공식 출처를 모두 고르시오.",
       "choices": [
+        "AWS 공식 문서(Documentation)",
+        "경쟁 클라우드 업체의 블로그",
         "AWS Security Blog",
         "AWS Knowledge Center",
-        "AWS Marketplace 리뷰 게시판",
-        "AWS 공식 문서(Documentation)",
-        "경쟁 클라우드 업체의 블로그"
+        "AWS Marketplace 리뷰 게시판"
       ],
       "answer": [
         0,
-        1,
+        2,
         3
       ],
       "explanation": "AWS Security Blog, Knowledge Center, 공식 문서는 모두 AWS가 직접 제공하는 신뢰할 수 있는 보안 정보 출처입니다. Marketplace 리뷰 게시판이나 경쟁 업체의 블로그는 공식 보안 정보 출처로 적절하지 않습니다.",
@@ -3194,16 +3194,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 계정의 보안 취약점이나 개선이 필요한 사항을 점검하기 위해 사용할 수 있는 서비스를 모두 고르시오.",
       "choices": [
+        "Amazon Route 53",
         "AWS Trusted Advisor",
         "Amazon Inspector",
         "Amazon GuardDuty",
-        "AWS Direct Connect",
-        "Amazon Route 53"
+        "AWS Direct Connect"
       ],
       "answer": [
-        0,
         1,
-        2
+        2,
+        3
       ],
       "explanation": "Trusted Advisor는 계정 전반의 모범 사례 준수 여부를, Inspector는 워크로드의 취약점을, GuardDuty는 위협과 이상 행위를 점검합니다. Direct Connect와 Route 53은 각각 전용 네트워크 연결과 DNS 서비스로 보안 점검 도구가 아닙니다.",
       "domainId": "d2"
@@ -3215,12 +3215,12 @@ window.APP_DATA.clf = {
       "question": "여러 환경(개발/스테이징/운영)에 동일한 인프라 구성을 반복적으로, 일관되게 배포하려는 회사에 가장 적합한 방법은?",
       "choices": [
         "AWS Management Console에서 담당자가 매번 수동으로 리소스를 생성한다",
-        "AWS CloudFormation 템플릿으로 인프라를 코드로 정의하여 배포한다",
         "각 담당자에게 설정값을 이메일로 공유해 개별적으로 구성하게 한다",
+        "AWS CloudFormation 템플릿으로 인프라를 코드로 정의하여 배포한다",
         "기존 인스턴스를 수동으로 복제한 뒤 담당자가 직접 설정을 변경한다"
       ],
       "answer": [
-        1
+        2
       ],
       "explanation": "AWS CloudFormation과 같은 IaC(Infrastructure as Code) 도구는 인프라를 코드로 정의해 여러 환경에 동일하게, 반복 가능하게 배포할 수 있게 해준다. 수동 작업은 사람의 실수로 환경 간 불일치가 발생하기 쉬워 반복 배포에는 적합하지 않다.",
       "domainId": "d3"
@@ -3233,11 +3233,11 @@ window.APP_DATA.clf = {
       "choices": [
         "AWS CLI(명령줄 인터페이스)",
         "AWS SDK",
-        "AWS Management Console",
-        "AWS API 직접 호출"
+        "AWS API 직접 호출",
+        "AWS Management Console"
       ],
       "answer": [
-        2
+        3
       ],
       "explanation": "Management Console은 웹 브라우저에서 마우스로 조작하는 그래픽 사용자 인터페이스(GUI)로, 프로그래밍 방식(코드/스크립트) 액세스에 해당하지 않는다. CLI, SDK, API 호출은 모두 코드나 명령어를 통해 AWS를 제어하는 프로그래밍 방식 액세스이다.",
       "domainId": "d3"
@@ -3282,16 +3282,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 반복 가능하고 자동화된 배포 방식에 해당하는 것을 모두 고르시오.",
       "choices": [
-        "AWS CloudFormation 템플릿을 실행하여 스택을 배포한다",
         "AWS Management Console에서 매번 수동으로 클릭하여 리소스를 생성한다",
         "AWS CLI 스크립트를 작성해 동일한 명령을 반복 실행한다",
         "AWS SDK를 이용해 애플리케이션 코드 내에서 리소스를 자동 프로비저닝한다",
-        "필요한 설정값을 이메일로 전달해 수작업으로 구성하게 한다"
+        "필요한 설정값을 이메일로 전달해 수작업으로 구성하게 한다",
+        "AWS CloudFormation 템플릿을 실행하여 스택을 배포한다"
       ],
       "answer": [
-        0,
+        1,
         2,
-        3
+        4
       ],
       "explanation": "CloudFormation, CLI 스크립트, SDK 기반 자동화는 모두 코드나 스크립트를 통해 반복 실행이 가능한 방식이다. 반면 콘솔 수동 클릭이나 이메일을 통한 수작업 전달은 사람이 매번 개입해야 하는 일회성 작업에 해당한다.",
       "domainId": "d3"
@@ -3303,12 +3303,12 @@ window.APP_DATA.clf = {
       "question": "AWS 리전(Region)에 대한 설명으로 가장 적절한 것은?",
       "choices": [
         "전 세계에 단 하나만 존재하는 데이터센터를 의미한다",
-        "하나 이상의 가용 영역으로 구성된, 지리적으로 분리된 영역이다",
         "사용자에게 콘텐츠를 캐싱해 전달하는 위치이다",
+        "하나 이상의 가용 영역으로 구성된, 지리적으로 분리된 영역이다",
         "하나의 물리적 서버 랙을 의미한다"
       ],
       "answer": [
-        1
+        2
       ],
       "explanation": "리전은 지리적으로 서로 분리된 영역이며, 각 리전은 물리적으로 독립된 하나 이상의 가용 영역(AZ)으로 구성된다. 콘텐츠 캐싱은 엣지 로케이션의 역할이다.",
       "domainId": "d3"
@@ -3320,12 +3320,12 @@ window.APP_DATA.clf = {
       "question": "애플리케이션의 고가용성을 높이기 위해 일반적으로 권장되는 아키텍처 방식은?",
       "choices": [
         "하나의 가용 영역에만 모든 리소스를 집중 배치한다",
-        "여러 가용 영역에 리소스를 분산하여 배포한다",
+        "가용 영역을 사용하지 않고 온프레미스에서만 운영한다",
         "하나의 EC2 인스턴스에 모든 트래픽을 집중시킨다",
-        "가용 영역을 사용하지 않고 온프레미스에서만 운영한다"
+        "여러 가용 영역에 리소스를 분산하여 배포한다"
       ],
       "answer": [
-        1
+        3
       ],
       "explanation": "가용 영역들은 물리적으로 분리되어 단일 장애 지점을 공유하지 않으므로, 리소스를 여러 AZ에 분산 배포하면 하나의 AZ에 장애가 발생해도 서비스 가용성을 유지할 수 있다.",
       "domainId": "d3"
@@ -3336,13 +3336,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "사용자와 지리적으로 가까운 곳에서 콘텐츠를 캐싱하여 지연 시간을 줄이는 데 사용되는 AWS 글로벌 인프라 구성 요소는?",
       "choices": [
-        "가용 영역(Availability Zone)",
-        "리전(Region)",
         "엣지 로케이션(Edge Location)",
+        "리전(Region)",
+        "가용 영역(Availability Zone)",
         "가상 프라이빗 클라우드(VPC)"
       ],
       "answer": [
-        2
+        0
       ],
       "explanation": "엣지 로케이션은 Amazon CloudFront 같은 콘텐츠 전송 서비스가 사용자에게 가까운 위치에서 콘텐츠를 캐싱해 지연 시간을 줄이기 위해 사용하는 시설이며, 리전보다 훨씬 많은 수가 전 세계에 분산되어 있다.",
       "domainId": "d3"
@@ -3354,12 +3354,12 @@ window.APP_DATA.clf = {
       "question": "특정 국가의 법률에 따라 데이터를 반드시 해당 국가 내의 AWS 리전에 저장해야 하는 요구사항과 가장 관련 있는 다중 리전 사용 사례는?",
       "choices": [
         "재해 복구(Disaster Recovery)",
-        "지연 시간(Latency) 개선",
         "데이터 주권(Data Sovereignty) 준수",
+        "지연 시간(Latency) 개선",
         "컴퓨팅 비용 절감"
       ],
       "answer": [
-        2
+        1
       ],
       "explanation": "데이터 주권은 특정 국가나 지역의 법규에 따라 데이터가 물리적으로 보관되어야 하는 위치에 대한 요구사항이며, 이를 준수하기 위해 해당 지역의 리전을 선택하는 것이 다중 리전 전략의 대표적 사용 사례 중 하나이다.",
       "domainId": "d3"
@@ -3370,16 +3370,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "AWS 가용 영역(Availability Zone)에 대한 설명으로 옳은 것을 모두 고르시오.",
       "choices": [
-        "하나의 리전은 여러 개의 가용 영역으로 구성된다",
-        "가용 영역들은 서로 물리적으로 분리되어 있어 단일 장애 지점을 공유하지 않는다",
         "가용 영역은 전 세계에 단 하나만 존재한다",
         "가용 영역들 간에는 저지연 네트워크로 연결되어 있다",
-        "가용 영역은 엣지 로케이션과 동일한 개념이다"
+        "가용 영역은 엣지 로케이션과 동일한 개념이다",
+        "하나의 리전은 여러 개의 가용 영역으로 구성된다",
+        "가용 영역들은 서로 물리적으로 분리되어 있어 단일 장애 지점을 공유하지 않는다"
       ],
       "answer": [
-        0,
         1,
-        3
+        3,
+        4
       ],
       "explanation": "리전은 여러 가용 영역으로 구성되며, 각 가용 영역은 독립된 전원/냉각/네트워크를 갖춰 단일 장애 지점을 공유하지 않지만 저지연 전용 네트워크로 서로 연결되어 있다. 가용 영역은 여러 개가 전 세계에 존재하며, 엣지 로케이션과는 다른 개념이다.",
       "domainId": "d3"
@@ -3391,12 +3391,12 @@ window.APP_DATA.clf = {
       "question": "서버를 직접 프로비저닝하지 않고 짧은 시간 동안 실행되는 이벤트 기반 코드를 실행하고 싶을 때 가장 적합한 서비스는?",
       "choices": [
         "Amazon EC2",
-        "AWS Lambda",
         "Amazon EMR",
+        "AWS Lambda",
         "Amazon WorkSpaces"
       ],
       "answer": [
-        1
+        2
       ],
       "explanation": "AWS Lambda는 서버 프로비저닝 없이 이벤트에 반응해 코드를 실행하는 완전 서버리스 컴퓨팅 서비스로, 실행된 시간에 대해서만 과금된다. EC2는 상시 실행되는 가상 서버를 직접 관리해야 한다.",
       "domainId": "d3"
@@ -3408,12 +3408,12 @@ window.APP_DATA.clf = {
       "question": "대량의 병렬 연산이 필요한 배치 작업에 적합하도록 CPU 성능에 초점을 맞춘 EC2 인스턴스 유형 계열은?",
       "choices": [
         "스토리지 최적화 인스턴스",
-        "컴퓨팅 최적화 인스턴스",
+        "범용 인스턴스",
         "메모리 최적화 인스턴스",
-        "범용 인스턴스"
+        "컴퓨팅 최적화 인스턴스"
       ],
       "answer": [
-        1
+        3
       ],
       "explanation": "컴퓨팅 최적화 인스턴스는 높은 성능의 프로세서를 제공해 배치 처리, 미디어 트랜스코딩, 과학적 모델링 등 CPU 집약적인 작업에 적합하다.",
       "domainId": "d3"
@@ -3424,13 +3424,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "Kubernetes 기반 컨테이너 오케스트레이션을 관리형 서비스로 제공하는 AWS 서비스는?",
       "choices": [
-        "Amazon ECS",
         "Amazon EKS",
+        "Amazon ECS",
         "AWS Fargate",
         "AWS Batch"
       ],
       "answer": [
-        1
+        0
       ],
       "explanation": "Amazon EKS(Elastic Kubernetes Service)는 표준 Kubernetes를 관리형으로 실행할 수 있게 해주는 서비스이다. Amazon ECS는 AWS 자체 컨테이너 오케스트레이션 서비스로 Kubernetes를 사용하지 않는다.",
       "domainId": "d3"
@@ -3458,14 +3458,14 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "클라우드 컴퓨팅의 탄력성(Elasticity)에 대한 설명으로 옳은 것을 모두 고르시오.",
       "choices": [
+        "탄력성은 온프레미스 환경에서만 구현 가능한 개념이다",
+        "탄력성은 클라우드 컴퓨팅이 제공하는 핵심 이점 중 하나이다",
         "Auto Scaling을 이용하면 트래픽에 따라 인스턴스 수를 자동으로 늘리거나 줄일 수 있다",
         "탄력성은 리소스를 항상 최대 용량으로 고정해 두는 것을 의미한다",
-        "수요가 감소하면 불필요한 리소스를 줄여 비용을 절감할 수 있다",
-        "탄력성은 온프레미스 환경에서만 구현 가능한 개념이다",
-        "탄력성은 클라우드 컴퓨팅이 제공하는 핵심 이점 중 하나이다"
+        "수요가 감소하면 불필요한 리소스를 줄여 비용을 절감할 수 있다"
       ],
       "answer": [
-        0,
+        1,
         2,
         4
       ],
@@ -3478,15 +3478,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "서버를 직접 프로비저닝하지 않고 실행할 수 있는 AWS의 서버리스 컴퓨팅 서비스를 모두 고르시오.",
       "choices": [
+        "Amazon Redshift",
         "AWS Fargate",
         "Amazon EC2",
         "AWS Lambda",
-        "Amazon EMR",
-        "Amazon Redshift"
+        "Amazon EMR"
       ],
       "answer": [
-        0,
-        2
+        1,
+        3
       ],
       "explanation": "AWS Fargate는 컨테이너를, AWS Lambda는 함수 코드를 서버 프로비저닝 없이 실행하는 서버리스 컴퓨팅 서비스이다. EC2, EMR, Redshift는 사용자가 인스턴스나 클러스터 크기 등을 직접 프로비저닝하고 관리해야 한다.",
       "domainId": "d3"
@@ -3498,12 +3498,12 @@ window.APP_DATA.clf = {
       "question": "완전관리형 NoSQL 키-값/문서 데이터베이스로, 대규모 확장성과 한 자릿수 밀리초 수준의 낮은 지연 시간을 제공하는 서비스는?",
       "choices": [
         "Amazon RDS",
-        "Amazon DynamoDB",
         "Amazon Redshift",
+        "Amazon DynamoDB",
         "Amazon ElastiCache"
       ],
       "answer": [
-        1
+        2
       ],
       "explanation": "Amazon DynamoDB는 완전관리형 NoSQL 데이터베이스로 키-값 및 문서 데이터 모델을 지원하며, 대규모 트래픽에서도 일관되게 낮은 지연 시간을 제공하도록 설계되었다.",
       "domainId": "d3"
@@ -3514,13 +3514,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "MySQL 및 PostgreSQL과 호환되며 AWS가 자체적으로 개발한 고성능·고가용성 관계형 데이터베이스 엔진은?",
       "choices": [
-        "Amazon Aurora",
+        "Amazon DocumentDB",
         "Amazon DynamoDB",
         "Amazon Neptune",
-        "Amazon DocumentDB"
+        "Amazon Aurora"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "Amazon Aurora는 MySQL 및 PostgreSQL과 호환되는 AWS 자체 개발 관계형 데이터베이스 엔진으로, 상용 데이터베이스에 준하는 성능과 오픈소스 수준의 비용 효율성을 제공한다.",
       "domainId": "d3"
@@ -3531,13 +3531,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "온프레미스 데이터베이스를 최소한의 다운타임으로 AWS로 마이그레이션할 때 사용하는 서비스는?",
       "choices": [
-        "AWS Snowball",
         "AWS Database Migration Service(DMS)",
+        "AWS Snowball",
         "AWS Glue",
         "Amazon Athena"
       ],
       "answer": [
-        1
+        0
       ],
       "explanation": "AWS DMS는 소스 데이터베이스가 계속 운영 중인 상태에서도 데이터를 대상 데이터베이스로 이전할 수 있게 해주어 마이그레이션 중 다운타임을 최소화한다.",
       "domainId": "d3"
@@ -3548,13 +3548,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "데이터베이스 조회 성능을 높이기 위해 자주 사용되는 데이터를 메모리에 캐싱하는 서비스는?",
       "choices": [
-        "Amazon ElastiCache",
         "Amazon RDS",
+        "Amazon ElastiCache",
         "AWS Backup",
         "Amazon FSx"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "Amazon ElastiCache는 Valkey, Memcached, Redis OSS 엔진을 지원하는 인메모리 캐싱 서비스로, 자주 조회되는 데이터를 메모리에 저장해 데이터베이스 부하를 줄이고 응답 속도를 높인다.",
       "domainId": "d3"
@@ -3565,16 +3565,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "EC2 인스턴스에 데이터베이스를 직접 설치해 운영하는 경우와 비교했을 때, Amazon RDS와 같은 관리형 데이터베이스 서비스가 제공하는 이점을 모두 고르시오.",
       "choices": [
-        "AWS가 OS 및 데이터베이스 엔진 패치를 관리해준다",
         "자동 백업 및 스냅샷 기능을 기본적으로 제공한다",
         "사용자가 모든 하드웨어와 OS 설치를 직접 수행해야 한다",
         "Multi-AZ 배포를 통한 자동 장애 조치를 손쉽게 구성할 수 있다",
-        "사용 가능한 데이터베이스 엔진 선택권이 완전히 사라진다"
+        "사용 가능한 데이터베이스 엔진 선택권이 완전히 사라진다",
+        "AWS가 OS 및 데이터베이스 엔진 패치를 관리해준다"
       ],
       "answer": [
         0,
-        1,
-        3
+        2,
+        4
       ],
       "explanation": "관리형 데이터베이스 서비스는 패치, 백업, 장애 조치 등 운영 부담을 AWS가 대신 처리해준다. 반면 EC2에 직접 DB를 설치하는 경우 하드웨어와 OS 관리를 사용자가 직접 수행해야 하며, RDS는 여전히 여러 데이터베이스 엔진 중에서 선택할 수 있다.",
       "domainId": "d3"
@@ -3585,15 +3585,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "이기종 데이터베이스 마이그레이션(예: 온프레미스 Oracle에서 Amazon Aurora PostgreSQL로 전환)을 수행할 때 함께 사용되는 AWS 도구를 모두 고르시오.",
       "choices": [
-        "AWS Schema Conversion Tool(SCT)",
-        "AWS Database Migration Service(DMS)",
         "Amazon Kinesis",
         "AWS Glue",
-        "Amazon Comprehend"
+        "Amazon Comprehend",
+        "AWS Schema Conversion Tool(SCT)",
+        "AWS Database Migration Service(DMS)"
       ],
       "answer": [
-        0,
-        1
+        3,
+        4
       ],
       "explanation": "이기종 마이그레이션에서는 먼저 AWS SCT로 소스와 대상 데이터베이스 간 스키마 차이를 변환하고, 이후 AWS DMS로 실제 데이터를 이전하는 것이 일반적인 절차이다. Kinesis, Glue, Comprehend는 각각 스트리밍 처리, ETL, 자연어 처리를 위한 서비스로 데이터베이스 마이그레이션 도구가 아니다.",
       "domainId": "d3"
@@ -3605,12 +3605,12 @@ window.APP_DATA.clf = {
       "question": "VPC 내에서 서브넷 수준으로 적용되며, 상태 비저장(stateless) 방식으로 인바운드와 아웃바운드 트래픽에 대해 허용 및 거부 규칙을 모두 설정할 수 있는 것은?",
       "choices": [
         "보안 그룹(Security Group)",
-        "네트워크 ACL(NACL)",
         "라우팅 테이블",
+        "네트워크 ACL(NACL)",
         "인터넷 게이트웨이"
       ],
       "answer": [
-        1
+        2
       ],
       "explanation": "네트워크 ACL은 서브넷 수준에서 동작하는 상태 비저장 방화벽으로, 인바운드와 아웃바운드 규칙을 별도로 설정해야 하며 허용(ALLOW)과 거부(DENY) 규칙을 모두 지정할 수 있다.",
       "domainId": "d3"
@@ -3622,12 +3622,12 @@ window.APP_DATA.clf = {
       "question": "인스턴스(ENI) 수준에서 적용되며, 상태 저장(stateful) 방식으로 동작하여 허용 규칙만 설정할 수 있는 가상 방화벽은?",
       "choices": [
         "네트워크 ACL",
-        "보안 그룹(Security Group)",
+        "Amazon Route 53",
         "AWS WAF",
-        "Amazon Route 53"
+        "보안 그룹(Security Group)"
       ],
       "answer": [
-        1
+        3
       ],
       "explanation": "보안 그룹은 인스턴스 수준에서 동작하는 상태 저장(stateful) 방화벽으로, 허용 규칙만 설정할 수 있으며 요청에 대한 응답 트래픽은 별도 규칙 없이 자동으로 허용된다.",
       "domainId": "d3"
@@ -3638,13 +3638,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "도메인 이름을 IP 주소로 변환하고, 지연 시간 기반이나 지리 위치 기반 등 다양한 라우팅 정책을 제공하는 관리형 DNS 서비스는?",
       "choices": [
-        "Amazon CloudFront",
         "Amazon Route 53",
+        "Amazon CloudFront",
         "AWS Direct Connect",
         "Amazon VPC"
       ],
       "answer": [
-        1
+        0
       ],
       "explanation": "Amazon Route 53은 도메인 등록, DNS 확인, 다양한 라우팅 정책(지연 시간 기반, 지리 위치 기반, 가중치 기반 등)과 상태 확인(헬스체크)을 제공하는 AWS의 관리형 DNS 서비스이다.",
       "domainId": "d3"
@@ -3672,16 +3672,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "Amazon VPC의 구성 요소에 해당하는 것을 모두 고르시오.",
       "choices": [
+        "Amazon S3 버킷",
+        "AWS Lambda 함수",
         "서브넷(Subnet)",
         "인터넷 게이트웨이(Internet Gateway)",
-        "라우팅 테이블(Route Table)",
-        "Amazon S3 버킷",
-        "AWS Lambda 함수"
+        "라우팅 테이블(Route Table)"
       ],
       "answer": [
-        0,
-        1,
-        2
+        2,
+        3,
+        4
       ],
       "explanation": "서브넷, 인터넷 게이트웨이, 라우팅 테이블은 모두 VPC 네트워크를 구성하는 핵심 요소이다. S3 버킷과 Lambda 함수는 VPC의 구성 요소가 아니라 별도의 AWS 서비스이다.",
       "domainId": "d3"
@@ -3692,16 +3692,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "온프레미스 네트워크와 AWS VPC를 연결하는 방법에 해당하는 것을 모두 고르시오.",
       "choices": [
+        "Amazon Kinesis",
         "AWS Site-to-Site VPN",
         "AWS Direct Connect",
         "Amazon SNS",
-        "AWS Client VPN",
-        "Amazon Kinesis"
+        "AWS Client VPN"
       ],
       "answer": [
-        0,
         1,
-        3
+        2,
+        4
       ],
       "explanation": "Site-to-Site VPN과 Direct Connect는 온프레미스 네트워크 전체를 AWS와 연결하는 방법이며, Client VPN은 개별 사용자가 안전하게 AWS 리소스나 온프레미스 네트워크에 접속할 수 있게 해주는 연결 방식이다. SNS와 Kinesis는 네트워크 연결 서비스가 아니다.",
       "domainId": "d3"
@@ -3713,12 +3713,12 @@ window.APP_DATA.clf = {
       "question": "정적 웹사이트 파일, 백업 데이터, 로그 등을 저장하기 위한 사실상 무제한 확장 가능한 객체 스토리지 서비스는?",
       "choices": [
         "Amazon EBS",
-        "Amazon S3",
         "Amazon EFS",
+        "Amazon S3",
         "Amazon FSx"
       ],
       "answer": [
-        1
+        2
       ],
       "explanation": "Amazon S3는 버킷에 객체를 저장하는 객체 스토리지 서비스로, 사실상 무제한의 확장성을 제공하며 백업, 정적 웹 호스팅, 데이터 레이크 등 다양한 용도로 사용된다.",
       "domainId": "d3"
@@ -3730,12 +3730,12 @@ window.APP_DATA.clf = {
       "question": "자주 접근하지는 않지만 필요할 때 즉시 검색이 가능해야 하는 데이터를 저비용으로 저장하기에 적합한 S3 스토리지 클래스는?",
       "choices": [
         "S3 Standard",
-        "S3 Standard-IA",
+        "Amazon EBS",
         "S3 Glacier Deep Archive",
-        "Amazon EBS"
+        "S3 Standard-IA"
       ],
       "answer": [
-        1
+        3
       ],
       "explanation": "S3 Standard-IA(Infrequent Access)는 접근 빈도는 낮지만 필요 시 즉시 검색이 가능해야 하는 데이터에 적합하며, S3 Standard보다 저장 비용이 저렴하다. Glacier Deep Archive는 검색에 최대 수십 시간이 걸릴 수 있어 즉시 검색 요구사항에는 맞지 않는다.",
       "domainId": "d3"
@@ -3746,13 +3746,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "EC2 인스턴스가 중지되거나 종료되면 저장된 데이터가 함께 사라지는 임시 블록 스토리지는?",
       "choices": [
-        "Amazon EBS",
         "인스턴스 스토어(Instance Store)",
+        "Amazon EBS",
         "Amazon S3",
         "Amazon EFS"
       ],
       "answer": [
-        1
+        0
       ],
       "explanation": "인스턴스 스토어는 EC2 호스트에 물리적으로 연결된 임시 블록 스토리지로, 인스턴스가 중지되거나 종료되면 데이터가 손실된다. 반면 EBS는 네트워크 기반 볼륨으로 인스턴스와 독립적으로 데이터를 유지한다.",
       "domainId": "d3"
@@ -3780,16 +3780,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "Amazon S3 수명 주기(Lifecycle) 정책을 사용해 수행할 수 있는 작업을 모두 고르시오.",
       "choices": [
-        "일정 기간이 지난 객체를 더 저렴한 스토리지 클래스로 자동 전환한다",
         "일정 기간이 지난 객체를 자동으로 삭제한다",
         "EC2 인스턴스 유형을 자동으로 변경한다",
         "오래된 버전의 객체를 정리한다",
-        "VPC의 라우팅 테이블을 자동으로 갱신한다"
+        "VPC의 라우팅 테이블을 자동으로 갱신한다",
+        "일정 기간이 지난 객체를 더 저렴한 스토리지 클래스로 자동 전환한다"
       ],
       "answer": [
         0,
-        1,
-        3
+        2,
+        4
       ],
       "explanation": "S3 수명 주기 정책은 객체를 접근 빈도에 따라 다른 스토리지 클래스로 전환하거나, 일정 기간 후 자동 삭제하거나, 이전 버전을 정리하는 규칙을 설정할 수 있다. EC2 인스턴스 유형 변경이나 VPC 라우팅 테이블 갱신과는 관련이 없다.",
       "domainId": "d3"
@@ -3800,15 +3800,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 설명에 해당하는 AWS 스토리지 관련 서비스를 모두 고르시오. - '온프레미스 환경과 AWS 스토리지를 연결하는 하이브리드 서비스이다' 또는 '여러 AWS 서비스에 걸친 백업을 중앙에서 관리한다'",
       "choices": [
-        "AWS Storage Gateway",
-        "AWS Backup",
         "Amazon FSx",
         "Amazon Kinesis",
-        "AWS Glue"
+        "AWS Glue",
+        "AWS Storage Gateway",
+        "AWS Backup"
       ],
       "answer": [
-        0,
-        1
+        3,
+        4
       ],
       "explanation": "AWS Storage Gateway는 온프레미스와 AWS 스토리지를 연결하는 하이브리드 스토리지 서비스이며, AWS Backup은 EBS, RDS, EFS 등 여러 서비스의 백업을 중앙에서 정책 기반으로 관리하는 서비스이다. FSx는 특정 워크로드용 파일 시스템이고, Kinesis와 Glue는 각각 스트리밍 처리와 ETL을 위한 서비스로 이 설명에 해당하지 않는다.",
       "domainId": "d3"
@@ -3819,13 +3819,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "이미지와 동영상에서 객체, 장면, 얼굴 등을 인식하는 컴퓨터 비전 서비스는?",
       "choices": [
-        "Amazon Rekognition",
-        "Amazon Textract",
         "Amazon Polly",
+        "Amazon Textract",
+        "Amazon Rekognition",
         "Amazon Comprehend"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "Amazon Rekognition은 이미지와 동영상을 분석하여 객체, 장면, 얼굴 등을 인식하는 컴퓨터 비전 서비스이다. Textract는 문서에서 텍스트를 추출하고, Polly는 텍스트를 음성으로 변환하며, Comprehend는 텍스트를 분석하는 서비스이다.",
       "domainId": "d3"
@@ -3837,12 +3837,12 @@ window.APP_DATA.clf = {
       "question": "텍스트를 자연스러운 음성으로 변환(Text-to-Speech)하는 AWS 서비스는?",
       "choices": [
         "Amazon Transcribe",
-        "Amazon Polly",
+        "Amazon Lex",
         "Amazon Translate",
-        "Amazon Lex"
+        "Amazon Polly"
       ],
       "answer": [
-        1
+        3
       ],
       "explanation": "Amazon Polly는 텍스트를 자연스러운 음성으로 변환하는 서비스이다. Transcribe는 반대로 음성을 텍스트로 변환하며, Translate는 언어 번역, Lex는 대화형 챗봇 구축에 사용된다.",
       "domainId": "d3"
@@ -3853,16 +3853,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 AWS 서비스와 그 용도에 대한 설명으로 옳은 것을 모두 고르시오.",
       "choices": [
+        "Amazon SageMaker는 데이터 웨어하우스 구축에 특화된 서비스이다",
+        "Amazon EMR은 관계형 데이터베이스 마이그레이션 전용 도구이다",
         "Amazon Athena는 S3에 저장된 데이터를 서버리스로 표준 SQL 쿼리할 수 있게 해준다",
         "AWS Glue는 서버리스 ETL 작업과 데이터 카탈로그 기능을 제공한다",
-        "Amazon Kinesis는 실시간 스트리밍 데이터를 수집하고 처리한다",
-        "Amazon SageMaker는 데이터 웨어하우스 구축에 특화된 서비스이다",
-        "Amazon EMR은 관계형 데이터베이스 마이그레이션 전용 도구이다"
+        "Amazon Kinesis는 실시간 스트리밍 데이터를 수집하고 처리한다"
       ],
       "answer": [
-        0,
-        1,
-        2
+        2,
+        3,
+        4
       ],
       "explanation": "Athena, Glue, Kinesis에 대한 설명은 모두 정확하다. SageMaker는 데이터 웨어하우스가 아니라 머신러닝 모델 구축 플랫폼이며, EMR은 데이터베이스 마이그레이션 도구가 아니라 Hadoop/Spark 같은 빅데이터 프레임워크를 실행하는 관리형 클러스터 서비스이다.",
       "domainId": "d3"
@@ -3873,13 +3873,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "대규모 데이터 웨어하우스를 구축하여 복잡한 분석 쿼리를 수행하기 위한 관리형 AWS 서비스는?",
       "choices": [
-        "Amazon DynamoDB",
         "Amazon Redshift",
+        "Amazon DynamoDB",
         "Amazon ElastiCache",
         "Amazon Kinesis"
       ],
       "answer": [
-        1
+        0
       ],
       "explanation": "Amazon Redshift는 페타바이트급 데이터를 대상으로 복잡한 분석 쿼리를 수행하도록 설계된 완전관리형 데이터 웨어하우스 서비스이다.",
       "domainId": "d3"
@@ -3890,16 +3890,16 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "다음 중 자연어(텍스트/음성) 처리와 관련된 AWS AI 서비스를 모두 고르시오.",
       "choices": [
+        "Amazon QuickSight(BI 시각화)",
         "Amazon Comprehend(텍스트에서 감정/엔티티 추출)",
         "Amazon Transcribe(음성을 텍스트로 변환)",
         "Amazon Translate(언어 간 번역)",
-        "Amazon Rekognition(이미지/동영상 분석)",
-        "Amazon QuickSight(BI 시각화)"
+        "Amazon Rekognition(이미지/동영상 분석)"
       ],
       "answer": [
-        0,
         1,
-        2
+        2,
+        3
       ],
       "explanation": "Comprehend, Transcribe, Translate는 모두 텍스트나 음성 같은 자연어를 다루는 AI 서비스이다. Rekognition은 이미지/동영상을 다루는 컴퓨터 비전 서비스이고, QuickSight는 데이터 시각화를 위한 BI 도구로 자연어 처리와는 관련이 없다.",
       "domainId": "d3"
@@ -3927,13 +3927,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "여러 AWS 서비스를 시각적 워크플로우(상태 머신) 형태로 조율하는 서버리스 서비스는?",
       "choices": [
-        "AWS Step Functions",
-        "Amazon SQS",
         "AWS CodePipeline",
+        "Amazon SQS",
+        "AWS Step Functions",
         "Amazon EventBridge"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "AWS Step Functions는 여러 AWS 서비스 호출을 상태 머신 형태의 워크플로우로 정의하고 순서대로 조율할 수 있게 해주는 서버리스 서비스이다.",
       "domainId": "d3"
@@ -3945,12 +3945,12 @@ window.APP_DATA.clf = {
       "question": "클라우드 기반의 컨택센터(콜센터) 솔루션을 제공하는 AWS 서비스는?",
       "choices": [
         "Amazon SES",
-        "Amazon Connect",
+        "AWS Support",
         "Amazon Chime",
-        "AWS Support"
+        "Amazon Connect"
       ],
       "answer": [
-        1
+        3
       ],
       "explanation": "Amazon Connect는 클라우드 기반의 컨택센터(콜센터) 서비스로, 고객 응대를 위한 통화 라우팅 및 관리 기능을 제공한다. SES는 이메일 발송 서비스이다.",
       "domainId": "d3"
@@ -3961,13 +3961,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "사용자에게 전체 가상 데스크톱 환경을 제공하는 관리형 최종 사용자 컴퓨팅 서비스는?",
       "choices": [
-        "Amazon AppStream 2.0",
         "Amazon WorkSpaces",
+        "Amazon AppStream 2.0",
         "AWS Amplify",
         "AWS AppSync"
       ],
       "answer": [
-        1
+        0
       ],
       "explanation": "Amazon WorkSpaces는 완전한 가상 데스크톱(VDI)을 사용자에게 제공하는 서비스이다. AppStream 2.0은 데스크톱 전체가 아니라 개별 애플리케이션을 스트리밍으로 제공한다는 점에서 차이가 있다.",
       "domainId": "d3"
@@ -3978,15 +3978,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "소스 코드를 빌드·테스트하고 지속적 통합/배포(CI/CD) 파이프라인을 자동화하는 데 사용되는 AWS 개발자 도구를 모두 고르시오.",
       "choices": [
-        "AWS CodeBuild",
         "AWS CodePipeline",
         "Amazon EventBridge",
         "AWS X-Ray",
-        "Amazon SNS"
+        "Amazon SNS",
+        "AWS CodeBuild"
       ],
       "answer": [
         0,
-        1
+        4
       ],
       "explanation": "AWS CodeBuild는 소스 코드를 컴파일하고 테스트하는 완전관리형 빌드 서비스이며, AWS CodePipeline은 이러한 빌드/테스트/배포 단계를 연결하여 CI/CD 파이프라인을 자동화한다. EventBridge, X-Ray, SNS는 각각 이벤트 라우팅, 분산 추적, 알림 서비스로 CI/CD 파이프라인 자동화 도구가 아니다.",
       "domainId": "d3"
@@ -3997,13 +3997,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 스타트업이 이번 주에만 짧게 신규 기능의 부하 테스트를 진행하려고 합니다. 언제, 얼마나 많은 컴퓨팅 자원이 필요할지 미리 예측할 수 없는 상황에서 가장 적합한 EC2 구매 옵션은?",
       "choices": [
-        "On-Demand Instances",
         "Standard Reserved Instances",
+        "On-Demand Instances",
         "Dedicated Hosts",
         "3년 약정 Savings Plans"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "On-Demand는 약정이나 선불금 없이 사용한 만큼만 지불하는 방식으로, 사용 패턴을 예측하기 어렵거나 짧은 기간만 필요한 워크로드에 적합합니다. Reserved Instances와 Savings Plans는 장기간 안정적인 사용을 전제로 할인을 제공하므로 이런 시나리오에는 맞지 않습니다.",
       "domainId": "d4"
@@ -4014,13 +4014,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "중단되어도 나중에 재실행하면 되는 대규모 동영상 트랜스코딩 배치 작업의 비용을 최대한 절감하고 싶습니다. 어떤 구매 옵션이 가장 적합한가요?",
       "choices": [
-        "Spot Instances",
-        "On-Demand Instances",
         "전용 호스트(Dedicated Host)",
+        "On-Demand Instances",
+        "Spot Instances",
         "Standard Reserved Instances"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "Spot Instances는 AWS의 유휴 컴퓨팅 용량을 On-Demand 대비 최대 90%까지 할인된 가격에 제공하지만, 용량이 필요해지면 2분 전 통지 후 회수될 수 있습니다. 따라서 중단에 강하고 재시작이 가능한 배치 작업에 이상적입니다.",
       "domainId": "d4"
@@ -4031,13 +4031,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "회사는 향후 3년간 EC2 사용을 지속할 계획이지만, 사업 방향에 따라 인스턴스 패밀리나 리전, 운영체제가 바뀔 가능성이 높습니다. 할인 혜택을 받으면서도 이런 유연성을 유지하려면 어떤 옵션이 가장 적합한가요?",
       "choices": [
-        "Compute Savings Plans",
+        "EC2 Instance Savings Plans",
         "Standard Reserved Instances",
         "Dedicated Instances",
-        "EC2 Instance Savings Plans"
+        "Compute Savings Plans"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "Compute Savings Plans는 특정 인스턴스 패밀리, 리전, 운영체제, 테넌시에 관계없이 EC2, Fargate, Lambda 사용량에 폭넓게 적용되어 가장 큰 유연성을 제공합니다. Standard RI나 EC2 Instance Savings Plans는 특정 인스턴스 패밀리나 리전에 묶여 유연성이 떨어집니다.",
       "domainId": "d4"
@@ -4065,15 +4065,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "AWS On-Demand Capacity Reservation에 대한 설명으로 옳은 것을 모두 고르시오. (2개 선택)",
       "choices": [
-        "특정 가용 영역(AZ)에서 원하는 기간만큼 용량을 예약할 수 있다",
-        "1년 또는 3년의 장기 약정이 반드시 필요하다",
         "예약한 용량을 사용하지 않아도 On-Demand 요금이 청구된다",
         "Spot Instances와만 결합하여 사용할 수 있다",
-        "AWS가 자동으로 할인율을 적용해 준다"
+        "AWS가 자동으로 할인율을 적용해 준다",
+        "특정 가용 영역(AZ)에서 원하는 기간만큼 용량을 예약할 수 있다",
+        "1년 또는 3년의 장기 약정이 반드시 필요하다"
       ],
       "answer": [
         0,
-        2
+        3
       ],
       "explanation": "Capacity Reservation은 장기 약정 없이 특정 AZ에서 원하는 기간만큼 용량을 확보하며, 사용 여부와 관계없이 On-Demand 요금이 청구됩니다. 할인을 받으려면 Reserved Instances나 Savings Plans와 별도로 결합해야 하며, 자동 할인은 제공되지 않습니다.",
       "domainId": "d4"
@@ -4084,15 +4084,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "AWS의 데이터 전송 및 Organizations 내 예약 인스턴스(RI) 공유에 대한 설명으로 옳은 것을 모두 고르시오. (2개 선택)",
       "choices": [
+        "리전 간 데이터 전송은 발신 측에서만 과금되며 수신 측은 항상 무료이다",
+        "RI는 구매 즉시 조직 내 모든 계정에서 무조건 공유가 강제된다",
         "인터넷에서 AWS로 들어오는(inbound) 데이터 전송은 일반적으로 무료이다",
         "같은 리전 내에서 이루어지는 모든 데이터 전송은 항상 무료이다",
-        "AWS Organizations의 결제 공유 설정에 따라 한 계정이 구매한 RI 혜택을 다른 구성원 계정과 공유할 수 있다",
-        "리전 간 데이터 전송은 발신 측에서만 과금되며 수신 측은 항상 무료이다",
-        "RI는 구매 즉시 조직 내 모든 계정에서 무조건 공유가 강제된다"
+        "AWS Organizations의 결제 공유 설정에 따라 한 계정이 구매한 RI 혜택을 다른 구성원 계정과 공유할 수 있다"
       ],
       "answer": [
-        0,
-        2
+        2,
+        4
       ],
       "explanation": "AWS로 들어오는 데이터는 대체로 무료이며, Organizations의 통합 결제 하에서는 설정에 따라 한 계정의 RI 할인 혜택을 다른 계정의 일치하는 사용량에도 적용할 수 있습니다. 다만 같은 리전이라도 AZ 간 전송에는 소액 과금이 발생할 수 있고, RI 공유는 관리 계정에서 활성화해야 하는 선택 사항입니다.",
       "domainId": "d4"
@@ -4103,13 +4103,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "새로운 3계층 웹 애플리케이션 아키텍처를 아직 배포하지 않은 상태에서, 여러 서비스 조합에 따른 예상 월간 비용을 미리 견적 내고 싶습니다. 어떤 도구를 사용해야 하나요?",
       "choices": [
-        "AWS Pricing Calculator",
         "AWS Cost Explorer",
+        "AWS Pricing Calculator",
         "AWS Budgets",
         "Cost and Usage Report"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "AWS Pricing Calculator는 실제로 리소스를 배포하기 전에 서비스 구성에 따른 예상 비용을 시뮬레이션해보는 도구입니다. Cost Explorer와 CUR은 이미 발생한 실제 사용량과 비용을 분석하는 데 사용되고, Budgets은 예산 초과를 감시하는 도구입니다.",
       "domainId": "d4"
@@ -4120,13 +4120,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "지난 6개월간 서비스별 실제 지출 추세를 그래프로 확인하고, 이를 바탕으로 향후 몇 개월간의 비용을 예측하려고 합니다. 가장 적합한 도구는?",
       "choices": [
-        "AWS Cost Explorer",
-        "AWS Pricing Calculator",
         "AWS Trusted Advisor",
+        "AWS Pricing Calculator",
+        "AWS Cost Explorer",
         "AWS Marketplace"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "AWS Cost Explorer는 과거 및 현재의 비용/사용량 데이터를 시각화하고, 이 데이터를 기반으로 향후 비용을 예측하는 기능을 제공합니다. Pricing Calculator는 실제 사용 데이터가 아니라 배포 전 견적을 다룹니다.",
       "domainId": "d4"
@@ -4137,13 +4137,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "회사는 여러 부서(마케팅, 개발, 운영)가 공유하는 AWS 계정에서 각 부서별 리소스 사용 비용을 구분해서 보고서로 받고 싶습니다. 이를 위해 리소스에 부여해야 하는 것은?",
       "choices": [
-        "비용 할당 태그(Cost Allocation Tag)",
+        "서비스 할당량(Service Quota)",
         "IAM 정책",
         "보안 그룹 규칙",
-        "서비스 할당량(Service Quota)"
+        "비용 할당 태그(Cost Allocation Tag)"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "비용 할당 태그를 리소스에 부여하고 결제 콘솔에서 활성화하면, 태그(예: 부서명)를 기준으로 비용을 세분화하여 Cost Explorer나 Cost and Usage Report에서 분석할 수 있습니다. IAM 정책이나 보안 그룹은 접근 제어와 관련된 것으로 비용 추적과는 무관합니다.",
       "domainId": "d4"
@@ -4171,15 +4171,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "AWS Organizations의 통합 결제(Consolidated Billing)가 제공하는 이점으로 옳은 것을 모두 고르시오. (2개 선택)",
       "choices": [
+        "구성원 계정마다 반드시 별도의 결제 수단을 등록해야 한다",
         "여러 계정의 사용량을 합산하여 볼륨 할인 구간에 더 빠르게 도달할 수 있다",
         "모든 구성원 계정에 대해 하나의 통합된 청구서를 받을 수 있다",
         "구성원 계정의 IAM 사용자 권한을 관리 계정이 자동으로 대신 관리해준다",
-        "모든 구성원 계정의 보안 그룹 설정이 자동으로 동일하게 통일된다",
-        "구성원 계정마다 반드시 별도의 결제 수단을 등록해야 한다"
+        "모든 구성원 계정의 보안 그룹 설정이 자동으로 동일하게 통일된다"
       ],
       "answer": [
-        0,
-        1
+        1,
+        2
       ],
       "explanation": "통합 결제는 조직 내 여러 계정의 사용량을 합산하여 볼륨 할인 혜택을 더 쉽게 받을 수 있게 하고, 관리 계정에서 모든 구성원 계정에 대한 단일 청구서를 받을 수 있게 합니다. IAM 권한 관리나 보안 그룹 통일은 통합 결제의 기능이 아니며, 결제는 관리 계정에서 일괄 처리되므로 구성원 계정마다 별도 결제 수단이 필요하지 않습니다.",
       "domainId": "d4"
@@ -4190,15 +4190,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "비용 할당 태그와 Cost and Usage Report(CUR)에 대한 설명으로 옳은 것을 모두 고르시오. (2개 선택)",
       "choices": [
-        "AWS 생성 태그는 'aws:' 접두사가 붙으며 AWS가 자동으로 적용한다",
         "사용자 정의 태그는 결제 콘솔에서 비용 할당 태그로 활성화해야 리포트에 반영된다",
         "CUR은 요약된 월별 총액 한 줄만 제공하며 세부 항목은 포함하지 않는다",
         "비용 할당 태그는 IAM 정책 문서에서만 확인할 수 있고 CUR과는 관련이 없다",
-        "사용자 정의 태그는 활성화 여부와 관계없이 항상 CUR에 자동 포함된다"
+        "사용자 정의 태그는 활성화 여부와 관계없이 항상 CUR에 자동 포함된다",
+        "AWS 생성 태그는 'aws:' 접두사가 붙으며 AWS가 자동으로 적용한다"
       ],
       "answer": [
         0,
-        1
+        4
       ],
       "explanation": "AWS 생성 태그는 'aws:' 접두사가 붙어 자동으로 적용되고, 사용자 정의 태그는 사용자가 직접 지정한 뒤 결제 콘솔에서 비용 할당 태그로 활성화해야 리포트에 나타납니다. CUR은 오히려 가장 세부적이고 포괄적인 비용/사용량 데이터를 제공하는 보고서입니다.",
       "domainId": "d4"
@@ -4209,13 +4209,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "글로벌 금융 서비스 기업이 24/7 미션 크리티컬 시스템을 운영하며, 장애 발생 시 15분 이내 응답과 전담 Technical Account Manager(TAM)의 지속적인 아키텍처 자문을 원합니다. 어떤 AWS Support 플랜이 가장 적합한가요?",
       "choices": [
-        "Enterprise",
         "Developer",
+        "Enterprise",
         "Basic",
         "Business"
       ],
       "answer": [
-        0
+        1
       ],
       "explanation": "Enterprise 지원 플랜은 전담 TAM을 배정하고 비즈니스 크리티컬 시스템 다운 시 15분 이내 응답을 제공하는 최상위 플랜으로, 대규모 미션 크리티컬 운영 조직에 적합합니다. Business는 24/7 지원을 제공하지만 전담 TAM이나 15분 응답 SLA는 제공하지 않습니다.",
       "domainId": "d4"
@@ -4226,13 +4226,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "1인 개발자가 처음으로 유료 기술 지원을 이용해보려 하며, 업무 시간 중 이메일로 개발 관련 질문에 대한 일반적인 안내를 받을 수 있으면 충분합니다. 비용을 최소화하고 싶을 때 적합한 Support 플랜은?",
       "choices": [
-        "Developer",
-        "Enterprise",
         "Business",
+        "Enterprise",
+        "Developer",
         "Enterprise On-Ramp"
       ],
       "answer": [
-        0
+        2
       ],
       "explanation": "Developer 플랜은 업무 시간 중 이메일을 통한 기술 지원과 일반적인 안내를 저렴한 비용으로 제공하여 소규모 개발/테스트 단계의 개인이나 팀에 적합합니다. Business 이상 플랜은 24/7 지원과 더 빠른 응답 시간을 제공하지만 비용이 더 높습니다.",
       "domainId": "d4"
@@ -4243,13 +4243,13 @@ window.APP_DATA.clf = {
       "type": "single",
       "question": "한 사용자가 자신의 AWS 계정 정보가 도용되어 다른 사람이 리소스를 부정하게 사용하고 있다고 의심되어 이를 신고하고 조사받고 싶습니다. 어떤 AWS 팀에 문의해야 하나요?",
       "choices": [
-        "Trust & Safety 팀",
+        "Well-Architected 검토 팀",
         "Professional Services",
         "AWS 파트너 네트워크(APN)",
-        "Well-Architected 검토 팀"
+        "Trust & Safety 팀"
       ],
       "answer": [
-        0
+        3
       ],
       "explanation": "Trust & Safety 팀은 AWS 리소스의 부정 사용, 계정 도용, 약관 위반, 피싱 등의 신고를 접수하고 조사하는 전담 조직입니다. Professional Services는 아키텍처/마이그레이션 컨설팅을, APN은 파트너 생태계를 다루므로 이런 보안 사고 신고에는 적합하지 않습니다.",
       "domainId": "d4"
@@ -4260,15 +4260,15 @@ window.APP_DATA.clf = {
       "type": "multi",
       "question": "AWS Trusted Advisor와 AWS Health Dashboard에 대한 설명으로 옳은 것을 모두 고르시오. (2개 선택)",
       "choices": [
-        "Trusted Advisor는 비용 최적화, 보안, 성능, 내결함성, 서비스 한도, 운영 우수성 영역에서 계정을 점검하고 권장 사항을 제시한다",
-        "AWS Health Dashboard의 Personal Health Dashboard는 내 계정 리소스에 영향을 미치는 이벤트를 알려준다",
         "Trusted Advisor의 전체 점검 항목은 Basic(무료) 플랜에서도 아무 제한 없이 모두 제공된다",
         "Health API는 모든 Support 플랜에서 동일한 수준으로 제공된다",
-        "Trusted Advisor는 IAM 사용자의 비밀번호를 자동으로 변경해주는 도구이다"
+        "Trusted Advisor는 IAM 사용자의 비밀번호를 자동으로 변경해주는 도구이다",
+        "Trusted Advisor는 비용 최적화, 보안, 성능, 내결함성, 서비스 한도, 운영 우수성 영역에서 계정을 점검하고 권장 사항을 제시한다",
+        "AWS Health Dashboard의 Personal Health Dashboard는 내 계정 리소스에 영향을 미치는 이벤트를 알려준다"
       ],
       "answer": [
-        0,
-        1
+        3,
+        4
       ],
       "explanation": "Trusted Advisor는 여섯 가지 범주에서 계정 상태를 점검해 개선을 권장하며, Personal Health Dashboard는 내 계정에 영향을 주는 개별 이벤트를 알려줍니다. Trusted Advisor의 전체 점검 항목은 Business/Enterprise 이상에서 제공되고, Basic 플랜은 제한된 핵심 점검만 제공하며, Health API는 Business 이상 플랜에서 프로그래밍 방식 접근이 가능합니다.",
       "domainId": "d4"
