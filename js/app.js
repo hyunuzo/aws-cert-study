@@ -4,7 +4,7 @@
   var STORAGE_KEY = "awsStudyApp.v1";
   var THEME_KEY = "awsStudyApp.theme";
 
-  var CERTS = ["clf", "saa"];
+  var CERTS = ["clf", "saa", "soa"];
 
   var progress = loadProgress();
   var session = null; // active quiz/exam session
@@ -250,10 +250,10 @@
 
     return (
       "<h1>AWS 스터디</h1>" +
-      '<p class="muted">Cloud Practitioner와 Solutions Architect - Associate 시험을 위한 개념 학습, 퀴즈, 모의고사 도구입니다. 모든 진행 상황은 이 브라우저에 저장됩니다.</p>' +
+      '<p class="muted">Cloud Practitioner, Solutions Architect - Associate, CloudOps Engineer - Associate 시험을 위한 개념 학습, 퀴즈, 모의고사 도구입니다. 모든 진행 상황은 이 브라우저에 저장됩니다.</p>' +
       '<div class="cert-cards">' + cards + "</div>" +
       '<a class="home-link" href="#/glossary">' +
-      "<div><b>서비스 사전</b><p>두 시험 범위의 AWS 서비스 " + allServices().length + "개를 한곳에서 검색합니다</p></div>" +
+      "<div><b>서비스 사전</b><p>" + CERTS.length + "개 시험 범위의 AWS 서비스 " + allServices().length + "개를 한곳에서 검색합니다</p></div>" +
       '<span class="arrow">→</span>' +
       "</a>"
     );
@@ -793,7 +793,7 @@
     var catOptions = '<option value="all">전체 카테고리</option>' + categories.map(function (c) { return '<option value="' + esc(c) + '">' + esc(c) + "</option>"; }).join("");
     var certOptions = '<option value="all">전체 자격증</option>' + CERTS.map(function (c) { return '<option value="' + esc(c) + '">' + esc(data(c).code) + "</option>"; }).join("");
     return (
-      '<h1>서비스 사전</h1><p class="muted">CLF-C02 · SAA-C03 시험 범위 · 총 ' + list.length + "개 서비스</p>" +
+      '<h1>서비스 사전</h1><p class="muted">' + CERTS.map(function (c) { return esc(data(c).code); }).join(" · ") + ' 시험 범위 · 총 ' + list.length + "개 서비스</p>" +
       '<div class="glossary-toolbar">' +
       '<input type="search" id="svc-search" placeholder="서비스 이름 또는 설명 검색...">' +
       '<select id="svc-cat">' + catOptions + "</select>" +
