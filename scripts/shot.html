@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AWS 스터디 — 스크린샷 러너</title>
+<!-- index.html 과 같은 화면을 열되, 쿼리스트링으로 지정한 상태까지 자동으로 진행시켜 두는 개발용 페이지.
+     자산 경로는 프로젝트 루트 기준이므로 <base> 로 한 단계 올린다. 그 대가로 화면 안의 #/... 링크는
+     루트의 index.html 로 나가버리므로, 이 페이지는 링크 클릭이 아니라 data-action 버튼 클릭으로만 조작한다.
+
+     사용법 (프로젝트 루트에서 정적 서버를 띄운 뒤):
+       python3 -m http.server 8899
+       http://localhost:8899/scripts/shot.html?lang=both&n=3#/soapt/quiz
+     쿼리: lang=ko|en|both · n=자동으로 넘길 문항 수 · submit=1 이면 마지막 문항 채점까지 -->
+<base href="../">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header id="topbar">
+  <a class="brand" href="#/"><span class="logo">AWS</span> 스터디</a>
+  <span class="crumb" id="crumb"></span>
+  <span class="spacer"></span>
+  <button class="theme-toggle" id="theme-toggle">🌓 테마</button>
+</header>
+<main id="app"></main>
+
+<script src="js/data/clf-c02.data.js"></script>
+<script src="js/data/saa-c03.data.js"></script>
+<script src="js/data/soa-c03.data.js"></script>
+<script src="js/data/soa-c03-pt.data.js"></script>
+<script src="js/data/soa-c03-pt.ko.data.js"></script>
+<script src="js/app.js"></script>
+<script>
+// 스크린샷용 시나리오 러너: ?lang=ko|en|both &n=이동할 문항 수 &submit=1
+window.addEventListener("DOMContentLoaded", function () {
+  var p = new URLSearchParams(location.search);
+  setTimeout(function () {
+    var lang = p.get("lang");
+    if (lang) document.querySelector('[data-action="lang-set"][data-lang="' + lang + '"]').click();
+    document.getElementById("quiz-domain").value = "all";
+    document.getElementById("quiz-count").value = "all";
+    document.getElementById("quiz-order").value = "order";
+    document.querySelector('[data-action="quiz-start"]').click();
+    var jump = parseInt(p.get("n") || "0", 10);
+    for (var i = 0; i < jump; i++) {
+      document.querySelectorAll('[data-action="select-choice"]')[0].click();
+      document.querySelector('[data-action="quiz-submit"]').click();
+      var nx = document.querySelector('[data-action="quiz-next"]');
+      if (nx) nx.click();
+    }
+    if (p.get("submit")) {
+      document.querySelectorAll('[data-action="select-choice"]')[0].click();
+      document.querySelector('[data-action="quiz-submit"]').click();
+    }
+  }, 50);
+});
+</script>
+</body>
+</html>
