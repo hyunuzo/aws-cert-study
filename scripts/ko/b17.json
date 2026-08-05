@@ -1,0 +1,183 @@
+{
+  "soapt-q322": {
+    "q": "CloudOps 엔지니어가 CloudWatch 에이전트를 구성해 Amazon CloudWatch로 사용자 지정 지표를 보내고 있으며, 이제 이 지표를 표시하는 CloudWatch 대시보드를 구성하려고 합니다. 이 작업을 완료하려면 엔지니어는 어떤 단계를 수행해야 합니까?",
+    "c": [
+      "AWS Namespace를 선택하고 지표 이름으로 필터링한 뒤 대시보드에 추가한다.",
+      "텍스트 위젯을 추가하고 사용자 지정 네임스페이스에서 적절한 지표를 선택한 뒤 대시보드에 추가한다.",
+      "적절한 위젯과 사용자 지정 네임스페이스의 지표를 선택한 뒤 대시보드에 추가한다.",
+      "CloudWatch 콘솔을 열고 CloudWatch Events에서 모든 사용자 지정 지표를 추가한다."
+    ]
+  },
+  "soapt-q323": {
+    "q": "CloudOps 엔지니어가 어느 회사의 기존 AWS 인프라 복제본을 새 AWS 계정에 만들어야 합니다. 현재 리소스 생성·관리에는 AWS Service Catalog 포트폴리오가 사용됩니다. 이를 달성하는 가장 효율적인(MOST efficient) 방법은 무엇입니까?",
+    "c": [
+      "새 AWS 계정에서 AWS Service Catalog 포트폴리오를 사용하는 AWS CloudFormation 템플릿을 만든다.",
+      "새 AWS 계정에서 원본 포트폴리오를 복제하는 AWS Service Catalog 포트폴리오를 수동으로 만든다.",
+      "`DescribePortfolio` API 작업의 출력을 기반으로 새 AWS Service Catalog 포트폴리오를 만드는 AWS Lambda 함수를 실행한다.",
+      "AWS Service Catalog 포트폴리오를 다른 AWS 계정과 공유하고 그 계정으로 포트폴리오를 가져온다."
+    ]
+  },
+  "soapt-q324": {
+    "q": "어느 회사에 두 AWS 리전에 액티브-패시브 구성으로 배포된 애플리케이션이 있습니다. 이 애플리케이션은 각 리전의 Application Load Balancer(ALB) 뒤의 Amazon EC2 인스턴스에서 실행되며, 인스턴스는 각 리전의 Amazon EC2 Auto Scaling 그룹에 속해 있습니다. 애플리케이션은 `DNS`에 Amazon Route 53 호스팅 영역을 사용합니다. CloudOps 엔지니어는 보조 리전으로의 자동 장애 조치를 구성해야 합니다. 이 요구 사항을 충족하려면 CloudOps 엔지니어는 무엇을 해야 합니까?",
+    "c": [
+      "각 `ALB`를 가리키는 Route 53 별칭 레코드를 구성한다. 장애 조치 라우팅 정책을 선택한다. `Evaluate Target Health`를 `Yes`로 설정한다.",
+      "각 ALB를 가리키는 `CNAME` 레코드를 구성한다. 장애 조치 라우팅 정책을 선택한다. `Evaluate Target Health`를 `Yes`로 설정한다.",
+      "Auto Scaling 그룹에 Elastic Load Balancing(ELB) 상태 확인을 구성한다. 기본 리전의 `ALB`에 대상 그룹을 추가한다. 보조 리전의 EC2 인스턴스를 대상으로 포함한다.",
+      "Auto Scaling 그룹에 EC2 상태 확인을 구성한다. 기본 리전의 `ALB`에 대상 그룹을 추가한다. 보조 리전의 EC2 인스턴스를 대상으로 포함한다."
+    ]
+  },
+  "soapt-q325": {
+    "q": "어느 회사가 Amazon S3로 도메인 `example.com`과 서브도메인 `www.example.com`에 정적 웹사이트를 시작할 계획입니다. CloudOps 엔지니어는 이 요구 사항을 어떻게 충족해야 합니까?",
+    "c": [
+      "도메인과 서브도메인 모두를 위해 `example.com`이라는 S3 버킷 하나를 만든다.",
+      "도메인과 서브도메인 모두를 위해 `*.example.com`이라는 와일드카드 S3 버킷 하나를 만든다.",
+      "`example.com`과 `www.example.com`이라는 S3 버킷 2개를 만든다. 서브도메인 버킷이 요청을 도메인 버킷으로 리디렉션하도록 구성한다.",
+      "`http://example.com`과 `http://*.example.com`이라는 S3 버킷 2개를 만든다. 와일드카드(`*`) 버킷이 요청을 도메인 버킷으로 리디렉션하도록 구성한다."
+    ]
+  },
+  "soapt-q326": {
+    "q": "CloudOps 엔지니어가 Application Load Balancer(ALB) 뒤의 Amazon EC2 인스턴스에서 실행되는 애플리케이션을 관리하고 있습니다. 사용자들이 애플리케이션을 실행하려 할 때 오류가 발생한다고 보고합니다. 엔지니어는 그 로드 밸런서의 `HTTPCode_ELB_5xx_Count` Amazon CloudWatch 지표가 증가한 것을 확인했습니다. 이 증가의 가능한 원인은 무엇입니까?",
+    "c": [
+      "`ALB`가 `VPC` 내의 프라이빗 서브넷과 연결되어 있다.",
+      "`ALB`가 클라이언트로부터 요청을 받았지만 클라이언트가 연결을 닫았다.",
+      "`ALB` 보안 그룹이 사용자로부터 오는 인바운드 트래픽을 허용하도록 구성되어 있지 않다.",
+      "`ALB` 대상 그룹에 정상 상태의 EC2 인스턴스가 없다."
+    ]
+  },
+  "soapt-q327": {
+    "q": "어느 회사에 AWS Organizations 조직에 속한 여러 멤버 계정이 있습니다. 회사는 최근 관리자들이 계정 루트 사용자 자격 증명을 사용해 왔다는 것을 발견했습니다. 회사는 엔지니어들이 루트 사용자 자격 증명으로 Amazon EC2 인스턴스에 어떤 작업도 수행하지 못하게 해야 합니다. 이 요구 사항을 충족하려면 CloudOps 엔지니어는 무엇을 해야 합니까?",
+    "c": [
+      "각 멤버 계정에서 루트 사용자의 EC2 인스턴스 작업을 거부하는 자격 증명 기반 IAM 정책을 만든다.",
+      "조직의 관리 계정에서 모든 멤버 계정의 루트 사용자가 EC2 인스턴스에 대한 작업을 하지 못하도록 거부하는 서비스 제어 정책(SCP)을 만든다.",
+      "AWS Config로 루트 사용자의 EC2 인스턴스 작업을 방지한다.",
+      "각 멤버 계정에서 Amazon Inspector로 루트 사용자 로그인을 스캔하고 루트 사용자의 EC2 인스턴스 작업을 방지한다."
+    ]
+  },
+  "soapt-q328": {
+    "q": "어느 회사가 AWS Organizations로 새 멤버 계정을 만들었습니다. CloudOps 엔지니어는 이 새 계정에 AWS Business Support를 추가해야 합니다. 이 요구 사항을 충족하려면 CloudOps 엔지니어는 어떤 단계의 조합을 수행해야 합니까? (2개 선택)",
+    "c": [
+      "IAM 자격 증명으로 새 계정에 로그인한다. 지원 플랜을 변경한다.",
+      "루트 사용자 자격 증명으로 새 계정에 로그인한다. 지원 플랜을 변경한다.",
+      "AWS Support API로 지원 플랜을 변경한다.",
+      "계정 루트 사용자의 비밀번호를 재설정한다.",
+      "새 계정에 관리자 권한이 있는 IAM 사용자를 만든다."
+    ]
+  },
+  "soapt-q329": {
+    "q": "어느 회사가 `us-east-1` 리전에 웹사이트를 호스팅합니다. 회사는 웹사이트를 `eu-central-1` 리전에도 배포할 준비를 하고 있습니다. 유럽에 있는 웹사이트 방문자는 `eu-central-1`에 호스팅된 웹사이트에 접근해야 하고, 그 외 모든 방문자는 `us-east-1`에 호스팅된 웹사이트에 접근해야 합니다. 회사는 웹사이트의 `DNS` 레코드 관리에 Amazon Route 53을 사용합니다. 이 요구 사항을 충족하려면 CloudOps 엔지니어는 Route 53 레코드 세트에 어떤 라우팅 정책을 적용해야 합니까?",
+    "c": [
+      "지리적 위치(Geolocation) 라우팅 정책.",
+      "지리 근접(Geoproximity) 라우팅 정책.",
+      "지연 시간(Latency) 라우팅 정책.",
+      "다중값 응답(Multivalue answer) 라우팅 정책."
+    ]
+  },
+  "soapt-q330": {
+    "q": "어느 회사의 CloudOps 엔지니어가 Windows 기반 워크로드와 Linux 기반 워크로드를 실행하는 수백 대의 Amazon EC2 인스턴스 플릿을 관리합니다. 각 EC2 인스턴스에는 운영 체제를 식별하는 태그가 있고, 모든 EC2 인스턴스는 AWS Systems Manager Session Manager를 실행합니다. 제로데이 취약점이 보고되었지만 사용 가능한 패치가 없습니다. 회사 보안팀은 취약점 위험을 줄이기 위해 모든 관련 운영 체제용 코드를 제공합니다. CloudOps 엔지니어는 이 코드를 EC2 인스턴스에 구현해야 하고, 코드가 모든 인스턴스에서 성공적으로 실행되었음을 보여주는 보고서를 제공해야 합니다. 가능한 한 빨리 이 요구 사항을 충족하려면 CloudOps 엔지니어는 무엇을 해야 합니까?",
+    "c": [
+      "Systems Manager Run Command를 사용한다. `AWS-RunShellScript` 문서 또는 `AWS-RunPowerShellScript` 문서를 선택한다. 보안팀의 코드로 Run Command를 구성한다. Targets 파라미터에 운영 체제 태그를 지정한다. 명령을 실행한다. 명령 기록을 증거로 보안팀에 제공한다.",
+      "Session Manager를 통해 EC2 인스턴스에 연결하는 AWS Lambda 함수를 만든다. 운영 체제를 식별하고 보안팀의 코드를 실행하고 결과를 Amazon RDS DB 인스턴스로 반환하도록 그 Lambda 함수를 구성한다. 그 DB 인스턴스에서 결과를 쿼리한다. 결과를 증거로 보안팀에 제공한다.",
+      "각 EC2 인스턴스에 로그온한다. 각 EC2 인스턴스에서 보안팀의 코드를 실행한다. 각 실행 결과를 복사해 하나의 스프레드시트에 붙여 넣는다. 그 스프레드시트를 증거로 보안팀에 제공한다.",
+      "보안팀의 코드를 사용자 데이터에 포함하도록 EC2 인스턴스의 시작 템플릿을 업데이트한다. 업데이트된 시작 템플릿으로 EC2 인스턴스를 다시 시작한다. 각 인스턴스의 EC2 인스턴스 로그를 가져온다. 그 EC2 인스턴스 로그를 증거로 보안팀에 제공한다."
+    ]
+  },
+  "soapt-q331": {
+    "q": "CloudOps 엔지니어가 어느 회사 AWS 계정의 보안을 담당하고 있습니다. 회사에는 사용자가 다중 인증(MFA) 장치로 인증했을 때만 Amazon EC2 인스턴스를 중지하거나 종료할 수 있다는 정책이 있습니다. 이 요구 사항을 충족하려면 CloudOps 엔지니어는 어떤 정책을 적용해야 합니까?",
+    "c": [
+      "옵션 A.",
+      "옵션 B.",
+      "옵션 C.",
+      "옵션 D."
+    ]
+  },
+  "soapt-q332": {
+    "q": "어느 회사가 자사 `VPC`와 고객의 `VPC` 사이에 `VPC` 피어링 연결을 설정하고 있습니다. 회사 `VPC`의 IPv4 `CIDR` 블록은 `172.16.0.0/16`이고 고객의 것은 `10.0.0.0/16`입니다. CloudOps 엔지니어는 회사의 Amazon EC2 인스턴스 중 하나에서 고객 데이터베이스의 프라이빗 IP 주소로 ping을 보낼 수 있게 하려고 합니다. 이 요구 사항을 충족하려면 어떤 조치를 취해야 합니까?",
+    "c": [
+      "두 계정이 연결되어 통합 결제에 속해 있는지 확인해 파일 공유 네트워크를 만든 뒤 `VPC` 피어링을 활성화한다.",
+      "두 `VPC` 소유자가 각각 상대 `VPC`의 IP 주소 범위를 가리키는 경로를 `VPC` 라우팅 테이블에 수동으로 추가하도록 한다.",
+      "고객에게 소스 `VPC`와 동일한 IPv4 `CIDR` 블록(`172.16.0.0/16`)으로 `VPC`를 설정하도록 안내한다.",
+      "고객에게 두 `VPC`를 연결하는 가상 프라이빗 게이트웨이를 만들도록 안내한다."
+    ]
+  },
+  "soapt-q333": {
+    "q": "어느 회사가 사용자들이 도메인 이름 `www.example.com`으로 접근하는 웹 애플리케이션을 운영합니다. 회사는 Amazon Route 53으로 이 도메인 이름을 관리합니다. 회사는 애플리케이션 앞에 Amazon CloudFront 배포를 만들었고, `www.example.com`이 CloudFront를 통해 애플리케이션에 접근하도록 하려고 합니다. 이를 달성하는 가장 비용 효율적인(MOST cost-effective) 방법은 무엇입니까?",
+    "c": [
+      "Amazon Route 53에서 CloudFront 배포 URL을 가리키는 `CNAME` 레코드를 만든다.",
+      "Amazon Route 53에서 CloudFront 배포 URL을 가리키는 `ALIAS` 레코드를 만든다.",
+      "Amazon Route 53에서 웹 애플리케이션의 퍼블릭 IP 주소를 가리키는 `A` 레코드를 만든다.",
+      "Amazon Route 53에서 웹 애플리케이션의 퍼블릭 IP 주소를 가리키는 `PTR` 레코드를 만든다."
+    ]
+  },
+  "soapt-q334": {
+    "q": "CloudOps 엔지니어가 여러 AWS 리전에 애플리케이션을 배포해야 합니다. CloudOps 엔지니어는 사용자를 지연 시간이 가장 낮은 리전으로 라우팅하는 솔루션을 구현해야 합니다. 장애가 발생하면 이 솔루션은 애플리케이션의 정상 인스턴스가 있는 리전으로 요청을 자동 라우팅해야 합니다. 회사는 장애 조치 시간이 가장 짧은 솔루션이 필요합니다. 어떤 솔루션이 이 요구 사항을 충족합니까?",
+    "c": [
+      "각 엔드포인트에 대해 이름이 같은 Amazon Route 53 `A` 레코드를 만든다. 지연 시간 라우팅 정책을 사용한다. 각 레코드에 상태 확인을 연결한다.",
+      "각 엔드포인트에 대해 이름이 같은 Amazon Route 53 `A` 레코드를 만든다. 장애 조치 라우팅 정책을 사용한다. 각 레코드에 상태 확인을 연결한다.",
+      "AWS Global Accelerator 표준 액셀러레이터를 만든다. 각 리전에 대한 엔드포인트 그룹을 만든다. 액셀러레이터에 리스너를 추가한다. 그 엔드포인트 그룹을 리스너와 연결한다.",
+      "각 엔드포인트에 대해 이름이 같은 Amazon Route 53 `A` 레코드를 만든다. 지리적 위치 라우팅 정책을 사용한다. 각 레코드에 상태 확인을 연결한다."
+    ]
+  },
+  "soapt-q335": {
+    "q": "어느 회사가 Amazon Elastic Kubernetes Service(Amazon EKS) 워크로드를 모니터링하기 위해 Amazon CloudWatch 경보를 사용합니다. 이 경보들은 임계값 정의로 발생하며 EKS 클러스터를 더 효율적으로 운영하는 데는 도움이 되지 않습니다. CloudOps 엔지니어는 이상(anomaly)을 식별하고 그 이상을 해결할 방법에 대한 권장 사항을 생성하는 솔루션을 구현해야 합니다. 어떤 솔루션이 이 요구 사항을 충족합니까?",
+    "c": [
+      "CloudWatch 이상 탐지로 이상을 식별하고 권장 사항을 제공한다.",
+      "CloudWatch Container Insights와 Amazon DevOps Guru로 이상을 식별하고 권장 사항을 제공한다.",
+      "CloudWatch Container Insights로 이상을 식별하고 권장 사항을 제공한다.",
+      "CloudWatch 이상 탐지와 CloudWatch Container Insights로 이상을 식별하고 권장 사항을 제공한다."
+    ]
+  },
+  "soapt-q336": {
+    "q": "어느 회사의 애플리케이션이 현재 모든 AWS 서비스에 대한 모든 액세스를 허용하는 IAM 역할을 사용합니다. CloudOps 엔지니어는 회사의 IAM 정책이 애플리케이션에 필요한 권한만 허용하도록 해야 합니다. 이 요구 사항을 충족하는 정책을 만들려면 CloudOps 엔지니어는 어떻게 해야 합니까?",
+    "c": [
+      "AWS CloudTrail을 켠다. AWS Security Hub로 정책을 생성한다.",
+      "Amazon EventBridge(Amazon CloudWatch Events)를 켠다. AWS Identity and Access Management Access Analyzer로 정책을 생성한다.",
+      "AWS CLI로 AWS Identity and Access Management Access Analyzer에서 `get-generated-policy` 명령을 실행한다.",
+      "AWS CloudTrail을 켠다. AWS Identity and Access Management Access Analyzer로 정책을 생성한다."
+    ]
+  },
+  "soapt-q337": {
+    "q": "어느 회사가 Amazon S3 버킷에 민감한 데이터를 저장합니다. 회사는 그 S3 버킷에 대한 모든 액세스 시도를 로깅해야 하며, 회사의 리스크 팀은 모든 삭제 이벤트에 대해 즉시 알림을 받아야 합니다. 어떤 솔루션이 이 요구 사항을 충족합니까?",
+    "c": [
+      "감사 로그용으로 S3 서버 액세스 로깅을 활성화한다. 그 S3 버킷에 Amazon Simple Notification Service(Amazon SNS) 알림을 설정한다. 알림 시스템의 이벤트 유형으로 `DeleteObject`를 선택한다.",
+      "감사 로그용으로 S3 서버 액세스 로깅을 활성화한다. 알림 시스템용 Amazon EC2 인스턴스를 시작한다. 그 EC2 인스턴스에서 매일 액세스 로그를 다운로드해 `DeleteObject` 이벤트를 검색하는 cron 작업을 실행한다.",
+      "감사 로그용으로 Amazon CloudWatch Logs를 사용한다. 알림 시스템용으로 Amazon Simple Notification Service(Amazon SNS) 알림이 연결된 Amazon CloudWatch 경보를 사용한다.",
+      "감사 로그용으로 Amazon CloudWatch Logs를 사용한다. 알림 시스템용 Amazon EC2 인스턴스를 시작한다. 그 EC2 인스턴스에서 매일 항목 목록을 전날 목록과 비교하는 cron 작업을 실행한다. 항목이 없으면 알림을 보내도록 그 cron 작업을 구성한다."
+    ]
+  },
+  "soapt-q338": {
+    "q": "어느 회사가 내부 데이터를 Amazon S3 버킷에 저장합니다. 이 S3 버킷의 기존 데이터는 모두 Amazon S3 관리형 암호화 키를 사용하는 서버 측 암호화(SSE-S3)로 보호되고 있으며, S3 버전 관리가 활성화되어 있습니다. CloudOps 엔지니어는 재해 복구를 위해 이 내부 데이터를 다른 AWS 계정의 다른 S3 버킷으로 복제해야 합니다. 기존 데이터는 모두 원본 S3 버킷에서 대상 S3 버킷으로 복사됩니다. 가장 운영 효율적인(MOST operationally efficient) 복제 솔루션은 무엇입니까?",
+    "c": [
+      "원본 버킷에 복제 규칙을 추가하고 대상 버킷을 지정한다. 원본 버킷 소유자가 객체를 복제할 수 있도록 대상 버킷에 버킷 정책을 만든다.",
+      "Amazon EventBridge로 AWS Batch 작업을 예약해 원본 버킷의 새 객체를 대상 버킷으로 복사한다. 대상 계정에 Batch Operations IAM 역할을 만든다.",
+      "원본 버킷에 Amazon S3 이벤트 알림을 구성해 새 객체를 대상 버킷으로 복사하는 AWS Lambda 함수를 호출한다. 그 Lambda 함수에 교차 계정 액세스 권한이 있는지 확인한다.",
+      "Amazon EC2 인스턴스에서 예약 스크립트를 실행해 원본 버킷의 새 객체를 대상 버킷으로 복사한다. 그 EC2 인스턴스의 역할에 교차 계정 액세스 권한을 할당한다."
+    ]
+  },
+  "soapt-q339": {
+    "q": "어느 회사가 최근 기본 부팅 볼륨이 있는 Amazon EC2 인스턴스에 MySQL을 배포했습니다. 회사는 1.75TB 데이터베이스를 복원할 계획입니다. CloudOps 엔지니어는 올바른 Amazon Elastic Block Store(Amazon EBS) 볼륨을 프로비저닝해야 합니다. 이 데이터베이스는 최대 10,000 IOPS의 읽기 성능이 필요하며 크기가 늘어날 것으로 예상되지 않습니다. 가장 저렴한 비용(LOWEST cost)으로 필요한 성능을 제공하는 솔루션은 무엇입니까?",
+    "c": [
+      "2TB `Cold HDD (sc1)` 볼륨을 배포한다.",
+      "2TB `Throughput Optimized HDD (st1)` 볼륨을 배포한다.",
+      "2TB `General Purpose SSD (gp3)` 볼륨을 배포한다. IOPS를 10,000으로 설정한다.",
+      "2TB `Provisioned IOPS SSD (io2)` 볼륨을 배포한다. IOPS를 10,000으로 설정한다."
+    ]
+  },
+  "soapt-q340": {
+    "q": "어느 회사가 AWS Organizations로 다중 계정 환경을 관리합니다. 회사는 주요 AWS 계정 중 하나에서 Lifecycle: Production 태그가 지정된 모든 Amazon Elastic Block Store(Amazon EBS) 볼륨의 일일 증분 백업 생성을 자동화해야 합니다. 또한 사용자가 Amazon EC2 `*` 권한으로 이 프로덕션 스냅샷을 삭제하지 못하게 해야 합니다. 이 요구 사항을 충족하려면 CloudOps 엔지니어는 무엇을 해야 합니까?",
+    "c": [
+      "Amazon Data Lifecycle Manager로 모든 EBS 볼륨의 일일 스냅샷을 만든다. 태그 키로 Lifecycle을, 태그 값으로 Production을 지정한다.",
+      "사용자가 EBS 스냅샷을 삭제할 수 없도록 거부하는 서비스 제어 정책(SCP)을 그 계정에 연결한다. 24시간 cron 일정으로 Amazon EventBridge 규칙을 만든다. 대상으로 EBS Create Snapshot을 구성한다. 지정된 태그가 있는 모든 EBS 볼륨을 대상으로 한다.",
+      "AWS Backup으로 모든 EBS 볼륨의 일일 스냅샷을 만든다. 태그 키로 Lifecycle을, 태그 값으로 Production을 지정한다.",
+      "Amazon Data Lifecycle Manager로 해당 AWS 계정 내 모든 프로덕션 EC2 인스턴스의 일일 Amazon 머신 이미지(AMI)를 만든다."
+    ]
+  },
+  "soapt-q341": {
+    "q": "어느 웹 애플리케이션이 온라인 사용자의 주문을 받아 Amazon SQS 큐에 넣습니다. EC2 Auto Scaling 그룹의 Amazon EC2 인스턴스가 큐에서 메시지를 읽어 주문을 처리하고 사용자에게 주문 확인 이메일을 보냅니다. Auto Scaling 그룹은 큐 깊이(queue depth)를 기준으로 확장·축소됩니다. 매 영업일 시작 시점에 사용자들이 확인 이메일이 지연된다고 보고합니다. 어떤 조치가 이 문제를 해결합니까?",
+    "c": [
+      "트래픽을 예상해 미리 확장하는 예약 조정 작업을 만든다.",
+      "Auto Scaling 그룹이 CPU 사용률을 기준으로 확장·축소되도록 변경한다.",
+      "더 큰 EC2 인스턴스 유형을 시작하도록 시작 구성을 변경한다.",
+      "확장할 때 더 많은 EC2 인스턴스를 배포하도록 조정 정책을 수정한다."
+    ]
+  }
+}

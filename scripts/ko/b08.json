@@ -1,0 +1,183 @@
+{
+  "soapt-q141": {
+    "q": "CloudOps 엔지니어가 기본 설정을 사용하는 단순(simple) 조정 Auto Scaling 그룹에서, Application Load Balancer(ALB) 뒤의 Amazon EC2 인스턴스에서 애플리케이션이 실행되도록 구성했습니다. 이 Auto Scaling 그룹은 조정에 `RequestCountPerTarget` 지표를 사용하도록 구성되어 있습니다. CloudOps 엔지니어는 `180`초 동안 `RequestCountPerTarget` 지표가 지정된 한도를 두 번 초과한 것을 확인했습니다. 이 상황에서 Auto Scaling 그룹의 EC2 인스턴스 수는 어떻게 됩니까?",
+    "c": [
+      "Auto Scaling 그룹은 `RequestCountPerTarget` 지표가 사전 정의된 한도를 초과할 때마다 EC2 인스턴스를 1대 추가로 시작한다.",
+      "Auto Scaling 그룹은 EC2 인스턴스 1대를 시작한 뒤, 다른 인스턴스를 시작하기 전에 기본 휴지 기간(cooldown)을 기다린다.",
+      "Auto Scaling 그룹은 트래픽을 재분배하도록 `ALB`에 알림을 보내고, 부하가 정상화될 때까지 새 EC2 인스턴스를 추가하지 않는다.",
+      "Auto Scaling 그룹은 다른 인스턴스를 시작하기 전에 모든 EC2 인스턴스에 트래픽을 분산하려고 시도한다."
+    ]
+  },
+  "soapt-q142": {
+    "q": "어떤 비정상 프로세스가 프로세서를 전부 사용하며 `100%`로 실행되는 것으로 알려져 있습니다. CloudOps 엔지니어는 이 문제가 2분 넘게 발생하면 인스턴스를 자동으로 재시작하려고 합니다. 이를 어떻게 달성할 수 있습니까?",
+    "c": [
+      "기본 모니터링(basic monitoring)이 적용된 Amazon EC2 인스턴스에 Amazon CloudWatch 경보를 만든다. 인스턴스를 재시작하는 작업을 활성화한다.",
+      "세부 모니터링(detailed monitoring)이 적용된 EC2 인스턴스에 CloudWatch 경보를 만든다. 인스턴스를 재시작하는 작업을 활성화한다.",
+      "2분마다 예약 실행되어 EC2 인스턴스를 재시작하는 AWS Lambda 함수를 만든다.",
+      "EC2 상태 확인으로 트리거되어 EC2 인스턴스를 재시작하는 Lambda 함수를 만든다."
+    ]
+  },
+  "soapt-q143": {
+    "q": "CloudOps 엔지니어가 Amazon EC2 Auto Scaling 그룹의 스케일 업 이벤트를 확인했습니다. Amazon CloudWatch에는 연결된 Application Load Balancer의 `RequestCount` 지표가 급증한 것으로 나타납니다. 엔지니어는 요청 출처의 IP 주소를 알고 싶습니다. 이 정보를 어디에서 찾을 수 있습니까?",
+    "c": [
+      "Auto Scaling 로그.",
+      "AWS CloudTrail 로그.",
+      "EC2 인스턴스 로그.",
+      "Elastic Load Balancer 액세스 로그."
+    ]
+  },
+  "soapt-q144": {
+    "q": "IT 부서 규모가 큰 어느 조직이 AWS로 마이그레이션하기로 결정했습니다. IT 부서에는 서로 다른 직무가 있어 모든 사용자에게 모든 AWS 리소스 액세스를 부여하는 것은 바람직하지 않습니다. 현재 조직은 LDAP 그룹 멤버십으로 액세스를 관리합니다. 현재의 LDAP 자격 증명으로 액세스를 허용하는 가장 좋은(BEST) 방법은 무엇입니까?",
+    "c": [
+      "AWS Directory Service Simple AD를 만든다. 온프레미스 LDAP 디렉터리를 Simple AD로 복제한다.",
+      "LDAP 그룹을 읽어 IAM 사용자 생성을 자동화하는 Lambda 함수를 만든다.",
+      "AWS CloudFormation으로 IAM 역할을 만든다. 온프레미스 LDAP 서버에 액세스할 수 있도록 Direct Connect를 배포한다.",
+      "SAML을 사용해 LDAP 디렉터리를 IAM과 페더레이션한다. 권한을 제한하기 위해 LDAP 그룹별로 대응되는 IAM 역할을 만든다."
+    ]
+  },
+  "soapt-q145": {
+    "q": "어느 회사가 가져온 키 구성 요소(imported key material)를 사용하는 AWS KMS 고객 마스터 키(CMK)를 사용합니다. 회사는 Java 애플리케이션에서 별칭으로 이 CMK를 참조해 데이터를 암호화합니다. 이 CMK는 6개월마다 교체되어야 합니다. 키를 교체하는 절차는 무엇입니까?",
+    "c": [
+      "이 CMK에 자동 키 교체를 활성화하고 기간을 6개월로 지정한다.",
+      "새 키 구성 요소를 가져온 새 CMK를 만들고, 키 별칭이 새 CMK를 가리키도록 업데이트한다.",
+      "현재 키 구성 요소를 삭제하고 기존 CMK로 새 구성 요소를 가져온다.",
+      "기존 키 구성 요소의 사본을 백업용 새 CMK로 가져오고 교체 일정을 6개월로 설정한다."
+    ]
+  },
+  "soapt-q146": {
+    "q": "어느 회사가 AWS Lambda에서 서버리스 애플리케이션을 운영합니다. 이 애플리케이션은 Amazon RDS for MySQL DB 인스턴스에 데이터를 저장합니다. 사용량이 꾸준히 증가했고, 최근 Lambda 함수가 데이터베이스에 연결을 시도할 때 `too many connections` 오류가 다수 발생하고 있습니다. 회사는 이미 데이터베이스에 가능한 최대 `max_connections` 값을 구성해 두었습니다. 이 오류를 해결하려면 CloudOps 엔지니어는 무엇을 해야 합니까?",
+    "c": [
+      "데이터베이스의 읽기 전용 복제본을 만든다. Amazon Route 53으로 두 데이터베이스를 모두 포함하는 가중치 `DNS` 레코드를 만든다.",
+      "Amazon RDS Proxy로 프록시를 만든다. Lambda 함수의 연결 문자열을 업데이트한다.",
+      "데이터베이스가 사용하는 파라미터 그룹의 `max_connect_errors` 파라미터 값을 늘린다.",
+      "Lambda 함수의 예약된 동시성(reserved concurrency)을 더 높은 값으로 업데이트한다."
+    ]
+  },
+  "soapt-q147": {
+    "q": "어느 회사가 같은 AWS 리전의 Amazon S3 버킷 50개에 파일을 저장합니다. 회사는 Amazon EC2 인스턴스에서 프라이빗 연결을 통해 이 S3 버킷에 안전하게 연결하려고 하며, 추가 비용이 발생하지 않는 솔루션이 필요합니다. 어떤 솔루션이 이 요구 사항을 충족합니까?",
+    "c": [
+      "각 S3 버킷에 대해 게이트웨이 `VPC` 엔드포인트를 만든다. 이 게이트웨이 `VPC` 엔드포인트를 `VPC` 내부의 각 서브넷에 연결한다.",
+      "각 S3 버킷에 대해 인터페이스 `VPC` 엔드포인트를 만든다. 이 인터페이스 `VPC` 엔드포인트를 `VPC` 내부의 각 서브넷에 연결한다.",
+      "모든 S3 버킷에 대해 게이트웨이 `VPC` 엔드포인트 하나를 만든다. 이 게이트웨이 `VPC` 엔드포인트를 `VPC` 라우팅 테이블에 추가한다.",
+      "모든 S3 버킷에 대해 인터페이스 `VPC` 엔드포인트 하나를 만든다. 이 인터페이스 `VPC` 엔드포인트를 `VPC` 라우팅 테이블에 추가한다."
+    ]
+  },
+  "soapt-q148": {
+    "q": "어느 회사가 애플리케이션 인프라 배포에 AWS CloudFormation을 사용합니다. 최근 어떤 사용자가 CloudFormation 템플릿에서 데이터베이스 속성을 실수로 변경한 뒤 스택 업데이트를 수행해 애플리케이션 중단을 일으켰습니다. CloudOps 엔지니어는 DevOps 팀이 계속 인프라를 배포할 수 있게 하면서도 특정 리소스에 대한 실수 수정은 막도록 배포 프로세스를 수정해야 합니다. 어떤 솔루션이 이 요구 사항을 충족합니까?",
+    "c": [
+      "모든 CloudFormation 스택 변경을 기준으로 알리는 AWS Config 규칙을 설정한다. 그러면 AWS Lambda 함수가 스택을 describe해 보호된 리소스가 수정되었는지 판단하고 작업을 취소할 수 있다.",
+      "모든 CloudFormation API 호출을 기준으로 트리거되는 규칙이 있는 Amazon CloudWatch Events 이벤트를 설정한다. 그러면 AWS Lambda 함수가 스택을 describe해 보호된 리소스가 수정되었는지 판단하고 작업을 취소할 수 있다.",
+      "모든 리소스를 명시적으로 허용하고, 보호된 리소스에 대해서는 `Update:*` 작업을 명시적으로 거부하는 스택 정책으로 CloudFormation 템플릿을 시작한다.",
+      "보호된 리소스의 특정 Amazon 리소스 이름(ARN)을 조건으로 하여, CloudFormation 스택 업데이트를 막는 IAM 정책을 DevOps 팀 역할에 연결한다."
+    ]
+  },
+  "soapt-q149": {
+    "q": "CloudOps 엔지니어가 Amazon EC2 인스턴스에서 실행되는 애플리케이션이 Amazon RDS 데이터베이스 인증에 실패했다는 알림을 받았습니다. 문제를 해결하기 위해 CloudOps 엔지니어는 AWS Secrets Manager 비밀번호 교체를 조사해야 합니다. 비밀번호 교체에 대한 정보를 제공하는 Amazon CloudWatch 로그는 무엇입니까?",
+    "c": [
+      "AWS CloudTrail 로그.",
+      "EC2 인스턴스 애플리케이션 로그.",
+      "AWS Lambda 함수 로그.",
+      "RDS 데이터베이스 로그."
+    ]
+  },
+  "soapt-q150": {
+    "q": "어느 AWS Lambda 함수가 하루에 여러 번 간헐적으로 실패하고 있습니다. CloudOps 엔지니어는 지난 7일 동안 이 오류가 몇 번 발생했는지 알아내야 합니다. 가장 운영 효율적인(MOST operationally efficient) 방식으로 이 요구 사항을 충족하는 조치는 무엇입니까?",
+    "c": [
+      "Amazon Athena로 그 Lambda 함수와 연결된 Amazon CloudWatch 로그를 쿼리한다.",
+      "Amazon Athena로 그 Lambda 함수와 연결된 AWS CloudTrail 로그를 쿼리한다.",
+      "Amazon CloudWatch Logs Insights로 연결된 Lambda 함수 로그를 쿼리한다.",
+      "Amazon Elasticsearch Service(Amazon ES)로 그 Lambda 함수의 Amazon CloudWatch 로그를 스트리밍한다."
+    ]
+  },
+  "soapt-q151": {
+    "q": "CloudOps 엔지니어가 같은 회사 내 서로 다른 사업 부문에 속한 계정들 사이에서 Amazon RDS 데이터베이스 스냅샷을 공유하는 프로세스를 구축하고 있습니다. 모든 데이터는 저장 시 암호화되어야 합니다. 엔지니어는 이 프로세스를 어떻게 구현해야 합니까?",
+    "c": [
+      "암호화된 스냅샷을 다운로드하고, 스냅샷 암호화에 사용된 AWS KMS 암호화 키로 복호화한 뒤, 각 계정에 새 볼륨을 만드는 스크립트를 작성한다.",
+      "스냅샷 암호화에 사용된 AWS KMS 암호화 키에 대한 권한을 관련 계정 전체에 부여하도록 키 정책을 업데이트한 뒤, 그 계정들과 스냅샷을 공유한다.",
+      "그 스냅샷을 기반으로 Amazon EC2 인스턴스를 만든 뒤, 인스턴스의 Amazon EBS 볼륨을 스냅샷으로 저장해 다른 계정과 공유한다. 각 계정 소유자가 그 스냅샷에서 새 볼륨을 만들어 암호화하도록 요구한다.",
+      "암호화된 스냅샷에서 암호화되지 않은 새 RDS 인스턴스를 만들고, `SSH`/`RDP`로 그 인스턴스에 접속해 데이터베이스 내용을 파일로 내보낸 뒤 그 파일을 다른 계정과 공유한다."
+    ]
+  },
+  "soapt-q152": {
+    "q": "CloudOps 엔지니어에게 `us-west-2`에 있는 회사 기존 인프라의 AWS CloudFormation 템플릿이 있습니다. 엔지니어가 이 템플릿으로 `eu-west-1`에 새 스택을 시작하려 했는데, 스택이 일부만 배포되고 오류 메시지가 나온 뒤 롤백되었습니다. 이 템플릿이 배포에 실패한 이유는 무엇입니까? (2개 선택)",
+    "c": [
+      "템플릿이 `eu-west-1`에서 사용할 수 없는 IAM 사용자를 참조했다.",
+      "템플릿이 `eu-west-1`에서 사용할 수 없는 Amazon 머신 이미지(AMI)를 참조했다.",
+      "템플릿에 리소스를 배포할 적절한 수준의 권한이 없었다.",
+      "템플릿이 `eu-west-1`에 존재하지 않는 서비스를 요청했다.",
+      "CloudFormation 템플릿은 기존 서비스를 업데이트하는 데만 사용할 수 있다."
+    ]
+  },
+  "soapt-q153": {
+    "q": "어느 회사가 데이터를 위해 Amazon DynamoDB 테이블을 사용합니다. CloudOps 엔지니어는 재해 복구를 위해 이 테이블을 다른 AWS 리전으로 복제하도록 구성해야 합니다. 이 요구 사항을 충족하려면 CloudOps 엔지니어는 무엇을 해야 합니까?",
+    "c": [
+      "DynamoDB Accelerator(DAX)를 활성화한다.",
+      "DynamoDB Streams를 활성화하고 글로벌 보조 인덱스(GSI)를 추가한다.",
+      "DynamoDB Streams를 활성화하고 글로벌 테이블 리전을 추가한다.",
+      "특정 시점 복구(point-in-time recovery)를 활성화한다."
+    ]
+  },
+  "soapt-q154": {
+    "q": "CloudOps 엔지니어가 어느 회사의 모든 AWS 계정 합산 청구액이 특정 임계값을 초과할 때마다 알림을 설정해야 합니다. 엔지니어는 AWS Organizations를 설정하고 통합 결제를 활성화했습니다. 결제 알림을 설정하려면 엔지니어는 추가로 어떤 단계를 수행해야 합니까?",
+    "c": [
+      "결제 계정(payer account)에서: Billing and Cost Management 콘솔에서 결제 알림을 활성화하고, 결제 알림이 트리거될 때 Amazon SNS 메시지를 게시한다.",
+      "각 계정에서: Billing and Cost Management 콘솔에서 결제 알림을 활성화하고, Amazon CloudWatch에서 결제 경보를 설정하고, 경보가 트리거될 때 SNS 메시지를 게시한다.",
+      "결제 계정에서: Billing and Cost Management 콘솔에서 결제 알림을 활성화하고, 경보가 트리거될 때 SNS 메시지를 게시하도록 Billing and Cost Management 콘솔에서 결제 경보를 설정한다.",
+      "결제 계정에서: Billing and Cost Management 콘솔에서 결제 알림을 활성화하고, Amazon CloudWatch에서 결제 경보를 설정하고, 경보가 트리거될 때 SNS 메시지를 게시한다."
+    ]
+  },
+  "soapt-q155": {
+    "q": "CloudOps 엔지니어가 퍼블릭 IP 주소를 가진 Amazon EC2 인스턴스의 연결 시간 초과 문제를 해결하고 있습니다. 이 인스턴스의 프라이빗 IP 주소는 `172.31.16.139`입니다. CloudOps 엔지니어가 원격 IP 주소 `203.0.113.12`에서 인스턴스의 퍼블릭 IP 주소로 ping을 시도하면 `request timed out` 응답이 옵니다. 흐름 로그에는 다음 정보가 있습니다. 이 문제의 원인 중 하나는 무엇입니까?",
+    "c": [
+      "인바운드 보안 그룹 거부 규칙.",
+      "아웃바운드 보안 그룹 거부 규칙.",
+      "네트워크 `ACL` 인바운드 규칙.",
+      "네트워크 `ACL` 아웃바운드 규칙."
+    ]
+  },
+  "soapt-q156": {
+    "q": "CloudOps 엔지니어가 Amazon CloudFront를 통해 승인된 사용자 집합에 디지털 콘텐츠를 전달하는 솔루션을 구성해야 합니다. 승인되지 않은 사용자의 접근은 제한되어야 합니다. 어떤 솔루션이 이 요구 사항을 충족합니까?",
+    "c": [
+      "퍼블릭 액세스가 차단되지 않은 Amazon S3 버킷에 디지털 콘텐츠를 저장한다. 사전 서명된 URL로 CloudFront를 통해 그 S3 버킷에 접근한다.",
+      "퍼블릭 액세스가 차단된 Amazon S3 버킷에 디지털 콘텐츠를 저장한다. 오리진 액세스 ID(OAI)로 CloudFront를 통해 콘텐츠를 전달한다. CloudFront의 사전 서명된 URL로 S3 버킷 액세스를 제한한다.",
+      "퍼블릭 액세스가 차단된 Amazon S3 버킷에 디지털 콘텐츠를 저장한다. 오리진 액세스 ID(OAI)로 CloudFront를 통해 콘텐츠를 전달한다. 필드 수준 암호화를 활성화한다.",
+      "퍼블릭 액세스가 차단되지 않은 Amazon S3 버킷에 디지털 콘텐츠를 저장한다. 사전 서명된 쿠키(signed cookies)로 CloudFront를 통한 콘텐츠 전달을 제한한다."
+    ]
+  },
+  "soapt-q157": {
+    "q": "어느 회사에 고성능 Windows 워크로드가 있습니다. 이 워크로드에는 10,000 IOPS의 일관된 성능을 제공하는 스토리지 볼륨이 필요합니다. 회사는 이 성능을 얻기 위해 필요하지 않은 추가 용량에 비용을 지불하고 싶지 않습니다. 가장 저렴한 비용(LEAST cost)으로 이 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "c": [
+      "프로비저닝된 IOPS 10,000으로 구성된 `Provisioned IOPS SSD (io1)` Amazon Elastic Block Store(Amazon EBS) 볼륨을 사용한다.",
+      "프로비저닝된 IOPS 10,000으로 구성된 `General Purpose SSD (gp3)` Amazon Elastic Block Store(Amazon EBS) 볼륨을 사용한다.",
+      "Max I/O 모드의 Amazon Elastic File System(Amazon EFS) 파일 시스템을 사용한다.",
+      "10,000 IOPS로 구성된 Amazon FSx for Windows File Server 파일 시스템을 사용한다."
+    ]
+  },
+  "soapt-q158": {
+    "q": "어느 회사가 Amazon EC2 인스턴스에 내부 애플리케이션을 호스팅합니다. 모든 애플리케이션 데이터와 요청은 온프레미스 네트워크와 AWS 사이의 AWS Site-to-Site `VPN` 연결을 통해 라우팅됩니다. 회사는 사내 네트워크 외부에서 네트워크 접근을 허용하는 변경이 있는지 애플리케이션을 모니터링해야 하며, 애플리케이션을 외부에 노출하는 변경은 자동으로 차단되어야 합니다. 가장 운영 효율적인(MOST operationally efficient) 방식으로 이 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "c": [
+      "탄력적 네트워크 인터페이스에 연결된 보안 그룹에서 사내 `CIDR` 범위가 아닌 인바운드 규칙을 제거하는 AWS Lambda 함수를 만든다. `VPC` 흐름 로그를 켜고 로그를 Amazon CloudWatch Logs로 보낸다. 사내 `CIDR` 범위가 아닌 트래픽과 일치하는 Amazon CloudWatch 경보를 만들고, 그 Lambda 함수를 대상으로 하는 Amazon Simple Notification Service(Amazon SNS) 주제에 메시지를 게시한다.",
+      "EC2 인스턴스의 퍼블릭 IP 주소를 확인하는 AWS Systems Manager Automation 문서를 대상으로 하는 예약 Amazon EventBridge(Amazon CloudWatch Events) 규칙을 만든다. EC2 인스턴스에 퍼블릭 IP 주소가 발견되면 다른 Systems Manager Automation 문서를 실행해 인스턴스를 종료한다.",
+      "보안 그룹이 사내 `CIDR` 범위가 아닌 곳에서 오는 인바운드 요청을 허용하는지 모니터링하도록 AWS Config와 사용자 지정 규칙을 구성한다. 애플리케이션 보안 그룹에서 사내 `CIDR` 범위가 아닌 항목을 제거하는 AWS Systems Manager Automation 문서를 만든다.",
+      "태그를 기준으로 EC2 인스턴스의 퍼블릭 IP 연결을 모니터링하는 AWS Config와 관리형 규칙을 구성한다. EC2 인스턴스에 식별자로 태그를 지정한다. EC2 인스턴스에서 퍼블릭 IP 연결을 제거하는 AWS Systems Manager Automation 문서를 만든다."
+    ]
+  },
+  "soapt-q159": {
+    "q": "어느 회사가 단일 `VPC`의 Amazon EC2 인스턴스에 애플리케이션을 배포했고, 이 EC2 인스턴스를 `VPC`의 프라이빗 서브넷에 배치했습니다. 이 EC2 인스턴스는 자신과 동일한 AWS 리전에 있는 Amazon S3 버킷에 접근해야 합니다. CloudOps 엔지니어는 EC2 인스턴스나 애플리케이션을 변경하지 않고 EC2 인스턴스에 S3 버킷 액세스를 제공해야 합니다. EC2 인스턴스는 인터넷에 접근할 수 없어야 합니다. 어떤 솔루션이 이 요구 사항을 충족합니까?",
+    "c": [
+      "기본 게이트웨이 엔드포인트 정책을 사용하는 S3 게이트웨이 엔드포인트를 만든다. 프라이빗 서브넷을 그 게이트웨이 엔드포인트와 연결한다.",
+      "S3 인터페이스 엔드포인트를 만든다. EC2 인스턴스를 그 인터페이스 엔드포인트와 연결한다.",
+      "`NAT` 게이트웨이를 구성한다. 프라이빗 서브넷을 그 `NAT` 게이트웨이와 연결한다.",
+      "프록시 EC2 인스턴스를 구성한다. 트래픽이 그 프록시 EC2 인스턴스를 지나도록 프라이빗 서브넷 라우팅 테이블을 업데이트한다. 모든 S3 요청을 대상 S3 버킷으로 라우팅하도록 프록시를 구성한다."
+    ]
+  },
+  "soapt-q160": {
+    "q": "어느 회사가 Amazon Linux 2 Amazon 머신 이미지(AMI) 기반의 Amazon EC2 인스턴스 수천 대를 운영합니다. CloudOps 엔지니어는 EC2 인스턴스에서 대화형 세션이 필요한 모든 사용자의 명령과 출력을 기록하는 솔루션을 구현해야 합니다. 이 솔루션은 데이터를 내구성 있는 스토리지 위치에 로깅해야 하고, 로그 데이터를 기반으로 자동 알림과 경보도 제공해야 합니다. 가장 운영 효율이 높은(MOST operational efficiency) 방식으로 이 요구 사항을 충족하는 솔루션은 무엇입니까?",
+    "c": [
+      "각 EC2 인스턴스에 명령 세션 로깅을 구성한다. 통합 Amazon CloudWatch 에이전트가 세션 로그를 Amazon CloudWatch Logs로 보내도록 구성한다. Amazon Athena로 쿼리 필터와 알림을 설정한다.",
+      "EC2 인스턴스에 명령줄 액세스가 필요할 때 모든 사용자가 중앙 배스천 호스트를 사용하도록 요구한다. 배스천 호스트의 통합 Amazon CloudWatch 에이전트가 세션 로그를 Amazon CloudWatch Logs로 보내도록 구성한다. CloudWatch Logs에서 관련 보안 결과에 대한 지표 필터와 지표 경보를 설정한다.",
+      "EC2 인스턴스에 명령줄 액세스가 필요할 때 모든 사용자가 AWS Systems Manager Session Manager를 사용하도록 요구한다. Session Manager가 세션 로그를 Amazon CloudWatch Logs로 스트리밍하도록 구성한다. CloudWatch Logs에서 관련 보안 결과에 대한 지표 필터와 지표 경보를 설정한다.",
+      "각 EC2 인스턴스에 명령 세션 로깅을 구성한다. EC2 인스턴스에 명령줄 액세스가 필요할 때 모든 사용자가 AWS Systems Manager Run Command 문서를 사용하도록 요구한다. 통합 Amazon CloudWatch 에이전트가 세션 로그를 Amazon CloudWatch Logs로 보내도록 구성한다. Amazon Athena 쿼리 결과를 기반으로 하는 CloudWatch 경보를 설정한다."
+    ]
+  }
+}

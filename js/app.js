@@ -3,8 +3,10 @@
 
   var STORAGE_KEY = "awsStudyApp.v1";
   var THEME_KEY = "awsStudyApp.theme";
+  var LANG_KEY = "awsStudyApp.lang.v1";
 
-  var CERTS = ["clf", "saa", "soa"];
+  // 개념학습이 있는 자격증 세션과, 문제만 있는 문제은행(kind: "bank") 세션을 함께 다룬다.
+  var CERTS = ["clf", "saa", "soa", "soapt"];
 
   var progress = loadProgress();
   var session = null; // active quiz/exam session
@@ -12,6 +14,42 @@
 
   function data(cert) {
     return window.APP_DATA[cert];
+  }
+
+  // 문제은행 세션에는 개념학습·서비스 사전이 없고, 도메인 자리에 연습시험 세트가 들어간다.
+  function isBank(cert) {
+    return data(cert).kind === "bank";
+  }
+
+  // ---------- 표시 언어 ----------
+  // 원문이 영어인 세션에만 한국어 번역본(window.APP_KO)이 붙는다. ko / en / both 세 가지 모드.
+  var langPrefs = loadLangPrefs();
+  function loadLangPrefs() {
+    try { return JSON.parse(localStorage.getItem(LANG_KEY)) || {}; } catch (e) { return {}; }
+  }
+  function hasTranslation(cert) {
+    return !!(window.APP_KO && window.APP_KO[cert]);
+  }
+  function langOf(cert) {
+    if (!hasTranslation(cert)) return "en";
+    return langPrefs[cert] || "ko";
+  }
+  function setLang(cert, v) {
+    langPrefs[cert] = v;
+    localStorage.setItem(LANG_KEY, JSON.stringify(langPrefs));
+    render();
+  }
+  function koOf(cert, id) {
+    var m = window.APP_KO && window.APP_KO[cert];
+    return m ? m[id] : null;
+  }
+  function langControl(cert) {
+    if (!hasTranslation(cert)) return "";
+    var cur = langOf(cert);
+    var opts = [["ko", "한국어"], ["en", "영어 원문"], ["both", "병기"]];
+    return '<span class="lang-switch" role="group" aria-label="표시 언어">' + opts.map(function (o) {
+      return '<button type="button" class="' + (cur === o[0] ? "active" : "") + '" data-action="lang-set" data-lang="' + o[0] + '">' + o[1] + "</button>";
+    }).join("") + "</span>";
   }
 
   // ---------- persistence ----------
@@ -52,6 +90,44 @@
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
   }
+  // 원본 문제은행 텍스트에는 `백틱` 인라인 코드가 섞여 있다. 이스케이프 후 코드만 되살린다.
+  function inlineMd(s) {
+    return esc(s).replace(/`([^`]+)`/g, function (_, code) { return "<code>" + code + "</code>"; });
+  }
+  function imgList(list) {
+    if (!list || !list.length) return "";
+    return '<div class="q-images">' + list.map(function (src) {
+      return '<img src="' + esc(src) + '" alt="문제 이미지" loading="lazy">';
+    }).join("") + "</div>";
+  }
+  function answerLetters(q) {
+    return q.answer.map(function (i) { return String.fromCharCode(65 + i); }).join(", ");
+  }
+  // 해설이 없는 문제은행에서는 정답 표기만이라도 남긴다.
+  function explanationHtml(q) {
+    if (q.explanation) return inlineMd(q.explanation);
+    return '<span class="muted">정답: ' + answerLetters(q) + " · 원본 자료에 해설이 포함되어 있지 않습니다.</span>";
+  }
+  // 번역이 없는 문항·세션에서는 조용히 원문으로 되돌아간다.
+  function questionStem(cert, q, small) {
+    var no = q.num ? '<span class="q-no">원본 ' + q.num + "번</span>" : "";
+    var lang = langOf(cert);
+    var ko = lang === "en" ? null : koOf(cert, q.id);
+    var main = ko && ko.q ? ko.q : q.question;
+    var style = small ? ' style="font-size:15px;margin-top:8px;"' : "";
+    var html = '<div class="q-text"' + style + ">" + no + inlineMd(main) + "</div>";
+    if (ko && ko.q && lang === "both") html += '<div class="q-text-alt">' + inlineMd(q.question) + "</div>";
+    return html + imgList(q.images);
+  }
+  function choiceBody(cert, q, i) {
+    var lang = langOf(cert);
+    var ko = lang === "en" ? null : koOf(cert, q.id);
+    var koText = ko && ko.c && ko.c[i];
+    var html = inlineMd(koText || q.choices[i]);
+    if (koText && lang === "both") html += '<div class="choice-alt">' + inlineMd(q.choices[i]) + "</div>";
+    return html + imgList(q.choiceImages && q.choiceImages[i]);
+  }
+
   function shuffle(arr) {
     var a = arr.slice();
     for (var i = a.length - 1; i > 0; i--) {
@@ -146,6 +222,8 @@
         return;
       }
       var section = parts[1] || "dashboard";
+      // 문제은행에는 개념학습·서비스 사전 화면이 없다.
+      if (isBank(cert) && (section === "concepts" || section === "glossary")) section = "dashboard";
       crumb.textContent = data(cert).code;
       switch (section) {
         case "dashboard":
@@ -214,33 +292,54 @@
 
   // ---------- shared chrome ----------
   function tabs(cert, active) {
-    var items = [
-      ["dashboard", "대시보드"],
-      ["concepts", "개념학습"],
-      ["quiz", "퀴즈"],
-      ["exam", "모의고사"],
-      ["glossary", "서비스 사전"],
-      ["wrong", "오답노트"]
-    ];
+    var items = isBank(cert)
+      ? [
+        ["dashboard", "대시보드"],
+        ["quiz", "문제 풀이"],
+        ["exam", "모의고사"],
+        ["wrong", "오답노트"]
+      ]
+      : [
+        ["dashboard", "대시보드"],
+        ["concepts", "개념학습"],
+        ["quiz", "퀴즈"],
+        ["exam", "모의고사"],
+        ["glossary", "서비스 사전"],
+        ["wrong", "오답노트"]
+      ];
     return '<div class="tabs">' + items.map(function (it) {
       return '<a href="#/' + cert + '/' + it[0] + '" class="' + (active === it[0] ? "active" : "") + '">' + it[1] + "</a>";
     }).join("") + "</div>";
+  }
+
+  // 서비스 사전은 개념이 있는 자격증 세션만 대상으로 한다.
+  function conceptCerts() {
+    return CERTS.filter(function (c) { return !isBank(c); });
+  }
+
+  // 문제은행 진행률은 '읽은 개념'이 아니라 '한 번이라도 푼 문항' 기준으로 센다.
+  function solvedCount(cert) {
+    var stats = progress[cert].questionStats;
+    return data(cert).questions.filter(function (q) { return stats[q.id] && stats[q.id].attempts > 0; }).length;
   }
 
   // ---------- home ----------
   function viewHome() {
     var cards = CERTS.map(function (cert) {
       var d = data(cert);
-      var total = certTasksTotal(cert);
-      var readN = certTasksRead(cert);
+      var bank = isBank(cert);
+      var total = bank ? d.questions.length : certTasksTotal(cert);
+      var readN = bank ? solvedCount(cert) : certTasksRead(cert);
       var pct = total ? Math.round((readN / total) * 100) : 0;
       var lastExam = progress[cert].examHistory[0];
       return (
         '<a class="cert-card" href="#/' + cert + '/dashboard">' +
         '<span class="code">' + d.code + "</span>" +
         "<h2>" + esc(d.name) + "</h2>" +
-        "<p>도메인 " + d.domains.length + "개 · 개념 " + total + "개 · 연습문제 " + d.questions.length + "개</p>" +
-        '<div class="progress-row"><div class="progress-bar"><span style="width:' + pct + '%"></span></div><div class="progress-label">' + pct + "% 학습</div></div>" +
+        (bank
+          ? "<p>연습시험 세트 " + d.domains.length + "개 · 문항 " + d.questions.length + "개 · 실전 기출 유형</p>"
+          : "<p>도메인 " + d.domains.length + "개 · 개념 " + total + "개 · 연습문제 " + d.questions.length + "개</p>") +
+        '<div class="progress-row"><div class="progress-bar"><span style="width:' + pct + '%"></span></div><div class="progress-label">' + pct + (bank ? "% 풀이" : "% 학습") + "</div></div>" +
         (lastExam
           ? '<p style="margin-top:10px;font-size:13px;">최근 모의고사: <b class="' + (lastExam.pass ? "" : "") + '">' + lastExam.scaledScore + "점</b> (" + (lastExam.pass ? "합격" : "불합격") + ")</p>"
           : '<p style="margin-top:10px;font-size:13px;color:var(--muted);">아직 응시한 모의고사가 없습니다</p>') +
@@ -250,10 +349,10 @@
 
     return (
       "<h1>AWS 스터디</h1>" +
-      '<p class="muted">Cloud Practitioner, Solutions Architect - Associate, CloudOps Engineer - Associate 시험을 위한 개념 학습, 퀴즈, 모의고사 도구입니다. 모든 진행 상황은 이 브라우저에 저장됩니다.</p>' +
+      '<p class="muted">Cloud Practitioner, Solutions Architect - Associate, CloudOps Engineer - Associate 시험을 위한 개념 학습, 퀴즈, 모의고사 도구입니다. 마지막 세션은 개념 없이 실전 문제만 모은 별도 문제은행입니다. 모든 진행 상황은 이 브라우저에 저장됩니다.</p>' +
       '<div class="cert-cards">' + cards + "</div>" +
       '<a class="home-link" href="#/glossary">' +
-      "<div><b>서비스 사전</b><p>" + CERTS.length + "개 시험 범위의 AWS 서비스 " + allServices().length + "개를 한곳에서 검색합니다</p></div>" +
+      "<div><b>서비스 사전</b><p>" + conceptCerts().length + "개 시험 범위의 AWS 서비스 " + allServices().length + "개를 한곳에서 검색합니다</p></div>" +
       '<span class="arrow">→</span>' +
       "</a>"
     );
@@ -262,8 +361,9 @@
   // ---------- dashboard ----------
   function viewDashboard(cert) {
     var d = data(cert);
-    var total = certTasksTotal(cert);
-    var readN = certTasksRead(cert);
+    var bank = isBank(cert);
+    var total = bank ? d.questions.length : certTasksTotal(cert);
+    var readN = bank ? solvedCount(cert) : certTasksRead(cert);
     var pct = total ? Math.round((readN / total) * 100) : 0;
     var qHist = progress[cert].quizHistory;
     var avgQuiz = qHist.length ? Math.round(qHist.reduce(function (a, h) { return a + h.scorePct; }, 0) / qHist.length) : null;
@@ -274,32 +374,39 @@
       var domQ = d.questions.filter(function (q) { return q.domainId === dom.id; });
       var stats = domQ.map(function (q) { return progress[cert].questionStats[q.id]; }).filter(Boolean);
       var domPct = stats.length ? Math.round((stats.filter(function (s) { return s.lastCorrect; }).length / stats.length) * 100) : 0;
+      var label = bank ? esc(dom.title) + " (" + dom.count + "문항)" : esc(dom.title) + " (" + dom.weight + "%)";
       return (
-        '<div class="domain-bar-row"><div class="name">' + esc(dom.title) + " (" + dom.weight + "%)</div>" +
+        '<div class="domain-bar-row"><div class="name">' + label + "</div>" +
         '<div class="bar"><span style="width:' + domPct + '%"></span></div>' +
         '<div class="pct">' + (stats.length ? domPct + "%" : "-") + "</div></div>"
       );
     }).join("");
 
     return (
-      "<h1>" + esc(d.name) + '</h1><p class="muted">' + d.code + " · 합격 기준 " + d.passScore + "점/1000점 · 시험시간 " + d.examMinutes + "분 · 총 " + d.totalQuestions + "문항</p>" +
+      "<h1>" + esc(d.name) + '</h1><p class="muted">' + esc(d.code) + " · 합격 기준 " + d.passScore + "점/1000점 · 시험시간 " + d.examMinutes + "분 · 총 " + d.totalQuestions + "문항" +
+      (bank ? " · 출처: " + esc(d.source) : "") + "</p>" +
       tabs(cert, "dashboard") +
       '<div class="grid-2">' +
-      '<div class="card"><h3 class="mt-0">학습 진행률</h3>' +
+      '<div class="card"><h3 class="mt-0">' + (bank ? "풀이 진행률" : "학습 진행률") + "</h3>" +
       '<div class="progress-row"><div class="progress-bar"><span style="width:' + pct + '%"></span></div><div class="progress-label">' + readN + "/" + total + "</div></div>" +
       '<div class="stat-row">' +
-      '<div class="stat"><div class="n">' + (avgQuiz == null ? "-" : avgQuiz + "%") + '</div><div class="l">퀴즈 평균 정답률</div></div>' +
-      '<div class="stat"><div class="n">' + qHist.length + '</div><div class="l">응시한 퀴즈 세션</div></div>' +
+      '<div class="stat"><div class="n">' + (avgQuiz == null ? "-" : avgQuiz + "%") + '</div><div class="l">' + (bank ? "풀이 평균 정답률" : "퀴즈 평균 정답률") + "</div></div>" +
+      '<div class="stat"><div class="n">' + qHist.length + '</div><div class="l">' + (bank ? "진행한 풀이 세션" : "응시한 퀴즈 세션") + "</div></div>" +
       '<div class="stat"><div class="n">' + (lastExam ? lastExam.scaledScore : "-") + '</div><div class="l">최근 모의고사 점수</div></div>' +
       "</div></div>" +
-      '<div class="card"><h3 class="mt-0">도메인별 정답률</h3><div class="domain-bars">' + bars + "</div></div>" +
+      '<div class="card"><h3 class="mt-0">' + (bank ? "세트별 정답률" : "도메인별 정답률") + '</h3><div class="domain-bars">' + bars + "</div></div>" +
       "</div>" +
       '<hr class="sep">' +
       '<div class="grid-2">' +
       '<div class="card"><h3 class="mt-0">빠른 시작</h3>' +
-      '<p class="muted">아직 다 못 읽은 개념이 ' + (total - readN) + "개 남았습니다.</p>" +
-      '<a class="btn" href="#/' + cert + '/concepts">개념학습 계속하기</a> ' +
-      '<a class="btn secondary" href="#/' + cert + '/quiz">퀴즈 풀기</a></div>' +
+      (bank
+        ? '<p class="muted">아직 풀지 않은 문항이 ' + (total - readN) + "개 남았습니다.</p>" +
+          '<a class="btn" href="#/' + cert + '/quiz">문제 풀기</a> ' +
+          '<a class="btn secondary" href="#/' + cert + '/wrong">오답노트 보기</a>'
+        : '<p class="muted">아직 다 못 읽은 개념이 ' + (total - readN) + "개 남았습니다.</p>" +
+          '<a class="btn" href="#/' + cert + '/concepts">개념학습 계속하기</a> ' +
+          '<a class="btn secondary" href="#/' + cert + '/quiz">퀴즈 풀기</a>') +
+      "</div>" +
       '<div class="card"><h3 class="mt-0">모의고사</h3>' +
       '<p class="muted">실제 시험과 동일하게 ' + d.totalQuestions + "문항 · " + d.examMinutes + '분 타이머로 진행됩니다.</p>' +
       '<a class="btn" href="#/' + cert + '/exam">모의고사 시작</a></div>' +
@@ -414,25 +521,39 @@
 
   function renderQuizSetup(cert) {
     var d = data(cert);
-    var domainOptions = '<option value="all">전체 도메인 (' + d.questions.length + "문항)</option>" +
+    var bank = isBank(cert);
+    var unsolvedN = d.questions.length - solvedCount(cert);
+    var domainOptions = '<option value="all">' + (bank ? "전체 문항 (" : "전체 도메인 (") + d.questions.length + "문항)</option>" +
+      (bank && unsolvedN ? '<option value="unsolved">아직 풀지 않은 문항 (' + unsolvedN + "문항)</option>" : "") +
       d.domains.map(function (dm) {
         var n = d.questions.filter(function (q) { return q.domainId === dm.id; }).length;
         return '<option value="' + dm.id + '">' + esc(dm.title) + " (" + n + "문항)</option>";
       }).join("");
     return (
-      "<h1>" + esc(d.name) + '</h1><p class="muted">퀴즈</p>' +
+      "<h1>" + esc(d.name) + '</h1><p class="muted">' + (bank ? "문제 풀이" : "퀴즈") + "</p>" +
       tabs(cert, "quiz") +
       '<div class="card">' +
-      '<h3 class="mt-0">퀴즈 설정</h3>' +
+      '<h3 class="mt-0">' + (bank ? "풀이 설정" : "퀴즈 설정") + "</h3>" +
       '<div class="grid-2">' +
       '<div><label class="field">범위</label><select id="quiz-domain">' + domainOptions + "</select></div>" +
       '<div><label class="field">문항 수</label><select id="quiz-count">' +
       [10, 20, 30, 50].map(function (n) { return '<option value="' + n + '">' + n + "문항</option>"; }).join("") +
       '<option value="all">전체</option>' +
       "</select></div>" +
+      '<div><label class="field">출제 순서</label><select id="quiz-order">' +
+      '<option value="shuffle">무작위</option><option value="order">원본 번호 순서</option>' +
+      "</select></div>" +
       "</div>" +
-      '<p class="muted" style="margin-top:14px;">즉시 정답과 해설을 확인할 수 있는 학습용 퀴즈입니다. 실전처럼 풀고 싶다면 모의고사를 이용하세요.</p>' +
-      '<button class="btn" data-action="quiz-start">퀴즈 시작</button>' +
+      (hasTranslation(cert)
+        ? '<div class="lang-field"><label class="field">표시 언어</label>' + langControl(cert) +
+          '<p class="muted" style="margin:8px 0 0;font-size:12.5px;">원문은 영어입니다. 한국어는 기계적 직역이 아닌 의역이며, AWS 서비스명·리소스명·코드는 원문 표기를 유지합니다. 풀이 중에도 언제든 바꿀 수 있습니다.</p></div>'
+        : "") +
+      '<p class="muted" style="margin-top:14px;">' +
+      (bank
+        ? "제출하면 바로 정답을 확인할 수 있습니다. 이 문제은행은 원본 자료에 해설이 없어 정답만 표시됩니다."
+        : "즉시 정답과 해설을 확인할 수 있는 학습용 퀴즈입니다. 실전처럼 풀고 싶다면 모의고사를 이용하세요.") +
+      "</p>" +
+      '<button class="btn" data-action="quiz-start">' + (bank ? "풀이 시작" : "퀴즈 시작") + "</button>" +
       "</div>"
     );
   }
@@ -440,12 +561,19 @@
   function startQuiz(cert) {
     var domainId = document.getElementById("quiz-domain").value;
     var countSel = document.getElementById("quiz-count").value;
-    var pool = domainId === "all" ? data(cert).questions.slice() : data(cert).questions.filter(function (q) { return q.domainId === domainId; });
-    var shuffled = shuffle(pool);
-    var n = countSel === "all" ? shuffled.length : Math.min(parseInt(countSel, 10), shuffled.length);
+    var orderEl = document.getElementById("quiz-order");
+    var order = orderEl ? orderEl.value : "shuffle";
+    var stats = progress[cert].questionStats;
+    var pool = data(cert).questions.filter(function (q) {
+      if (domainId === "all") return true;
+      if (domainId === "unsolved") return !(stats[q.id] && stats[q.id].attempts > 0);
+      return q.domainId === domainId;
+    });
+    if (order === "shuffle") pool = shuffle(pool);
+    var n = countSel === "all" ? pool.length : Math.min(parseInt(countSel, 10), pool.length);
     session = {
       kind: "quiz", cert: cert, domainId: domainId,
-      questions: shuffled.slice(0, n),
+      questions: pool.slice(0, n),
       index: 0, answers: {}, revealed: {}, phase: "active"
     };
     render();
@@ -485,7 +613,7 @@
       if (isRevealed && isSel && !isCorrectChoice) mark = "✗";
       return (
         '<button type="button" class="' + cls + '" ' + (isRevealed ? "disabled" : "") + ' data-action="select-choice" data-idx="' + i + '">' +
-        '<span class="mark">' + mark + '</span><span>' + esc(c) + "</span></button>"
+        '<span class="mark">' + mark + '</span><span>' + choiceBody(cert, q, i) + "</span></button>"
       );
     }).join("");
 
@@ -494,7 +622,7 @@
       var correct = sameSet(selected, q.answer);
       explain =
         '<div class="explain-box"><div class="verdict ' + (correct ? "correct" : "incorrect") + '">' + (correct ? "정답입니다" : "오답입니다") + "</div>" +
-        "<div>" + esc(q.explanation) + "</div></div>";
+        "<div>" + explanationHtml(q) + "</div></div>";
     }
 
     var footer = isRevealed
@@ -504,12 +632,12 @@
       : '<button class="btn" data-action="quiz-submit" ' + (selected.length ? "" : "disabled") + '>제출</button>';
 
     return (
-      "<h1>" + esc(data(cert).name) + '</h1><p class="muted">퀴즈 진행 중</p>' +
+      "<h1>" + esc(data(cert).name) + '</h1><p class="muted">' + (isBank(cert) ? "문제 풀이 진행 중" : "퀴즈 진행 중") + "</p>" +
       tabs(cert, "quiz") +
       '<div class="card">' +
-      '<div class="q-progress"><span>' + (session.index + 1) + " / " + total + '</span><div class="bar"><span style="width:' + pctDone + '%"></span></div><button class="btn ghost small" data-action="quiz-quit">그만두기</button></div>' +
-      '<div class="q-type-badge">' + (q.type === "multi" ? "복수 응답" : "단일 응답") + '</div>' +
-      '<div class="q-text">' + esc(q.question) + "</div>" +
+      '<div class="q-progress"><span>' + (session.index + 1) + " / " + total + '</span><div class="bar"><span style="width:' + pctDone + '%"></span></div>' + langControl(cert) + '<button class="btn ghost small" data-action="quiz-quit">그만두기</button></div>' +
+      '<div class="q-type-badge">' + (q.type === "multi" ? "복수 응답 (" + q.answer.length + "개 선택)" : "단일 응답") + '</div>' +
+      questionStem(cert, q) +
       '<div class="choice-list">' + choices + "</div>" +
       explain +
       '<div class="session-actions">' + footer + "</div>" +
@@ -562,37 +690,37 @@
     var r = session.result;
     var wrongQs = session.questions.filter(function (q) { return !sameSet(session.answers[q.id] || [], q.answer); });
     var reviewList = session.questions.map(function (q) {
-      return renderReviewItem(q, session.answers[q.id] || []);
+      return renderReviewItem(cert, q, session.answers[q.id] || []);
     }).join("");
 
     return (
-      "<h1>" + esc(data(cert).name) + '</h1><p class="muted">퀴즈 결과</p>' +
+      "<h1>" + esc(data(cert).name) + '</h1><p class="muted">' + (isBank(cert) ? "문제 풀이 결과" : "퀴즈 결과") + "</p>" +
       tabs(cert, "quiz") +
       '<div class="card result-hero">' +
       '<div class="score ' + (r.scorePct >= 70 ? "pass" : "fail") + '">' + r.scorePct + "%</div>" +
       '<div class="sub">' + r.correct + " / " + r.total + " 정답</div>" +
       '<div style="margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">' +
-      '<button class="btn" data-action="quiz-restart">새 퀴즈 시작</button>' +
+      '<button class="btn" data-action="quiz-restart">' + (isBank(cert) ? "새로 풀기" : "새 퀴즈 시작") + "</button>" +
       (wrongQs.length ? '<button class="btn secondary" data-action="quiz-review-wrong" data-ids="' + esc(wrongQs.map(function (q) { return q.id; }).join(",")) + '">틀린 문제만 다시 풀기 (' + wrongQs.length + ")</button>" : "") +
       "</div></div>" +
       '<hr class="sep"><h3>문항별 리뷰</h3>' + reviewList
     );
   }
 
-  function renderReviewItem(q, selected) {
+  function renderReviewItem(cert, q, selected) {
     var correct = sameSet(selected, q.answer);
     var choiceLines = q.choices.map(function (c, i) {
       var tagChar = "";
       if (q.answer.indexOf(i) !== -1) tagChar = "✓ ";
       else if (selected.indexOf(i) !== -1) tagChar = "✗ ";
       var style = q.answer.indexOf(i) !== -1 ? "color:var(--success);font-weight:700;" : (selected.indexOf(i) !== -1 ? "color:var(--danger);font-weight:700;" : "");
-      return '<div style="' + style + '">' + tagChar + esc(c) + "</div>";
+      return '<div style="' + style + '">' + tagChar + choiceBody(cert, q, i) + "</div>";
     }).join("");
     return (
       '<div class="qa-review"><span class="tag ' + (correct ? "ok" : "bad") + '">' + (correct ? "정답" : "오답") + "</span>" +
-      '<div class="q-text" style="font-size:15px;margin-top:8px;">' + esc(q.question) + "</div>" +
+      questionStem(cert, q, true) +
       choiceLines +
-      '<div class="explain-box" style="margin-top:10px;">' + esc(q.explanation) + "</div></div>"
+      '<div class="explain-box" style="margin-top:10px;">' + explanationHtml(q) + "</div></div>"
     );
   }
 
@@ -620,8 +748,16 @@
       '<div class="stat"><div class="n">' + d.examMinutes + '분</div><div class="l">제한 시간</div></div>' +
       '<div class="stat"><div class="n">' + d.passScore + ' / ' + d.maxScore + '</div><div class="l">합격 기준 점수</div></div>' +
       "</div>" +
-      '<p class="muted" style="margin-top:14px;">문항은 실제 시험처럼 도메인 가중치에 비례하여 무작위로 출제됩니다. 제출 전까지는 정답을 알려주지 않으며, 시간이 다 되면 자동으로 제출됩니다.</p>' +
+      '<p class="muted" style="margin-top:14px;">' +
+      (isBank(cert)
+        ? "문항은 " + d.domains.length + "개 연습시험 세트에서 문항 수 비율대로 무작위 추출됩니다."
+        : "문항은 실제 시험처럼 도메인 가중치에 비례하여 무작위로 출제됩니다.") +
+      " 제출 전까지는 정답을 알려주지 않으며, 시간이 다 되면 자동으로 제출됩니다.</p>" +
       '<p class="muted" style="font-size:12.5px;">※ 점수는 정답률을 100~1000점 구간으로 환산한 학습용 근사치이며, AWS의 실제 채점(문항 난이도 가중) 알고리즘과는 다를 수 있습니다.</p>' +
+      (hasTranslation(cert)
+        ? '<div class="lang-field"><label class="field">표시 언어</label>' + langControl(cert) +
+          '<p class="muted" style="margin:8px 0 0;font-size:12.5px;">실제 시험은 영어(또는 AWS 공식 번역) 지문으로 출제됩니다. 실전 감각을 기르려면 \'영어 원문\' 또는 \'병기\'를 권합니다.</p></div>'
+        : "") +
       '<button class="btn" data-action="exam-start">모의고사 시작</button>' +
       "</div>" +
       (lastExams.length ? '<hr class="sep"><div class="card"><h3 class="mt-0">최근 응시 기록</h3><table class="domain-table"><tr><th>일시</th><th>점수</th><th>결과</th></tr>' + histRows + "</table></div>" : "")
@@ -682,7 +818,7 @@
       var isSel = selected.indexOf(i) !== -1;
       return (
         '<button type="button" class="choice' + (q.type === "multi" ? " multi" : "") + (isSel ? " selected" : "") + '" data-action="exam-select" data-idx="' + i + '">' +
-        '<span class="mark">' + (isSel ? (q.type === "multi" ? "✓" : "●") : "") + '</span><span>' + esc(c) + "</span></button>"
+        '<span class="mark">' + (isSel ? (q.type === "multi" ? "✓" : "●") : "") + '</span><span>' + choiceBody(cert, q, i) + "</span></button>"
       );
     }).join("");
 
@@ -694,14 +830,15 @@
       '<span id="exam-timer" class="timer">--:--</span>' +
       '<span class="muted">답변 완료: ' + answeredCount + " / " + total + "</span>" +
       '<button class="btn ghost small" data-action="exam-flag">' + (session.flags[q.id] ? "★ 표시 해제" : "☆ 나중에 다시보기") + "</button>" +
+      langControl(cert) +
       '<span class="spacer"></span>' +
       '<button class="btn ghost small" data-action="exam-quit">그만두기</button>' +
       '<button class="btn danger small" data-action="exam-submit">제출하기</button>' +
       "</div>" +
       '<div class="qgrid">' + grid + "</div>" +
       '<div class="card">' +
-      '<div class="q-type-badge">' + (q.type === "multi" ? "복수 응답" : "단일 응답") + " · 문항 " + (session.index + 1) + "</div>" +
-      '<div class="q-text">' + esc(q.question) + "</div>" +
+      '<div class="q-type-badge">' + (q.type === "multi" ? "복수 응답 (" + q.answer.length + "개 선택)" : "단일 응답") + " · 문항 " + (session.index + 1) + "</div>" +
+      questionStem(cert, q) +
       '<div class="choice-list">' + choices + "</div>" +
       '<div class="session-actions" style="justify-content:space-between;">' +
       '<button class="btn secondary" data-action="exam-prev" ' + (session.index === 0 ? "disabled" : "") + '>이전</button>' +
@@ -749,7 +886,7 @@
       var pct = b.total ? Math.round((b.correct / b.total) * 100) : 0;
       return "<tr><td>" + esc(b.title) + "</td><td>" + b.correct + " / " + b.total + "</td><td>" + pct + "%</td></tr>";
     }).join("");
-    var reviewList = session.questions.map(function (q) { return renderReviewItem(q, session.answers[q.id] || []); }).join("");
+    var reviewList = session.questions.map(function (q) { return renderReviewItem(cert, q, session.answers[q.id] || []); }).join("");
 
     return (
       "<h1>" + esc(data(cert).name) + '</h1><p class="muted">모의고사 결과</p>' +
@@ -760,7 +897,7 @@
       '<div style="margin-top:18px;">' +
       '<button class="btn" data-action="exam-restart">다시 응시하기</button>' +
       "</div></div>" +
-      '<hr class="sep"><div class="card"><h3 class="mt-0">도메인별 결과</h3><table class="domain-table"><tr><th>도메인</th><th>정답</th><th>정답률</th></tr>' + rows + "</table></div>" +
+      '<hr class="sep"><div class="card"><h3 class="mt-0">' + (isBank(cert) ? "세트별 결과" : "도메인별 결과") + '</h3><table class="domain-table"><tr><th>' + (isBank(cert) ? "연습시험 세트" : "도메인") + "</th><th>정답</th><th>정답률</th></tr>" + rows + "</table></div>" +
       '<hr class="sep"><h3>문항별 리뷰</h3>' + reviewList
     );
   }
@@ -770,7 +907,7 @@
   function allServices() {
     var byName = {};
     var merged = [];
-    CERTS.forEach(function (cert) {
+    conceptCerts().forEach(function (cert) {
       data(cert).services.forEach(function (s) {
         var e = byName[s.name];
         if (!e) {
@@ -791,9 +928,9 @@
     list.forEach(function (s) { if (categories.indexOf(s.category) === -1) categories.push(s.category); });
     categories.sort(function (a, b) { return a.localeCompare(b); });
     var catOptions = '<option value="all">전체 카테고리</option>' + categories.map(function (c) { return '<option value="' + esc(c) + '">' + esc(c) + "</option>"; }).join("");
-    var certOptions = '<option value="all">전체 자격증</option>' + CERTS.map(function (c) { return '<option value="' + esc(c) + '">' + esc(data(c).code) + "</option>"; }).join("");
+    var certOptions = '<option value="all">전체 자격증</option>' + conceptCerts().map(function (c) { return '<option value="' + esc(c) + '">' + esc(data(c).code) + "</option>"; }).join("");
     return (
-      '<h1>서비스 사전</h1><p class="muted">' + CERTS.map(function (c) { return esc(data(c).code); }).join(" · ") + ' 시험 범위 · 총 ' + list.length + "개 서비스</p>" +
+      '<h1>서비스 사전</h1><p class="muted">' + conceptCerts().map(function (c) { return esc(data(c).code); }).join(" · ") + ' 시험 범위 · 총 ' + list.length + "개 서비스</p>" +
       '<div class="glossary-toolbar">' +
       '<input type="search" id="svc-search" placeholder="서비스 이름 또는 설명 검색...">' +
       '<select id="svc-cat">' + catOptions + "</select>" +
@@ -888,7 +1025,8 @@
     var list = Object.keys(byDomain).map(function (domId) {
       var dom = d.domains.find(function (x) { return x.id === domId; });
       var items = byDomain[domId].map(function (q) {
-        return '<div class="qa-review"><div class="q-text" style="font-size:14.5px;">' + esc(q.question) + '</div><div class="muted" style="font-size:13px;">시도 ' + stats[q.id].attempts + "회 · 정답 " + stats[q.id].correct + "회</div></div>";
+        return '<div class="qa-review">' + questionStem(cert, q, true) +
+          '<div class="muted" style="font-size:13px;">시도 ' + stats[q.id].attempts + "회 · 정답 " + stats[q.id].correct + "회</div></div>";
       }).join("");
       return '<h3>' + esc(dom ? dom.title : domId) + "</h3>" + items;
     }).join("");
@@ -897,7 +1035,7 @@
       "<h1>" + esc(d.name) + '</h1><p class="muted">오답노트 · 마지막으로 틀린 문제 ' + wrongQs.length + "개</p>" +
       tabs(cert, "wrong") +
       '<div class="card" style="margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">' +
-      '<span class="muted">이 문제들만 모아서 다시 풀어볼 수 있습니다.</span>' +
+      '<span class="muted">이 문제들만 모아서 다시 풀어볼 수 있습니다.</span>' + langControl(cert) +
       '<button class="btn" data-action="wrong-retry" data-ids="' + esc(wrongQs.map(function (q) { return q.id; }).join(",")) + '">오답 ' + wrongQs.length + "개 다시 풀기</button>" +
       "</div>" + list
     );
@@ -925,6 +1063,7 @@
     var parts = parseHash();
     var cert = parts[0];
     switch (action) {
+      case "lang-set": setLang(cert, el.getAttribute("data-lang")); break;
       case "quiz-start": startQuiz(cert); break;
       case "select-choice": selectChoice(cert, parseInt(el.getAttribute("data-idx"), 10)); break;
       case "quiz-submit": submitAnswer(cert); break;

@@ -1,0 +1,185 @@
+{
+  "soapt-q222": {
+    "q": "어느 회사가 AWS Organizations로 관리하는 모든 계정에서 인바운드 트래픽의 소스 주소로 `0.0.0.0/0`을 사용하는 보안 그룹을 감지하는 자동화 솔루션을 만들려고 합니다. 또한 회사 인트라넷에 해당하는 특정 `CIDR` 블록으로 액세스를 제한해 비준수 보안 그룹을 자동으로 조정하려고 합니다. 이 솔루션을 만들려면 CloudOps 엔지니어는 어떤 조치를 취해야 합니까?",
+    "c": [
+      "비준수 보안 그룹을 감지하는 AWS Config 규칙을 만든다. `0.0.0.0/0` 소스 주소를 승인된 `CIDR` 블록으로 변경하는 자동 조정을 설정한다.",
+      "`0.0.0.0/0`을 소스 주소로 갖는 보안 그룹 생성을 거부하는 IAM 정책을 만든다. 이 IAM 정책을 회사의 모든 사용자에게 연결한다.",
+      "새 보안 그룹과 기존 보안 그룹을 검사하는 AWS Lambda 함수를 만든다. 비준수 `0.0.0.0/0` 소스 주소가 있는지 확인하고 소스 주소를 승인된 `CIDR` 블록으로 변경한다.",
+      "`0.0.0.0/0` 소스 주소를 갖는 보안 그룹 생성을 거부하는 조직 단위(OU)용 서비스 제어 정책(SCP)을 만든다. `0.0.0.0/0` 소스 주소를 승인된 `CIDR` 블록으로 변경하는 자동 조정을 설정한다."
+    ]
+  },
+  "soapt-q223": {
+    "q": "어느 회사는 자사 AWS 계정의 모든 활동이 AWS CloudTrail로 기록되어야 한다고 요구합니다. 또한 CloudOps 엔지니어는 CloudTrail 로그 파일이 수정되거나 삭제되는 시점을 알아야 합니다. CloudOps 엔지니어는 이 요구 사항을 어떻게 충족해야 합니까?",
+    "c": [
+      "로그 파일 무결성 검증을 활성화한다. AWS CLI로 로그 파일을 검증한다.",
+      "로그 파일 무결성 검증을 활성화한다. AWS CloudTrail Processing Library로 로그 파일을 검증한다.",
+      "CloudTrail Insights로 로그 파일의 수정 여부를 모니터링한다.",
+      "Amazon CloudWatch Logs로 로그 파일의 수정 여부를 모니터링한다."
+    ]
+  },
+  "soapt-q224": {
+    "q": "어느 회사가 상태 저장(stateful) 웹 기반 애플리케이션을 AWS에 호스팅할 계획입니다. CloudOps 엔지니어는 Amazon EC2 인스턴스 Auto Scaling 그룹을 사용하고 있습니다. 이 웹 애플리케이션은 1년 내내 하루 24시간, 주 7일 실행됩니다. 회사는 트래픽과 사용 패턴에 따라 연중에 같은 인스턴스 패밀리 내에서 인스턴스 유형을 변경할 수 있어야 합니다. 가장 비용 효율적으로(MOST cost-effectively) 이 요구 사항을 충족하는 EC2 인스턴스 구매 옵션은 무엇입니까?",
+    "c": [
+      "전환 예약 인스턴스(Convertible Reserved Instances).",
+      "온디맨드 인스턴스.",
+      "스팟 인스턴스.",
+      "표준 예약 인스턴스(Standard Reserved Instances)."
+    ]
+  },
+  "soapt-q225": {
+    "q": "어느 애플리케이션이 Auto Scaling 그룹의 Amazon EC2 인스턴스에서 실행됩니다. EC2 인스턴스에 새 기능을 배포한 후 일부 인스턴스가 비정상으로 표시되었고 Auto Scaling 그룹이 이를 교체했습니다. CloudOps 엔지니어가 상태 변경의 원인을 파악하기 전에 EC2 인스턴스가 종료되어 버렸습니다. 이 문제를 해결하기 위해 CloudOps 엔지니어는 이런 상황에서 AWS Lambda 함수가 호출되도록 하려고 합니다. CloudOps 엔지니어는 이 요구 사항을 어떻게 충족해야 합니까?",
+    "c": [
+      "Auto Scaling 그룹의 인스턴스 축소 방지(scale-in protection) 설정을 활성화한다. Amazon EventBridge(Amazon CloudWatch Events)로 Lambda 함수를 호출한다.",
+      "Auto Scaling 그룹의 인스턴스 축소 방지 설정을 활성화한다. Amazon Route 53으로 Lambda 함수를 호출한다.",
+      "Amazon EventBridge(Amazon CloudWatch Events)로 Lambda 함수를 호출하도록 Auto Scaling 그룹에 수명 주기 후크를 추가한다.",
+      "Amazon Route 53으로 Lambda 함수를 호출하도록 Auto Scaling 그룹에 수명 주기 후크를 추가한다."
+    ]
+  },
+  "soapt-q226": {
+    "q": "어느 회사가 여러 고객의 중요한 데이터를 호스팅하는 애플리케이션을 운영합니다. 회사는 다양한 AWS 리소스에 대한 사용자 활동을 추적하기 위해 AWS CloudTrail을 사용합니다. 새 보안 요구 사항을 충족하려면 회사는 CloudTrail 로그 파일이 수정·삭제·위조되지 않도록 보호해야 합니다. 어떤 솔루션이 이 요구 사항을 충족합니까?",
+    "c": [
+      "CloudTrail 로그 파일 무결성 검증을 활성화한다.",
+      "CloudTrail 로그 파일이 저장된 S3 버킷에 Amazon S3 `MFA Delete`를 사용한다.",
+      "Amazon S3 버전 관리로 CloudTrail 로그 파일의 모든 버전을 보관한다.",
+      "AWS Key Management Service(AWS KMS) 보안 키로 CloudTrail 로그 파일을 보호한다."
+    ]
+  },
+  "soapt-q227": {
+    "q": "어느 글로벌 기업이 AWS 리전 5곳에서 사업을 운영합니다. CloudOps 엔지니어는 회사의 태그가 지정된 Amazon EC2 인스턴스와 태그가 없는 EC2 인스턴스를 모두 식별하려고 합니다. 회사는 출력에 인스턴스 ID와 태그가 표시되어야 한다고 요구합니다. CloudOps 엔지니어가 이 요구 사항을 충족하는 가장 운영 효율적인(MOST operationally efficient) 방법은 무엇입니까?",
+    "c": [
+      "AWS Resource Groups에서 태그 기반 리소스 그룹을 만든다.",
+      "AWS Trusted Advisor를 사용한다. Trusted Advisor에서 EC2 온디맨드 인스턴스 검사 결과를 내보낸다.",
+      "Cost Explorer를 사용한다. 서비스 유형으로 EC2-Instances를 선택하고 Resource로 그룹화한다.",
+      "AWS Resource Groups의 Tag Editor를 사용한다. 모든 리전을 선택하고 리소스 유형으로 `AWS::EC2::Instance`를 선택한다."
+    ]
+  },
+  "soapt-q228": {
+    "q": "어느 회사가 매일 수 기가바이트의 파일을 업로드해야 합니다. 회사는 Amazon S3로의 처리량과 업로드 속도를 높여야 합니다. 이 요구 사항을 충족하려면 CloudOps 엔지니어는 어떤 조치를 취해야 합니까?",
+    "c": [
+      "GET `HTTP` 메서드를 허용하고 그 S3 버킷을 오리진으로 하는 Amazon CloudFront 배포를 만든다.",
+      "Amazon ElastiCache 클러스터를 만들고 그 S3 버킷에 대한 캐싱을 활성화한다.",
+      "AWS Global Accelerator를 설정하고 그 S3 버킷으로 구성한다.",
+      "S3 Transfer Acceleration을 활성화하고 파일 업로드 시 가속 엔드포인트를 사용한다."
+    ]
+  },
+  "soapt-q229": {
+    "q": "CloudOps 엔지니어가 어느 회사 AWS 계정의 보안과 규정 준수를 관리합니다. 회사의 Amazon EC2 인스턴스가 사내 정책을 따르도록, CloudOps 엔지니어는 department 태그가 없는 EC2 인스턴스를 종료하려고 합니다. 비준수 리소스는 거의 실시간으로 종료되어야 합니다. 어떤 솔루션이 이 요구 사항을 충족합니까?",
+    "c": [
+      "`required-tags` 관리형 규칙을 사용하는 AWS Config 규칙을 만들어 비준수 리소스를 식별한다. 비준수 리소스를 종료하는 AWS `TerminateEC2Instance` 자동화 문서를 실행하도록 자동 조정을 구성한다.",
+      "새 EC2 인스턴스가 생성될 때를 모니터링하는 새 Amazon EventBridge(Amazon CloudWatch Events) 규칙을 만든다. 자동 조정을 위해 이벤트를 Simple Notification Service(Amazon SNS) 주제로 보낸다.",
+      "EC2 인스턴스를 만들 수 있는 모든 사용자가 `ec2:CreateTags`와 `ec2:DescribeTags` 작업도 사용할 수 있게 한다. 인스턴스의 종료 동작(shutdown behavior)을 terminate로 변경한다.",
+      "AWS Systems Manager Compliance가 EC2 인스턴스를 관리하도록 구성한다. AWS-StopEC2Instances 자동화 문서를 호출해 비준수 리소스를 중지한다."
+    ]
+  },
+  "soapt-q230": {
+    "q": "어느 회사가 S3 버전 관리가 활성화된 Amazon S3 버킷에 웹사이트 파일을 업로드했습니다. 회사는 그 S3 버킷을 오리진으로 하는 Amazon CloudFront 배포를 사용합니다. 회사는 최근 파일을 수정했지만 객체 이름은 그대로 유지했습니다. 사용자들은 웹사이트에 여전히 이전 콘텐츠가 나타난다고 보고합니다. CloudOps 엔지니어는 이 문제를 어떻게 해결해야 합니까?",
+    "c": [
+      "CloudFront 무효화(invalidation)를 생성하고 업데이트된 파일의 경로를 추가한다.",
+      "각 객체를 즉시 업데이트하기 위해 CloudFront 사전 서명된 URL을 만든다.",
+      "사용자에게 업데이트된 파일만 표시하도록 S3 오리진 액세스 ID(OAI)를 구성한다.",
+      "업데이트된 파일이 이전 파일을 대체할 수 있도록 S3 버킷에서 S3 버전 관리를 비활성화한다."
+    ]
+  },
+  "soapt-q231": {
+    "q": "어느 회사에 `VPC` A와 `VPC` B라는 두 개의 `VPC` 네트워크가 있습니다. `VPC` A의 `CIDR` 블록은 `10.0.0.0/16`이고 `VPC` B의 `CIDR` 블록은 `172.31.0.0/16`입니다. 회사는 두 `VPC` 사이에 `pcx-12345`라는 `VPC` 피어링 연결을 설정하려고 합니다. 구성 후 `VPC` A의 라우팅 테이블에 나타나야 하는 규칙은 무엇입니까? (2개 선택)",
+    "c": [
+      "`Destination`: `10.0.0.0/16`, `Target`: `Local`.",
+      "`Destination`: `172.31.0.0/16`, `Target`: `Local`.",
+      "`Destination`: `10.0.0.0/16`, `Target`: `pcx-12345`.",
+      "`Destination`: `172.31.0.0/16`, `Target`: `pcx-12345`.",
+      "`Destination`: `10.0.0.0/16`, `Target`: `172.31.0.0/16`."
+    ]
+  },
+  "soapt-q232": {
+    "q": "어느 회사가 고객의 판매 데이터를 분석합니다. 고객이 회사의 Amazon S3 버킷 중 하나에 파일을 업로드하면, 객체 Amazon 리소스 이름(ARN)이 담긴 메시지가 Amazon Simple Queue Service(Amazon SQS) 큐에 게시됩니다. Amazon EC2 인스턴스에서 실행되는 애플리케이션이 이 큐를 폴링해 메시지를 처리하며, 처리 시간은 파일 크기에 따라 달라집니다. 고객들이 파일 처리 지연을 보고하고 있습니다. CloudOps 엔지니어는 첫 단계로 Amazon EC2 Auto Scaling을 구성하기로 했습니다. CloudOps 엔지니어는 기존 EC2 인스턴스를 기반으로 Amazon 머신 이미지(AMI)를 만들고, 그 AMI를 참조하는 시작 템플릿도 만들었습니다. 응답 시간을 개선하려면 CloudOps 엔지니어는 Auto Scaling 정책을 어떻게 구성해야 합니까?",
+    "c": [
+      "시작 템플릿에 여러 인스턴스 크기를 추가한다. `ApproximateNumberOfMessagesVisible` 지표를 기반으로 하는 Auto Scaling 정책을 만들어, 큐의 메시지 수에 따라 인스턴스 크기를 선택한다.",
+      "지연된 메시지 수에 따라 인스턴스 수를 조정하도록 ApproximateNumberOfMessagesDelayed 지표를 기반으로 하는 Auto Scaling 정책을 만든다.",
+      "Auto Scaling 그룹의 `ASGAverageCPUUtilization` 지표와 GroupPendingInstances 지표를 기반으로 사용자 지정 지표를 만든다. 애플리케이션이 이 지표를 계산해 1분에 한 번 Amazon CloudWatch에 게시하도록 수정한다. 이 지표를 기반으로 인스턴스 수를 조정하는 Auto Scaling 정책을 만든다.",
+      "`ApproximateNumberOfMessagesVisible` 지표와 Auto Scaling 그룹의 `InService` 상태 인스턴스 수를 기반으로 사용자 지정 지표를 만든다. 애플리케이션이 이 지표를 계산해 1분에 한 번 Amazon CloudWatch에 게시하도록 수정한다. 이 지표를 기반으로 인스턴스 수를 조정하는 Auto Scaling 정책을 만든다."
+    ]
+  },
+  "soapt-q233": {
+    "q": "어느 회사가 `us-east-1` 리전의 한 가용 영역에 있는 Amazon EC2 인스턴스 2대로 다중 계층 웹 애플리케이션을 운영합니다. CloudOps 엔지니어는 이 EC2 인스턴스 중 1대를 새 가용 영역으로 마이그레이션해야 합니다. 어떤 솔루션이 이를 달성합니까?",
+    "c": [
+      "EC2 인스턴스를 다른 가용 영역으로 복사한다. 원본 인스턴스를 종료한다.",
+      "그 EC2 인스턴스로 Amazon 머신 이미지(AMI)를 만들어 다른 가용 영역에서 시작한다. 원본 인스턴스를 종료한다.",
+      "AWS CLI로 EC2 인스턴스를 다른 가용 영역으로 이동한다.",
+      "EC2 인스턴스를 중지하고 가용 영역을 수정한 뒤 인스턴스를 시작한다."
+    ]
+  },
+  "soapt-q234": {
+    "q": "어느 회사가 개발자들이 특정 Amazon EC2 인스턴스 패밀리를 사용하지 못하게 하려고 합니다. 회사는 AWS Organizations를 사용하며 이 제한을 여러 계정에 적용하려고 합니다. 이 요구 사항을 충족하기 위해 회사가 서비스 제어 정책(SCP)을 적용하는 가장 운영 효율적인(MOST operationally efficient) 방법은 무엇입니까?",
+    "c": [
+      "계정들을 조직 단위(OU)에 추가한다. 그 OU에 SCP를 적용한다.",
+      "계정들을 AWS Resource Groups의 리소스 그룹에 추가한다. 그 리소스 그룹에 SCP를 적용한다.",
+      "각 개발자 계정에 SCP를 적용한다.",
+      "계정들을 AWS Control Tower에 등록한다. AWS Control Tower 관리 계정에 SCP를 적용한다."
+    ]
+  },
+  "soapt-q235": {
+    "q": "어느 애플리케이션이 기본 `DHCP` 옵션 세트가 적용된 `VPC`의 Amazon EC2 인스턴스에서 실행됩니다. 이 애플리케이션은 `DNS` 이름이 `mssql.example.com`인 온프레미스 Microsoft SQL Server 데이터베이스에 연결합니다. 애플리케이션이 이 데이터베이스 `DNS` 이름을 확인할 수 없습니다. 어떤 솔루션이 이 문제를 해결합니까?",
+    "c": [
+      "Amazon Route 53 Resolver 인바운드 엔드포인트를 만든다. `example.com` 도메인에 대한 전달 규칙을 추가한다. 그 전달 규칙을 `VPC`와 연결한다.",
+      "Amazon Route 53 Resolver 인바운드 엔드포인트를 만든다. `example.com` 도메인에 대한 시스템 규칙을 추가한다. 그 시스템 규칙을 `VPC`와 연결한다.",
+      "Amazon Route 53 Resolver 아웃바운드 엔드포인트를 만든다. `example.com` 도메인에 대한 전달 규칙을 추가한다. 그 전달 규칙을 `VPC`와 연결한다.",
+      "Amazon Route 53 Resolver 아웃바운드 엔드포인트를 만든다. `example.com` 도메인에 대한 시스템 규칙을 추가한다. 그 시스템 규칙을 `VPC`와 연결한다."
+    ]
+  },
+  "soapt-q236": {
+    "q": "어느 회사의 애플리케이션이 인터넷 공급자에 의해 `app.example.com`에 호스팅되어 있습니다. 회사는 자신이 소유하고 Amazon Route 53으로 관리하는 `www.company.com`으로 이 애플리케이션에 접근하려고 합니다. 이를 위해 어떤 Route 53 레코드를 만들어야 합니까?",
+    "c": [
+      "`A` 레코드.",
+      "`Alias` 레코드.",
+      "`CNAME` 레코드.",
+      "`Pointer (PTR)` 레코드."
+    ]
+  },
+  "soapt-q237": {
+    "q": "어느 회사가 전 세계 사용자를 대상으로 웹 애플리케이션을 확장했습니다. CloudOps 엔지니어는 모든 프로덕션 인프라를 다중 리전 AWS 배포로 구현했습니다. CloudOps 엔지니어는 리소스의 위치를 기준으로 트래픽을 라우팅해야 합니다. 이 요구 사항을 충족하려면 어떤 Amazon Route 53 라우팅 정책을 사용해야 합니까?",
+    "c": [
+      "지리적 위치(Geolocation) 라우팅 정책.",
+      "지리 근접(Geoproximity) 라우팅 정책.",
+      "지연 시간 기반(Latency-based) 라우팅 정책.",
+      "다중값 응답(Multivalue answer) 라우팅 정책."
+    ]
+  },
+  "soapt-q238": {
+    "q": "어느 애플리케이션 팀이 CloudOps 엔지니어와 함께 애플리케이션용 Amazon CloudWatch 경보를 정의하고 있습니다. 애플리케이션 팀은 이 애플리케이션의 예상 사용량이나 예상 성장률을 모릅니다. CloudOps 엔지니어는 어떤 솔루션을 권해야 합니까?",
+    "c": [
+      "이상 탐지(anomaly detection)를 기반으로 하는 CloudWatch 경보를 만든다.",
+      "복합 경보 세트로 CloudWatch 경보를 만든다.",
+      "정적 임계값으로 CloudWatch 경보를 만든다.",
+      "누락 데이터를 임계값 위반(breaching)으로 처리하는 CloudWatch 경보를 만든다."
+    ]
+  },
+  "soapt-q239": {
+    "q": "어느 전자상거래 회사가 쇼핑 사이트의 인기 상품 쿼리를 인메모리 캐싱하기 위해 Amazon ElastiCache for Memcached 클러스터를 사용합니다. ElastiCache 클러스터의 최근 Amazon CloudWatch 지표 데이터를 보던 CloudOps 엔지니어가 많은 수의 축출(eviction)을 발견했습니다. 다음 중 이 축출을 줄이는 조치는 무엇입니까? (2개 선택)",
+    "c": [
+      "ElastiCache 클러스터에 노드를 추가한다.",
+      "ElastiCache TTL(time to live)을 늘린다.",
+      "ElastiCache 클러스터 내 개별 노드 크기를 늘린다.",
+      "ElastiCache 클러스터 앞에 Elastic Load Balancer를 둔다.",
+      "Amazon Simple Queue Service(Amazon SQS)로 ElastiCache 클러스터를 분리(decouple)한다."
+    ]
+  },
+  "soapt-q240": {
+    "q": "CloudOps 엔지니어가 여러 IAM 사용자에게 IAM 정책을 연결해 AWS 서비스 액세스를 제공하려고 합니다. 또한 그 정책을 변경하고 새 버전을 만들 수 있기를 원합니다. 어떤 조치의 조합이 이 요구 사항을 충족합니까? (2개 선택)",
+    "c": [
+      "사용자를 IAM 서비스 연결 역할에 추가한다. 그 역할에 정책을 연결한다.",
+      "사용자를 IAM 사용자 그룹에 추가한다. 그 그룹에 정책을 연결한다.",
+      "AWS 관리형 정책을 만든다.",
+      "고객 관리형 정책을 만든다.",
+      "인라인 정책을 만든다."
+    ]
+  },
+  "soapt-q241": {
+    "q": "어느 회사가 Amazon S3 버킷에 중요한 데이터를 저장합니다. CloudOps 엔지니어는 모든 S3 API 활동을 기록하는 솔루션을 구축해야 합니다. 어떤 조치가 이 요구 사항을 충족합니까?",
+    "c": [
+      "객체 액세스 로그를 기록하도록 S3 버킷 지표를 구성한다.",
+      "모든 S3 객체에 대한 데이터 이벤트를 로깅하는 AWS CloudTrail 추적을 만든다.",
+      "각 S3 버킷에서 S3 서버 액세스 로깅을 활성화한다.",
+      "객체 액세스 로그를 저장하기 위해 Amazon S3용 AWS IAM Access Analyzer를 사용한다."
+    ]
+  }
+}

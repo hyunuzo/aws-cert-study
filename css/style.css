@@ -268,6 +268,41 @@ select, input[type="text"], input[type="search"] {
 
 .q-type-badge { display:inline-block; font-size:11px; font-weight:700; padding:2px 8px; border-radius:999px; background: var(--border); color: var(--muted); margin-bottom:10px; }
 .q-text { font-size:17px; font-weight:600; margin: 4px 0 18px; white-space: pre-wrap; }
+.q-text .q-no {
+  display:inline-block; font-size:11px; font-weight:700; color: var(--muted);
+  border:1px solid var(--border); border-radius:999px; padding:1px 7px; margin-right:8px; vertical-align:2px;
+}
+/* 원본 문제은행의 인라인 코드(`백틱`)와 도표 이미지 */
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size:.9em; padding:1px 5px; border-radius:5px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent); border:1px solid var(--border);
+}
+/* 영어 원문 병기 */
+.q-text-alt {
+  font-size:14px; font-weight:400; color: var(--muted); line-height:1.6;
+  margin: -10px 0 18px; padding-left:12px; border-left:2px solid var(--border);
+}
+.choice-alt { font-size:12.5px; color: var(--muted); margin-top:5px; line-height:1.55; font-weight:400; }
+
+/* 표시 언어 전환 */
+.lang-switch { display:inline-flex; border:1px solid var(--border); border-radius:8px; overflow:hidden; flex-shrink:0; }
+.lang-switch button {
+  padding:5px 10px; font-size:12px; font-weight:600; border:0; cursor:pointer;
+  background: var(--bg); color: var(--muted); white-space:nowrap;
+}
+.lang-switch button + button { border-left:1px solid var(--border); }
+.lang-switch button:hover { color: var(--fg); }
+.lang-switch button.active { background: var(--accent); color: var(--accent-fg); }
+.lang-field { margin-top:16px; }
+
+.q-images { display:flex; flex-direction:column; gap:10px; margin: 0 0 18px; }
+.q-images img {
+  max-width:100%; height:auto; border-radius:10px; border:1px solid var(--border);
+  background:#fff; display:block;
+}
+.choice .q-images { margin: 8px 0 0; }
+.qa-review .q-images { margin: 8px 0 10px; }
 
 .choice-list { display:flex; flex-direction:column; gap:10px; }
 .choice {
@@ -276,6 +311,7 @@ select, input[type="text"], input[type="search"] {
   cursor:pointer; font-size:14.5px; color: var(--fg);
 }
 .choice:hover { border-color: var(--accent); }
+.choice > span:last-child { flex:1; min-width:0; display:block; }
 .choice .mark { width:20px; height:20px; border-radius:50%; border:2px solid var(--border); flex-shrink:0; margin-top:1px; display:flex; align-items:center; justify-content:center; font-size:12px; }
 .choice.multi .mark { border-radius:5px; }
 .choice.selected { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, var(--bg-elev)); }
