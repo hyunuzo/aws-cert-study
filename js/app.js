@@ -215,6 +215,14 @@
     } else if (parts[0] === "glossary") {
       crumb.textContent = "서비스 사전";
       html = viewAllGlossary();
+    } else if (parts[0] === "omr") {
+      // 답안지는 개념·문항 데이터가 없는 별도 화면이라 CERTS 라우팅을 타지 않는다.
+      if (parts[1] && !omrSet(parts[1])) {
+        location.hash = "#/omr";
+        return;
+      }
+      crumb.textContent = "실전 문제 풀이";
+      html = parts[1] ? viewOmrSheet(parts[1]) : viewOmrHome();
     } else {
       var cert = parts[0];
       if (CERTS.indexOf(cert) === -1) {
@@ -284,6 +292,7 @@
     var cert = parts[0];
     var section = parts[1];
     if (cert === "glossary") bindAllGlossary();
+    if (cert === "omr" && section) bindOmrSheet(section);
     if (CERTS.indexOf(cert) !== -1 && section === "glossary") bindGlossary(cert);
     if (cert && section === "exam" && session && session.kind === "exam" && session.cert === cert && session.phase === "active") {
       startExamTimer();
@@ -351,6 +360,10 @@
       "<h1>AWS 스터디</h1>" +
       '<p class="muted">Cloud Practitioner, Solutions Architect - Associate, CloudOps Engineer - Associate 시험을 위한 개념 학습, 퀴즈, 모의고사 도구입니다. 마지막 세션은 개념 없이 실전 문제만 모은 별도 문제은행입니다. 모든 진행 상황은 이 브라우저에 저장됩니다.</p>' +
       '<div class="cert-cards">' + cards + "</div>" +
+      '<a class="home-link" href="#/omr">' +
+      "<div><b>실전 문제 풀이 답안지</b><p>강의자료 PDF ‘실전 문제 풀이 1~20’(" + window.APP_OMR.totalQuestions + "문항)을 풀고 마킹하면 자동 채점합니다</p></div>" +
+      '<span class="arrow">→</span>' +
+      "</a>" +
       '<a class="home-link" href="#/glossary">' +
       "<div><b>서비스 사전</b><p>" + conceptCerts().length + "개 시험 범위의 AWS 서비스 " + allServices().length + "개를 한곳에서 검색합니다</p></div>" +
       '<span class="arrow">→</span>' +
@@ -1041,6 +1054,271 @@
     );
   }
 
+  // ---------- 실전 문제 풀이 답안지(OMR) ----------
+  // 문제 지문은 PDF('실전 문제 풀이 1~20')로 보고 풀고, 이 화면에는 번호별 마킹만 한다.
+  // 그래서 데이터에는 보기 개수(c)와 정답(a)만 들어 있다.
+  var OMR_KEY = "awsStudyApp.omr.v1";
+  var omrState = loadOmr();
+
+  function omrData() { return window.APP_OMR; }
+  function omrSet(id) {
+    return omrData().sets.filter(function (s) { return s.id === id; })[0];
+  }
+  function loadOmr() {
+    try { return JSON.parse(localStorage.getItem(OMR_KEY)) || {}; } catch (e) { return {}; }
+  }
+  // 목록 화면만 열어도 20개 세트의 빈 상태가 만들어지므로, 저장할 때 실제 기록이 있는 것만 남긴다.
+  // (메모리의 omrState 는 그대로 둔다. 참조를 들고 있는 답안지 화면이 마킹을 잃지 않도록.)
+  function saveOmr() {
+    var out = {};
+    Object.keys(omrState).forEach(function (id) {
+      var e = omrState[id];
+      if (Object.keys(e.marks || {}).length || e.result || (e.history && e.history.length)) out[id] = e;
+    });
+    localStorage.setItem(OMR_KEY, JSON.stringify(out));
+  }
+  function omrEntry(id) {
+    var e = omrState[id];
+    if (!e) { e = omrState[id] = {}; }
+    if (!e.marks) e.marks = {};
+    if (!e.history) e.history = [];
+    if (!("result" in e)) e.result = null;
+    return e;
+  }
+  function omrMarkedCount(id) {
+    var marks = omrEntry(id).marks;
+    return Object.keys(marks).filter(function (k) { return marks[k] && marks[k].length; }).length;
+  }
+  // 부분 점수는 없다. 복수정답 문항은 정답 조합이 정확히 일치해야 정답 처리한다.
+  function omrGrade(set, marks) {
+    var correct = 0;
+    set.questions.forEach(function (q) {
+      if (sameSet(marks[q.n] || [], q.a)) correct++;
+    });
+    var total = set.questions.length;
+    return { correct: correct, total: total, pct: Math.round((correct / total) * 100) };
+  }
+  function omrBest(id) {
+    var e = omrEntry(id);
+    if (!e.history.length) return null;
+    return e.history.reduce(function (a, h) { return h.pct > a.pct ? h : a; });
+  }
+
+  // ---------- OMR: 세트 목록 ----------
+  function viewOmrHome() {
+    var d = omrData();
+    var graded = d.sets.filter(function (s) { return omrEntry(s.id).result; });
+    var avg = graded.length
+      ? Math.round(graded.reduce(function (a, s) { return a + omrEntry(s.id).result.pct; }, 0) / graded.length)
+      : null;
+
+    var cards = d.sets.map(function (s) {
+      var e = omrEntry(s.id);
+      var marked = omrMarkedCount(s.id);
+      var pct = Math.round((marked / s.count) * 100);
+      var best = omrBest(s.id);
+      var status;
+      if (e.result) {
+        var pass = e.result.pct >= d.passPct;
+        status = '<span class="omr-score ' + (pass ? "ok" : "ng") + '">' + e.result.pct + "%</span>" +
+          '<span class="muted">' + e.result.correct + " / " + e.result.total + " 정답" +
+          (best && e.history.length > 1 ? " · 최고 " + best.pct + "%" : "") + "</span>";
+      } else if (marked) {
+        status = '<div class="progress-row" style="margin:0;"><div class="progress-bar"><span style="width:' + pct + '%"></span></div>' +
+          '<div class="progress-label">' + marked + " / " + s.count + " 마킹</div></div>";
+      } else {
+        status = '<span class="muted">아직 마킹하지 않았습니다</span>';
+      }
+      return (
+        '<a class="omr-set-card" href="#/omr/' + s.id + '">' +
+        '<b>' + esc(s.title) + "</b>" +
+        '<span class="muted omr-meta">' + s.count + "문항 · 복수정답 " + s.multi + "문항</span>" +
+        '<div class="omr-status">' + status + "</div>" +
+        "</a>"
+      );
+    }).join("");
+
+    return (
+      "<h1>실전 문제 풀이 답안지</h1>" +
+      '<p class="muted">강의자료 PDF <b>‘실전 문제 풀이 1~20’</b>을 보면서 문제를 풀고, 이 화면에는 문항 번호별로 답만 마킹하세요. ' +
+      "제출하면 바로 채점됩니다. 총 " + omrData().totalQuestions + "문항이며 마킹은 이 브라우저에 자동 저장됩니다.</p>" +
+      (avg === null
+        ? ""
+        : '<div class="card" style="margin-bottom:18px;">채점을 마친 세트 <b>' + graded.length + "</b>개 · 평균 정답률 <b>" + avg + "%</b>" +
+          '<span class="muted"> (합격 기준 ' + omrData().passPct + "%)</span></div>") +
+      '<div class="omr-sets">' + cards + "</div>" +
+      '<a class="home-link" href="#/">' +
+      "<div><b>← 홈으로</b><p>다른 자격증 학습 세션으로 돌아갑니다</p></div>" +
+      "</a>"
+    );
+  }
+
+  // ---------- OMR: 답안지 ----------
+  function omrBubbles(q, marks, reviewing) {
+    var mine = marks[q.n] || [];
+    var out = [];
+    for (var i = 0; i < q.c; i++) {
+      var cls = ["omr-bubble"];
+      if (mine.indexOf(i) !== -1) cls.push("marked");
+      if (reviewing) {
+        if (q.a.indexOf(i) !== -1) cls.push("is-answer");
+        else if (mine.indexOf(i) !== -1) cls.push("is-wrong");
+      }
+      out.push('<button type="button" class="' + cls.join(" ") + '" data-idx="' + i + '"' +
+        (reviewing ? " disabled" : "") + ' aria-label="' + q.n + "번 " + String.fromCharCode(65 + i) + '">' +
+        String.fromCharCode(65 + i) + "</button>");
+    }
+    return out.join("");
+  }
+
+  function omrSheet(set, marks, reviewing) {
+    var rows = set.questions.map(function (q) {
+      var mine = marks[q.n] || [];
+      var cls = ["omr-row"];
+      if (q.a.length > 1) cls.push("is-multi");
+      var flag = "";
+      if (reviewing) {
+        var ok = sameSet(mine, q.a);
+        cls.push(ok ? "is-ok" : "is-ng");
+        flag = '<span class="omr-flag">' + (ok ? "○" : "✕") + "</span>";
+      }
+      return (
+        '<div class="' + cls.join(" ") + '" data-num="' + q.n + '">' +
+        '<span class="omr-num">' + q.n + "</span>" +
+        '<span class="omr-bubbles">' + omrBubbles(q, marks, reviewing) + "</span>" +
+        (q.a.length > 1 ? '<span class="omr-tag">2개</span>' : "") +
+        flag +
+        "</div>"
+      );
+    }).join("");
+    return '<div class="omr-sheet" id="omr-sheet" data-set="' + set.id + '">' + rows + "</div>";
+  }
+
+  function viewOmrSheet(setId) {
+    var d = omrData();
+    var set = omrSet(setId);
+    var e = omrEntry(setId);
+    var reviewing = !!e.result;
+    var marked = omrMarkedCount(setId);
+
+    var head =
+      '<a class="omr-back" href="#/omr">← 세트 목록</a>' +
+      "<h1>" + esc(set.title) + "</h1>" +
+      '<p class="muted">' + set.count + "문항 · 복수정답 " + set.multi + "문항 · PDF <b>‘" + esc(set.title) + ".pdf’</b>를 보면서 마킹하세요.</p>";
+
+    if (reviewing) {
+      var pass = e.result.pct >= d.passPct;
+      var best = omrBest(setId);
+      var wrong = set.questions.filter(function (q) { return !sameSet(e.marks[q.n] || [], q.a); });
+      return (
+        head +
+        '<div class="card omr-result ' + (pass ? "ok" : "ng") + '">' +
+        '<div class="omr-result-score"><b>' + e.result.pct + "%</b><span>" + e.result.correct + " / " + e.result.total + " 정답</span></div>" +
+        "<div><b>" + (pass ? "합격 기준 통과" : "합격 기준 미달") + '</b><p class="muted">합격 기준 ' + d.passPct + "% · 채점 " + fmtDate(e.result.at) +
+        (best && e.history.length > 1 ? " · 최고 " + best.pct + "% (" + e.history.length + "회 응시)" : "") + "</p></div>" +
+        '<div class="omr-result-actions">' +
+        '<button class="btn" data-action="omr-retry">다시 풀기</button>' +
+        '</div></div>' +
+        '<div class="omr-toolbar">' +
+        '<span class="muted">틀린 문항 ' + wrong.length + "개" + (wrong.length ? " · " + wrong.map(function (q) { return q.n; }).join(", ") + "번" : "") + "</span>" +
+        (wrong.length ? '<label class="omr-only-wrong"><input type="checkbox" id="omr-only-wrong"> 틀린 문항만 보기</label>' : "") +
+        "</div>" +
+        '<div class="omr-legend"><span><i class="lg-answer"></i> 정답</span><span><i class="lg-wrong"></i> 내가 고른 오답</span></div>' +
+        omrSheet(set, e.marks, true)
+      );
+    }
+
+    return (
+      head +
+      '<div class="omr-toolbar sticky">' +
+      '<div class="progress-row omr-progress">' +
+      '<div class="progress-bar"><span id="omr-bar" style="width:' + Math.round((marked / set.count) * 100) + '%"></span></div>' +
+      '<div class="progress-label" id="omr-count">' + marked + " / " + set.count + "</div></div>" +
+      '<button class="btn ghost small" data-action="omr-clear">마킹 지우기</button>' +
+      '<button class="btn" data-action="omr-submit">제출하고 채점</button>' +
+      "</div>" +
+      '<p class="muted omr-hint">보기를 눌러 마킹합니다. <b>2개</b> 표시가 있는 문항은 두 개를 고르세요. 마킹은 자동 저장됩니다.</p>' +
+      omrSheet(set, e.marks, false)
+    );
+  }
+
+  // 40문항짜리 답안지에서 한 칸 누를 때마다 화면을 다시 그리면 스크롤이 맨 위로 튄다.
+  // 그래서 마킹은 DOM만 직접 고치고 진행률 표시만 갱신한다.
+  function bindOmrSheet(setId) {
+    var sheet = document.getElementById("omr-sheet");
+    if (!sheet) return;
+    var set = omrSet(setId);
+    var e = omrEntry(setId);
+
+    var onlyWrong = document.getElementById("omr-only-wrong");
+    if (onlyWrong) {
+      onlyWrong.addEventListener("change", function () {
+        sheet.classList.toggle("only-wrong", onlyWrong.checked);
+      });
+    }
+    if (e.result) return; // 채점 결과 화면에서는 마킹할 수 없다.
+
+    sheet.addEventListener("click", function (ev) {
+      var btn = ev.target.closest(".omr-bubble");
+      if (!btn) return;
+      var row = btn.closest(".omr-row");
+      var num = parseInt(row.getAttribute("data-num"), 10);
+      var q = set.questions.filter(function (x) { return x.n === num; })[0];
+      var idx = parseInt(btn.getAttribute("data-idx"), 10);
+      var sel = (e.marks[num] || []).slice();
+      var pos = sel.indexOf(idx);
+      if (pos !== -1) {
+        sel.splice(pos, 1);
+      } else if (q.c >= 5) {
+        // 복수정답 문항은 2개까지. 세 번째를 고르면 가장 먼저 고른 것이 빠진다.
+        sel.push(idx);
+        while (sel.length > 2) sel.shift();
+      } else {
+        sel = [idx];
+      }
+      if (sel.length) e.marks[num] = sel; else delete e.marks[num];
+      saveOmr();
+
+      Array.prototype.forEach.call(row.querySelectorAll(".omr-bubble"), function (b) {
+        b.classList.toggle("marked", sel.indexOf(parseInt(b.getAttribute("data-idx"), 10)) !== -1);
+      });
+      var marked = omrMarkedCount(setId);
+      var label = document.getElementById("omr-count");
+      var bar = document.getElementById("omr-bar");
+      if (label) label.textContent = marked + " / " + set.count;
+      if (bar) bar.style.width = Math.round((marked / set.count) * 100) + "%";
+    });
+  }
+
+  function submitOmr(setId) {
+    var set = omrSet(setId);
+    var e = omrEntry(setId);
+    var marked = omrMarkedCount(setId);
+    if (marked < set.count && !confirm("아직 마킹하지 않은 문항이 " + (set.count - marked) + "개 있습니다. 그대로 제출할까요?")) return;
+    var r = omrGrade(set, e.marks);
+    r.at = new Date().toISOString();
+    e.result = r;
+    e.history.unshift({ at: r.at, correct: r.correct, total: r.total, pct: r.pct });
+    saveOmr();
+    render();
+  }
+
+  function retryOmr(setId) {
+    if (!confirm("마킹을 모두 지우고 처음부터 다시 풀까요? 채점 기록은 남습니다.")) return;
+    var e = omrEntry(setId);
+    e.marks = {};
+    e.result = null;
+    saveOmr();
+    render();
+  }
+
+  function clearOmrMarks(setId) {
+    if (!confirm("이 세트의 마킹을 모두 지울까요?")) return;
+    omrEntry(setId).marks = {};
+    saveOmr();
+    render();
+  }
+
   // ---------- theme ----------
   function initTheme() {
     var saved = localStorage.getItem(THEME_KEY);
@@ -1098,6 +1376,9 @@
       }
       case "exam-submit": submitExam(cert, false); break;
       case "exam-restart": session = null; render(); break;
+      case "omr-submit": submitOmr(parts[1]); break;
+      case "omr-retry": retryOmr(parts[1]); break;
+      case "omr-clear": clearOmrMarks(parts[1]); break;
       case "exam-quit":
         if (confirm("모의고사를 중단할까요? 지금까지의 응답은 저장되지 않습니다.")) { session = null; render(); }
         break;

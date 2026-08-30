@@ -417,3 +417,90 @@ hr.sep { border:none; border-top:1px solid var(--border); margin: 20px 0; }
   .result-hero .score { font-size: 38px; }
   .svc-grid { grid-template-columns: minmax(0, 1fr); }
 }
+
+/* ---------- 실전 문제 풀이 답안지(OMR) ---------- */
+.omr-sets { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px; margin-top: 18px; }
+.omr-set-card {
+  display: flex; flex-direction: column; gap: 6px; min-height: 118px;
+  text-decoration: none; color: inherit;
+  background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px 18px; box-shadow: var(--shadow); transition: transform .12s ease, box-shadow .12s ease;
+}
+.omr-set-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(20,25,40,.12), 0 14px 30px rgba(20,25,40,.10); }
+.omr-set-card b { font-size: 16px; }
+.omr-set-card .omr-meta { font-size: 13px; }
+.omr-set-card .omr-status { margin-top: auto; display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; font-size: 13px; }
+.omr-score { font-size: 20px; font-weight: 700; }
+.omr-score.ok { color: var(--success); }
+.omr-score.ng { color: var(--danger); }
+
+.omr-back { display: inline-block; margin-bottom: 6px; color: var(--muted); text-decoration: none; font-size: 14px; }
+.omr-back:hover { color: var(--fg); }
+
+.omr-toolbar {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 12px 16px; box-shadow: var(--shadow); margin: 16px 0 10px;
+}
+.omr-toolbar.sticky { position: sticky; top: 8px; z-index: 5; }
+.omr-progress { margin: 0; flex: 1 1 180px; }
+.omr-only-wrong { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--muted); cursor: pointer; }
+.omr-hint { font-size: 13px; margin: 0 0 12px; }
+.omr-legend { display: flex; gap: 16px; font-size: 13px; color: var(--muted); margin-bottom: 10px; }
+.omr-legend i { display: inline-block; width: 14px; height: 14px; border-radius: 50%; vertical-align: -2px; margin-right: 5px; }
+.omr-legend .lg-answer { background: var(--success); }
+.omr-legend .lg-wrong { background: var(--danger); }
+
+.omr-result { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; margin-bottom: 4px; }
+.omr-result.ok { border-color: var(--success); }
+.omr-result.ng { border-color: var(--danger); }
+.omr-result-score { display: flex; flex-direction: column; line-height: 1.1; }
+.omr-result-score b { font-size: 34px; }
+.omr-result.ok .omr-result-score b { color: var(--success); }
+.omr-result.ng .omr-result-score b { color: var(--danger); }
+.omr-result-score span { font-size: 13px; color: var(--muted); margin-top: 4px; }
+.omr-result p { margin: 2px 0 0; font-size: 13px; }
+.omr-result-actions { margin-left: auto; }
+
+.omr-sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 8px 14px; }
+.omr-row {
+  display: flex; align-items: center; gap: 8px; min-width: 0;
+  border: 1px solid transparent; border-radius: 10px; padding: 4px 8px;
+  background: var(--bg-elev);
+}
+.omr-num { width: 26px; text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; flex-shrink: 0; }
+.omr-bubbles { display: flex; gap: 5px; }
+.omr-bubble {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  border: 1.5px solid var(--border); background: transparent; color: var(--muted);
+  font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .1s ease, border-color .1s ease, color .1s ease;
+}
+.omr-bubble:hover:not(:disabled) { border-color: var(--accent); color: var(--fg); }
+.omr-bubble.marked { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.omr-bubble:disabled { cursor: default; }
+.omr-tag {
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  border: 1px solid var(--border); border-radius: 999px; padding: 0 6px; flex-shrink: 0;
+}
+.omr-flag { margin-left: auto; padding-left: 4px; font-size: 15px; font-weight: 700; flex-shrink: 0; }
+.omr-row.is-ok { background: var(--success-bg); }
+.omr-row.is-ok .omr-flag { color: var(--success); }
+.omr-row.is-ng { background: var(--danger-bg); }
+.omr-row.is-ng .omr-flag { color: var(--danger); }
+.omr-bubble.is-answer { border-color: var(--success); color: var(--success); background: transparent; }
+.omr-bubble.is-answer.marked { background: var(--success); border-color: var(--success); color: #fff; }
+.omr-bubble.is-wrong { background: var(--danger); border-color: var(--danger); color: #fff; text-decoration: line-through; }
+.omr-sheet.only-wrong .omr-row.is-ok { display: none; }
+
+@media (max-width: 560px) {
+  .omr-sheet { grid-template-columns: minmax(0, 1fr); }
+  .omr-toolbar { padding: 10px 12px; gap: 8px; }
+  .omr-toolbar.sticky { top: 0; }
+  /* 좁은 화면에서는 진행률 줄과 버튼 줄을 나눈다. */
+  .omr-progress { flex: 1 0 100%; }
+  .omr-toolbar .btn { flex: 1 1 auto; }
+  .omr-num { width: 22px; }
+  .omr-bubble { width: 30px; height: 30px; }
+}

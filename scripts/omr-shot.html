@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>실전 문제 풀이 답안지 — 스크린샷 러너</title>
+<!-- index.html 과 같은 화면을 열되, 답안지(#/omr) 상태를 쿼리스트링으로 만들어 두는 개발용 페이지.
+     자산 경로는 프로젝트 루트 기준이므로 <base> 로 한 단계 올린다.
+
+     사용법 (프로젝트 루트에서 정적 서버를 띄운 뒤):
+       python3 -m http.server 8899
+       http://localhost:8899/scripts/omr-shot.html?seed=s01:12#/omr/s01
+
+     쿼리
+       reset=1            저장된 마킹을 지우고 시작
+       theme=light|dark   테마 고정
+       seed=s01:12[:4]    s01 세트의 앞 12문항을 미리 마킹 (4문항마다 일부러 오답)
+       submit=1           불러오자마자 제출·채점까지 진행
+       after=list         채점 뒤 세트 목록 화면으로 이동
+
+     참고: 헤드리스 크롬은 창을 500px 미만으로 줄여도 레이아웃 폭이 500px 로 고정된다.
+     그보다 좁은 화면은 실제 브라우저에서 확인할 것. -->
+<base href="../">
+<!-- 헤드리스 크롬이 style.css 를 캐시해 버려서 매번 새 쿼리를 붙인다. -->
+<script>document.write('<link rel="stylesheet" href="css/style.css?t=' + Date.now() + '">');</script>
+</head>
+<body>
+<header id="topbar">
+  <a class="brand" href="#/"><span class="logo">AWS</span> 스터디</a>
+  <span class="crumb" id="crumb"></span>
+  <span class="spacer"></span>
+  <button class="theme-toggle" id="theme-toggle">🌓 테마</button>
+</header>
+<main id="app"></main>
+<script>
+// 앱 스크립트보다 먼저 저장소 상태를 정리한다.
+(function () {
+  var p = new URLSearchParams(location.search);
+  if (p.get("reset")) localStorage.removeItem("awsStudyApp.omr.v1");
+  if (p.get("theme")) localStorage.setItem("awsStudyApp.theme", p.get("theme"));
+})();
+</script>
+<script src="js/data/clf-c02.data.js"></script>
+<script src="js/data/saa-c03.data.js"></script>
+<script src="js/data/soa-c03.data.js"></script>
+<script src="js/data/soa-c03-pt.data.js"></script>
+<script src="js/data/soa-c03-pt.ko.data.js"></script>
+<script src="js/data/clf-omr.data.js"></script>
+<script>
+// seed=세트:문항수[:오답주기] — 정답표를 그대로 베껴 마킹하되 일정 주기로 오답을 섞는다.
+(function () {
+  var seed = new URLSearchParams(location.search).get("seed");
+  if (!seed) return;
+  var parts = seed.split(":");
+  var setId = parts[0];
+  var n = parseInt(parts[1] || "0", 10);
+  var wrongEvery = parseInt(parts[2] || "4", 10);
+  var set = window.APP_OMR.sets.filter(function (s) { return s.id === setId; })[0];
+  var state = {};
+  state[setId] = { marks: {}, result: null, history: [] };
+  set.questions.slice(0, n).forEach(function (q, i) {
+    state[setId].marks[q.n] = i % wrongEvery === 0 ? [(q.a[0] + 1) % q.c] : q.a.slice();
+  });
+  localStorage.setItem("awsStudyApp.omr.v1", JSON.stringify(state));
+})();
+</script>
+<script src="js/app.js"></script>
+<script>
+window.addEventListener("DOMContentLoaded", function () {
+  var p = new URLSearchParams(location.search);
+  if (!p.get("submit")) return;
+  setTimeout(function () {
+    window.confirm = function () { return true; };
+    document.querySelector('[data-action="omr-submit"]').click();
+    // after=list 면 채점 뒤 세트 목록으로 넘어가 점수 표시까지 확인한다.
+    if (p.get("after") === "list") location.hash = "#/omr";
+  }, 60);
+});
+</script>
+</body>
+</html>
