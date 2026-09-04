@@ -6,7 +6,7 @@
   var LANG_KEY = "awsStudyApp.lang.v1";
 
   // 개념학습이 있는 자격증 세션과, 문제만 있는 문제은행(kind: "bank") 세션을 함께 다룬다.
-  var CERTS = ["clf", "saa", "soa", "soapt"];
+  var CERTS = ["clf", "saa", "soa", "soapt", "soadump"];
 
   var progress = loadProgress();
   var session = null; // active quiz/exam session
@@ -19,6 +19,16 @@
   // 문제은행 세션에는 개념학습·서비스 사전이 없고, 도메인 자리에 연습시험 세트가 들어간다.
   function isBank(cert) {
     return data(cert).kind === "bank";
+  }
+
+  // 문제은행이라고 다 해설이 없는 것은 아니다. 안내 문구를 데이터에 맞춘다.
+  function hasExplanations(cert) {
+    return !isBank(cert) || !!data(cert).hasExplanations;
+  }
+
+  // 문제은행의 도메인 자리에 들어가는 묶음의 이름(연습시험 '세트' / 번호 '구간').
+  function domainNoun(cert) {
+    return data(cert).domainNoun || "세트";
   }
 
   // ---------- 표시 언어 ----------
@@ -346,7 +356,7 @@
         '<span class="code">' + d.code + "</span>" +
         "<h2>" + esc(d.name) + "</h2>" +
         (bank
-          ? "<p>연습시험 세트 " + d.domains.length + "개 · 문항 " + d.questions.length + "개 · 실전 기출 유형</p>"
+          ? "<p>" + esc(d.blurb || "연습시험 세트 " + d.domains.length + "개 · 문항 " + d.questions.length + "개 · 실전 기출 유형") + "</p>"
           : "<p>도메인 " + d.domains.length + "개 · 개념 " + total + "개 · 연습문제 " + d.questions.length + "개</p>") +
         '<div class="progress-row"><div class="progress-bar"><span style="width:' + pct + '%"></span></div><div class="progress-label">' + pct + (bank ? "% 풀이" : "% 학습") + "</div></div>" +
         (lastExam
@@ -358,7 +368,7 @@
 
     return (
       "<h1>AWS 스터디</h1>" +
-      '<p class="muted">Cloud Practitioner, Solutions Architect - Associate, CloudOps Engineer - Associate 시험을 위한 개념 학습, 퀴즈, 모의고사 도구입니다. 마지막 세션은 개념 없이 실전 문제만 모은 별도 문제은행입니다. 모든 진행 상황은 이 브라우저에 저장됩니다.</p>' +
+      '<p class="muted">Cloud Practitioner, Solutions Architect - Associate, CloudOps Engineer - Associate 시험을 위한 개념 학습, 퀴즈, 모의고사 도구입니다. 뒤쪽 두 세션은 개념 없이 실전 문제만 모은 별도 문제은행입니다. 모든 진행 상황은 이 브라우저에 저장됩니다.</p>' +
       '<div class="cert-cards">' + cards + "</div>" +
       '<a class="home-link" href="#/omr">' +
       "<div><b>실전 문제 풀이 답안지</b><p>강의자료 PDF ‘실전 문제 풀이 1~20’(" + window.APP_OMR.totalQuestions + "문항)을 풀고 마킹하면 자동 채점합니다</p></div>" +
@@ -407,7 +417,7 @@
       '<div class="stat"><div class="n">' + qHist.length + '</div><div class="l">' + (bank ? "진행한 풀이 세션" : "응시한 퀴즈 세션") + "</div></div>" +
       '<div class="stat"><div class="n">' + (lastExam ? lastExam.scaledScore : "-") + '</div><div class="l">최근 모의고사 점수</div></div>' +
       "</div></div>" +
-      '<div class="card"><h3 class="mt-0">' + (bank ? "세트별 정답률" : "도메인별 정답률") + '</h3><div class="domain-bars">' + bars + "</div></div>" +
+      '<div class="card"><h3 class="mt-0">' + (bank ? domainNoun(cert) + "별 정답률" : "도메인별 정답률") + '</h3><div class="domain-bars">' + bars + "</div></div>" +
       "</div>" +
       '<hr class="sep">' +
       '<div class="grid-2">' +
@@ -562,7 +572,7 @@
           '<p class="muted" style="margin:8px 0 0;font-size:12.5px;">원문은 영어입니다. 한국어는 기계적 직역이 아닌 의역이며, AWS 서비스명·리소스명·코드는 원문 표기를 유지합니다. 풀이 중에도 언제든 바꿀 수 있습니다.</p></div>'
         : "") +
       '<p class="muted" style="margin-top:14px;">' +
-      (bank
+      (bank && !hasExplanations(cert)
         ? "제출하면 바로 정답을 확인할 수 있습니다. 이 문제은행은 원본 자료에 해설이 없어 정답만 표시됩니다."
         : "즉시 정답과 해설을 확인할 수 있는 학습용 퀴즈입니다. 실전처럼 풀고 싶다면 모의고사를 이용하세요.") +
       "</p>" +
@@ -763,7 +773,7 @@
       "</div>" +
       '<p class="muted" style="margin-top:14px;">' +
       (isBank(cert)
-        ? "문항은 " + d.domains.length + "개 연습시험 세트에서 문항 수 비율대로 무작위 추출됩니다."
+        ? "문항은 " + d.domains.length + "개 " + domainNoun(cert) + "에서 문항 수 비율대로 무작위 추출됩니다."
         : "문항은 실제 시험처럼 도메인 가중치에 비례하여 무작위로 출제됩니다.") +
       " 제출 전까지는 정답을 알려주지 않으며, 시간이 다 되면 자동으로 제출됩니다.</p>" +
       '<p class="muted" style="font-size:12.5px;">※ 점수는 정답률을 100~1000점 구간으로 환산한 학습용 근사치이며, AWS의 실제 채점(문항 난이도 가중) 알고리즘과는 다를 수 있습니다.</p>' +
