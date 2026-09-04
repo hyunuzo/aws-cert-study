@@ -6,7 +6,7 @@
   var LANG_KEY = "awsStudyApp.lang.v1";
 
   // 개념학습이 있는 자격증 세션과, 문제만 있는 문제은행(kind: "bank") 세션을 함께 다룬다.
-  var CERTS = ["clf", "saa", "soa", "soapt", "soadump"];
+  var CERTS = ["clf", "saa", "soa", "soapt"];
 
   var progress = loadProgress();
   var session = null; // active quiz/exam session
@@ -19,16 +19,6 @@
   // 문제은행 세션에는 개념학습·서비스 사전이 없고, 도메인 자리에 연습시험 세트가 들어간다.
   function isBank(cert) {
     return data(cert).kind === "bank";
-  }
-
-  // 문제은행이라고 다 해설이 없는 것은 아니다. 안내 문구를 데이터에 맞춘다.
-  function hasExplanations(cert) {
-    return !isBank(cert) || !!data(cert).hasExplanations;
-  }
-
-  // 문제은행의 도메인 자리에 들어가는 묶음의 이름(연습시험 '세트' / 번호 '구간').
-  function domainNoun(cert) {
-    return data(cert).domainNoun || "세트";
   }
 
   // ---------- 표시 언어 ----------
@@ -225,6 +215,10 @@
     } else if (parts[0] === "glossary") {
       crumb.textContent = "서비스 사전";
       html = viewAllGlossary();
+    } else if (parts[0] === "soatool") {
+      // 별도 도구를 옮겨온 화면. 자격증 데이터와 무관해서 CERTS 라우팅을 타지 않는다.
+      crumb.textContent = "SOA-C03 상황실";
+      html = viewTool();
     } else if (parts[0] === "omr") {
       // 답안지는 개념·문항 데이터가 없는 별도 화면이라 CERTS 라우팅을 타지 않는다.
       if (parts[1] && !omrSet(parts[1])) {
@@ -303,6 +297,7 @@
     var section = parts[1];
     if (cert === "glossary") bindAllGlossary();
     if (cert === "omr" && section) bindOmrSheet(section);
+    if (cert === "soatool") bindTool();
     if (CERTS.indexOf(cert) !== -1 && section === "glossary") bindGlossary(cert);
     if (cert && section === "exam" && session && session.kind === "exam" && session.cert === cert && session.phase === "active") {
       startExamTimer();
@@ -356,7 +351,7 @@
         '<span class="code">' + d.code + "</span>" +
         "<h2>" + esc(d.name) + "</h2>" +
         (bank
-          ? "<p>" + esc(d.blurb || "연습시험 세트 " + d.domains.length + "개 · 문항 " + d.questions.length + "개 · 실전 기출 유형") + "</p>"
+          ? "<p>연습시험 세트 " + d.domains.length + "개 · 문항 " + d.questions.length + "개 · 실전 기출 유형</p>"
           : "<p>도메인 " + d.domains.length + "개 · 개념 " + total + "개 · 연습문제 " + d.questions.length + "개</p>") +
         '<div class="progress-row"><div class="progress-bar"><span style="width:' + pct + '%"></span></div><div class="progress-label">' + pct + (bank ? "% 풀이" : "% 학습") + "</div></div>" +
         (lastExam
@@ -368,8 +363,12 @@
 
     return (
       "<h1>AWS 스터디</h1>" +
-      '<p class="muted">Cloud Practitioner, Solutions Architect - Associate, CloudOps Engineer - Associate 시험을 위한 개념 학습, 퀴즈, 모의고사 도구입니다. 뒤쪽 두 세션은 개념 없이 실전 문제만 모은 별도 문제은행입니다. 모든 진행 상황은 이 브라우저에 저장됩니다.</p>' +
+      '<p class="muted">Cloud Practitioner, Solutions Architect - Associate, CloudOps Engineer - Associate 시험을 위한 개념 학습, 퀴즈, 모의고사 도구입니다. 마지막 세션은 개념 없이 실전 문제만 모은 별도 문제은행입니다. 모든 진행 상황은 이 브라우저에 저장됩니다.</p>' +
       '<div class="cert-cards">' + cards + "</div>" +
+      '<a class="home-link" href="#/soatool">' +
+      "<div><b>SOA-C03 상황실</b><p>덤프 " + toolMax() + "문항을 범위·순서 섞기 옵션으로 풀고 바로 해설을 확인합니다</p></div>" +
+      '<span class="arrow">→</span>' +
+      "</a>" +
       '<a class="home-link" href="#/omr">' +
       "<div><b>실전 문제 풀이 답안지</b><p>강의자료 PDF ‘실전 문제 풀이 1~20’(" + window.APP_OMR.totalQuestions + "문항)을 풀고 마킹하면 자동 채점합니다</p></div>" +
       '<span class="arrow">→</span>' +
@@ -417,7 +416,7 @@
       '<div class="stat"><div class="n">' + qHist.length + '</div><div class="l">' + (bank ? "진행한 풀이 세션" : "응시한 퀴즈 세션") + "</div></div>" +
       '<div class="stat"><div class="n">' + (lastExam ? lastExam.scaledScore : "-") + '</div><div class="l">최근 모의고사 점수</div></div>' +
       "</div></div>" +
-      '<div class="card"><h3 class="mt-0">' + (bank ? domainNoun(cert) + "별 정답률" : "도메인별 정답률") + '</h3><div class="domain-bars">' + bars + "</div></div>" +
+      '<div class="card"><h3 class="mt-0">' + (bank ? "세트별 정답률" : "도메인별 정답률") + '</h3><div class="domain-bars">' + bars + "</div></div>" +
       "</div>" +
       '<hr class="sep">' +
       '<div class="grid-2">' +
@@ -572,7 +571,7 @@
           '<p class="muted" style="margin:8px 0 0;font-size:12.5px;">원문은 영어입니다. 한국어는 기계적 직역이 아닌 의역이며, AWS 서비스명·리소스명·코드는 원문 표기를 유지합니다. 풀이 중에도 언제든 바꿀 수 있습니다.</p></div>'
         : "") +
       '<p class="muted" style="margin-top:14px;">' +
-      (bank && !hasExplanations(cert)
+      (bank
         ? "제출하면 바로 정답을 확인할 수 있습니다. 이 문제은행은 원본 자료에 해설이 없어 정답만 표시됩니다."
         : "즉시 정답과 해설을 확인할 수 있는 학습용 퀴즈입니다. 실전처럼 풀고 싶다면 모의고사를 이용하세요.") +
       "</p>" +
@@ -773,7 +772,7 @@
       "</div>" +
       '<p class="muted" style="margin-top:14px;">' +
       (isBank(cert)
-        ? "문항은 " + d.domains.length + "개 " + domainNoun(cert) + "에서 문항 수 비율대로 무작위 추출됩니다."
+        ? "문항은 " + d.domains.length + "개 연습시험 세트에서 문항 수 비율대로 무작위 추출됩니다."
         : "문항은 실제 시험처럼 도메인 가중치에 비례하여 무작위로 출제됩니다.") +
       " 제출 전까지는 정답을 알려주지 않으며, 시간이 다 되면 자동으로 제출됩니다.</p>" +
       '<p class="muted" style="font-size:12.5px;">※ 점수는 정답률을 100~1000점 구간으로 환산한 학습용 근사치이며, AWS의 실제 채점(문항 난이도 가중) 알고리즘과는 다를 수 있습니다.</p>' +
@@ -1329,6 +1328,378 @@
     render();
   }
 
+  // ---------- SOA-C03 상황실 ----------
+  // 별도로 받은 SOA-C03_문제풀이_툴.html 의 화면과 조작을 그대로 옮겨온 독립 화면.
+  // 자격증 세션(CERTS)과는 아무것도 공유하지 않는다. 원본처럼 진행 상황을 저장하지 않으므로
+  // 새로고침하면 초기화된다. 보기 문자(A~F)는 데이터의 것을 쓰되, '보기 순서 섞기'를 켜면
+  // 원본과 똑같이 표시 위치 기준으로 다시 매긴다.
+  var toolOpts = { start: 1, end: 20, shuffleQ: false, shuffleO: false };
+  var toolRun = null; // { questions, answers, index, status, phase }
+
+  function toolData() { return window.SOA_TOOL || { questions: [] }; }
+  function toolMax() { return toolData().questions.length; }
+
+  function toolClamp(v, lo, hi, fallback) {
+    var n = parseInt(v, 10);
+    if (isNaN(n)) return fallback;
+    return Math.min(hi, Math.max(lo, n));
+  }
+
+  // 화면의 범위 입력값을 상태로 거둬들인다. 어떤 버튼을 누르든 먼저 호출해서
+  // 다시 그릴 때 사용자가 타이핑한 값이 날아가지 않게 한다.
+  function toolSyncRange() {
+    var a = document.getElementById("tool-start");
+    var b = document.getElementById("tool-end");
+    if (!a || !b) return;
+    var s = toolClamp(a.value, 1, toolMax(), 1);
+    var e = toolClamp(b.value, 1, toolMax(), toolMax());
+    if (s > e) { var t = s; s = e; e = t; }
+    toolOpts.start = s;
+    toolOpts.end = e;
+  }
+
+  function sameLetters(a, b) {
+    if (a.length !== b.length) return false;
+    return b.every(function (l) { return a.indexOf(l) !== -1; });
+  }
+
+  function pad3(n) { return (n < 100 ? (n < 10 ? "00" : "0") : "") + n; }
+
+  function scrollTopSmooth() {
+    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) { window.scrollTo(0, 0); }
+  }
+
+  // 원본과 같은 준비 절차: 문제를 섞고, 보기를 섞고, 표시 순서대로 A/B/C… 를 다시 붙인다.
+  function toolPrepare(base) {
+    var pool = toolOpts.shuffleQ ? shuffle(base) : base.slice();
+    return pool.map(function (q) {
+      var opts = Object.keys(q.options).sort().map(function (k) {
+        return { text: q.options[k], correct: q.answer.indexOf(k) !== -1 };
+      });
+      if (toolOpts.shuffleO) opts = shuffle(opts);
+      opts.forEach(function (o, i) { o.letter = String.fromCharCode(65 + i); });
+      return { num: q.num, question: q.question, explanation: q.explanation, need: q.answer.length, options: opts };
+    });
+  }
+
+  function toolBegin(base, status) {
+    toolRun = {
+      questions: toolPrepare(base),
+      answers: base.map(function () { return { selected: [], checked: false, correct: false }; }),
+      index: 0,
+      status: status,
+      phase: "quiz"
+    };
+  }
+
+  function toolCorrectLetters(q) {
+    return q.options.filter(function (o) { return o.correct; }).map(function (o) { return o.letter; });
+  }
+
+  // 정답을 확인하지 않고 다른 문제로 넘어가면 원본처럼 그 자리에서 자동 채점한다.
+  function toolAutoGrade(i) {
+    if (!toolRun || i < 0 || i >= toolRun.questions.length) return;
+    var st = toolRun.answers[i];
+    if (st.checked) return;
+    st.checked = true;
+    st.correct = sameLetters(st.selected, toolCorrectLetters(toolRun.questions[i]));
+  }
+
+  function toolScore() {
+    var c = 0, w = 0;
+    toolRun.answers.forEach(function (a) { if (a.checked) { if (a.correct) c++; else w++; } });
+    return { correct: c, wrong: w };
+  }
+
+  function toolStatusbar(text) {
+    return '<div class="tool-statusbar"><span class="tool-dot"></span><span>' + esc(text) +
+      '</span><span class="tool-fill"></span><span>SOA-C03</span></div>';
+  }
+
+  // ---------- 설정 화면 ----------
+  function viewToolSetup() {
+    var d = toolData();
+    var max = toolMax();
+    function toggle(opt, on, title, sub) {
+      return '<button type="button" class="tool-toggle' + (on ? " on" : "") + '" data-action="tool-toggle" data-opt="' + opt + '">' +
+        '<span class="tool-switch"></span><span class="tool-tlabel">' + title + "<small>" + sub + "</small></span></button>";
+    }
+    return (
+      toolStatusbar("SESSION IDLE · " + max + " QUESTIONS LOADED") +
+      "<h1>AWS " + esc(d.title || "SOA-C03 상황실") + "</h1>" +
+      '<p class="muted">' + esc(d.subtitle || "") + "</p>" +
+      '<div class="card">' +
+      '<label class="field">문제 범위</label>' +
+      '<div class="tool-range">' +
+      '<input type="number" id="tool-start" class="tool-num" min="1" max="' + max + '" value="' + toolOpts.start + '">' +
+      '<span class="tool-tilde">~</span>' +
+      '<input type="number" id="tool-end" class="tool-num" min="1" max="' + max + '" value="' + toolOpts.end + '">' +
+      '<span class="tool-count" id="tool-count">' + (toolOpts.end - toolOpts.start + 1) + "문제</span>" +
+      "</div>" +
+      '<div class="tool-btnrow">' +
+      [10, 20, 30, 50].map(function (n) {
+        return '<button class="btn ghost small" data-action="tool-block" data-size="' + n + '">' + n + "개씩</button>";
+      }).join("") +
+      '<button class="btn ghost small" data-action="tool-all">전체 ' + max + "</button>" +
+      "</div>" +
+      '<div class="tool-btnrow">' +
+      '<button class="btn secondary small" data-action="tool-shift" data-dir="-1">◀ 이전 구간</button>' +
+      '<button class="btn secondary small" data-action="tool-shift" data-dir="1">다음 구간 ▶</button>' +
+      "</div>" +
+      '<label class="field tool-field2">섞기 옵션</label>' +
+      '<div class="tool-toggles">' +
+      toggle("q", toolOpts.shuffleQ, "문제 순서 섞기", "매번 다른 순서로 출제") +
+      toggle("o", toolOpts.shuffleO, "보기 순서 섞기", "A/B/C/D 위치를 매번 재배치") +
+      "</div>" +
+      '<button class="btn tool-go" data-action="tool-run">세션 시작 →</button>' +
+      "</div>" +
+      '<p class="muted tool-note">데이터는 세션 동안만 메모리에 유지됩니다 · 새로고침 시 초기화<br>출처: ' + esc(d.source || "") + "</p>"
+    );
+  }
+
+  // ---------- 풀이 화면 ----------
+  function toolLedsHtml() {
+    return toolRun.questions.map(function (_, i) {
+      var a = toolRun.answers[i];
+      var cls = "tool-led";
+      if (a.checked) cls += a.correct ? " correct" : " wrong";
+      if (i === toolRun.index) cls += " current";
+      return '<button type="button" class="' + cls + '" data-action="tool-goto" data-idx="' + i +
+        '" title="Q' + pad3(i + 1) + '으로 이동"></button>';
+    }).join("");
+  }
+
+  function toolMainHtml() {
+    var q = toolRun.questions[toolRun.index];
+    var st = toolRun.answers[toolRun.index];
+    var sc = toolScore();
+    var last = toolRun.index === toolRun.questions.length - 1;
+
+    var opts = q.options.map(function (o) {
+      var cls = "tool-opt";
+      if (st.checked) {
+        cls += " locked";
+        if (o.correct) cls += " correct";
+        else if (st.selected.indexOf(o.letter) !== -1) cls += " incorrect";
+      } else if (st.selected.indexOf(o.letter) !== -1) {
+        cls += " selected";
+      }
+      return '<button type="button" class="' + cls + '" data-action="tool-select" data-letter="' + o.letter + '"' +
+        (st.checked ? " disabled" : "") + '><span class="tool-mark">' + o.letter + "</span>" +
+        '<span class="tool-otext">' + esc(o.text) + "</span></button>";
+    }).join("");
+
+    var banner = st.checked
+      ? '<div class="tool-banner ' + (st.correct ? "good" : "bad") + '">' +
+        (st.correct ? "정답입니다 ✓" : "오답입니다 · 정답: " + toolCorrectLetters(q).sort().join(", ")) + "</div>"
+      : "";
+
+    return (
+      '<div class="tool-qmeta"><span class="tool-qnum">Q' + pad3(toolRun.index + 1) + " / " + toolRun.questions.length +
+      "  (원문 #" + q.num + ')</span><span class="tool-qscore">정답 ' + sc.correct + " · 오답 " + sc.wrong + "</span></div>" +
+      '<div class="tool-qtext">' + esc(q.question) + "</div>" +
+      '<div class="tool-hint">' + (q.need > 1 ? "정답을 " + q.need + "개 선택하세요." : "정답을 1개 선택하세요.") +
+      "   [숫자키 1-" + q.options.length + " 선택 · Enter 확인/다음 · ← → 이전/다음 문제]</div>" +
+      '<div class="tool-optlist">' + opts + "</div>" +
+      banner +
+      '<div class="tool-actions">' +
+      '<button class="btn ghost" data-action="tool-quit">종료하고 결과 보기</button>' +
+      (st.checked ? "" : '<button class="btn" data-action="tool-check"' + (st.selected.length ? "" : " disabled") + ">정답 확인</button>") +
+      '<button class="btn" data-action="tool-next">' + (last ? "결과 보기 →" : "다음 문제 →") + "</button>" +
+      "</div>"
+    );
+  }
+
+  function toolExplainHtml() {
+    var st = toolRun.answers[toolRun.index];
+    if (!st.checked) return '<p class="tool-placeholder">정답을 확인하면 여기에 해설이 표시됩니다.</p>';
+    return '<div class="tool-explain">' + esc(toolRun.questions[toolRun.index].explanation || "(해설 없음)") + "</div>";
+  }
+
+  function viewToolQuiz() {
+    return (
+      toolStatusbar(toolRun.status) +
+      '<div class="tool-ledstrip" id="tool-leds">' + toolLedsHtml() + "</div>" +
+      '<div class="tool-grid">' +
+      '<div class="card tool-main" id="tool-main">' + toolMainHtml() + "</div>" +
+      '<div class="card tool-side"><span class="field">해설</span><div id="tool-explain">' + toolExplainHtml() + "</div></div>" +
+      "</div>"
+    );
+  }
+
+  // 보기 선택·채점은 화면을 통째로 다시 그리지 않는다. 원본처럼 스크롤 위치를 건드리지 않기 위해서다.
+  function repaintTool() {
+    var main = document.getElementById("tool-main");
+    var leds = document.getElementById("tool-leds");
+    var exp = document.getElementById("tool-explain");
+    if (!main || !leds || !exp) { render(); return; }
+    main.innerHTML = toolMainHtml();
+    leds.innerHTML = toolLedsHtml();
+    exp.innerHTML = toolExplainHtml();
+  }
+
+  function toolSelect(letter) {
+    var q = toolRun.questions[toolRun.index];
+    var st = toolRun.answers[toolRun.index];
+    if (st.checked) return;
+    if (q.need === 1) st.selected = [letter];
+    else {
+      var pos = st.selected.indexOf(letter);
+      st.selected = pos === -1 ? st.selected.concat([letter]) : st.selected.filter(function (l) { return l !== letter; });
+    }
+    repaintTool();
+  }
+
+  function toolCheck() {
+    var st = toolRun.answers[toolRun.index];
+    if (st.checked || !st.selected.length) return;
+    st.checked = true;
+    st.correct = sameLetters(st.selected, toolCorrectLetters(toolRun.questions[toolRun.index]));
+    repaintTool();
+  }
+
+  function toolGoto(i) {
+    if (i < 0 || i >= toolRun.questions.length || i === toolRun.index) return;
+    toolAutoGrade(toolRun.index);
+    toolRun.index = i;
+    repaintTool();
+    scrollTopSmooth();
+  }
+
+  function toolAdvance() {
+    toolAutoGrade(toolRun.index);
+    if (toolRun.index < toolRun.questions.length - 1) {
+      toolRun.index++;
+      repaintTool();
+      scrollTopSmooth();
+    } else {
+      toolFinish();
+    }
+  }
+
+  function toolFinish() {
+    var sc = toolScore();
+    var done = sc.correct + sc.wrong;
+    toolRun.status = "SESSION COMPLETE · " + (done ? Math.round((sc.correct / done) * 100) : 0) +
+      "% · " + sc.correct + "/" + done;
+    toolRun.phase = "results";
+    render();
+  }
+
+  // ---------- 결과 화면 ----------
+  function toolWrongNums() {
+    return toolRun.questions.filter(function (_, i) {
+      return toolRun.answers[i].checked && !toolRun.answers[i].correct;
+    }).map(function (q) { return q.num; });
+  }
+
+  function viewToolResults() {
+    var sc = toolScore();
+    var done = sc.correct + sc.wrong;
+    var pct = done ? Math.round((sc.correct / done) * 100) : 0;
+    var wrong = toolWrongNums();
+    return (
+      toolStatusbar(toolRun.status) +
+      '<div class="card tool-hero"><div class="tool-pct">' + pct + '%</div><div class="tool-frac">' +
+      sc.correct + " / " + done + " 정답 (미응답 " + (toolRun.questions.length - done) + ")</div></div>" +
+      '<div class="card"><span class="field">틀린 문제</span>' +
+      (wrong.length
+        ? '<div class="tool-wronglist">' + wrong.map(function (n) { return '<span class="tool-wtag">#' + n + "</span>"; }).join("") + "</div>"
+        : '<p class="muted tool-none">틀린 문제가 없습니다.</p>') +
+      "</div>" +
+      '<div class="tool-btnrow tool-btnrow-end">' +
+      '<button class="btn" data-action="tool-retry-wrong"' + (wrong.length ? "" : " disabled") + ">틀린 문제만 다시 풀기</button>" +
+      '<button class="btn secondary" data-action="tool-restart">처음부터 다시</button>' +
+      "</div>"
+    );
+  }
+
+  function viewTool() {
+    if (!toolMax()) return '<h1>SOA-C03 상황실</h1><p class="muted">문항 데이터를 불러오지 못했습니다.</p>';
+    if (!toolRun) return viewToolSetup();
+    return toolRun.phase === "results" ? viewToolResults() : viewToolQuiz();
+  }
+
+  // 범위 입력은 타이핑하는 동안 문제 수를 바로 보여준다.
+  function bindTool() {
+    var a = document.getElementById("tool-start");
+    var b = document.getElementById("tool-end");
+    var out = document.getElementById("tool-count");
+    if (!a || !b || !out) return;
+    function live() {
+      var s = parseInt(a.value, 10), e = parseInt(b.value, 10);
+      out.textContent = (!isNaN(s) && !isNaN(e) && e >= s) ? (e - s + 1) + "문제" : "";
+    }
+    a.addEventListener("input", live);
+    b.addEventListener("input", live);
+  }
+
+  // ---------- 설정 화면 조작 ----------
+  function toolSetBlock(size) {
+    toolSyncRange();
+    toolOpts.end = Math.min(toolMax(), toolOpts.start + size - 1);
+    render();
+  }
+
+  function toolShiftBlock(dir) {
+    toolSyncRange();
+    var size = toolOpts.end - toolOpts.start + 1;
+    var max = toolMax();
+    if (dir > 0) {
+      var s = toolOpts.end + 1;
+      if (s > max) s = 1; // 끝까지 갔으면 처음으로 돌아온다
+      toolOpts.start = s;
+      toolOpts.end = Math.min(max, s + size - 1);
+    } else {
+      var e = toolOpts.start - 1;
+      if (e < 1) e = max; // 처음보다 앞이면 끝으로 감싼다
+      toolOpts.end = e;
+      toolOpts.start = Math.max(1, e - size + 1);
+    }
+    render();
+  }
+
+  function toolRunSession() {
+    toolSyncRange();
+    var base = toolData().questions.filter(function (q) {
+      return q.num >= toolOpts.start && q.num <= toolOpts.end;
+    });
+    if (!base.length) return;
+    toolBegin(base, "SESSION ACTIVE · #" + toolOpts.start + "–#" + toolOpts.end + " (" + base.length + " QUESTIONS)");
+    render();
+  }
+
+  function toolRetryWrong() {
+    var nums = toolWrongNums();
+    if (!nums.length) return;
+    var base = toolData().questions.filter(function (q) { return nums.indexOf(q.num) !== -1; });
+    toolBegin(base, "RETRY MODE · " + base.length + " WRONG QUESTIONS");
+    render();
+  }
+
+  // ---------- 키보드 단축키(풀이 화면에서만) ----------
+  document.addEventListener("keydown", function (e) {
+    if (!toolRun || toolRun.phase !== "quiz") return;
+    if (parseHash()[0] !== "soatool") return;
+    var tag = (e.target && e.target.tagName) || "";
+    if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+    if (e.key >= "1" && e.key <= "6") {
+      var opts = toolRun.questions[toolRun.index].options;
+      var idx = parseInt(e.key, 10) - 1;
+      if (idx < opts.length) { e.preventDefault(); toolSelect(opts[idx].letter); }
+      return;
+    }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      if (toolRun.answers[toolRun.index].checked) toolAdvance();
+      else toolCheck();
+      return;
+    }
+    if (e.key === "ArrowRight") { e.preventDefault(); toolAdvance(); return; }
+    if (e.key === "ArrowLeft") { e.preventDefault(); toolGoto(toolRun.index - 1); }
+  });
+
   // ---------- theme ----------
   function initTheme() {
     var saved = localStorage.getItem(THEME_KEY);
@@ -1386,6 +1757,23 @@
       }
       case "exam-submit": submitExam(cert, false); break;
       case "exam-restart": session = null; render(); break;
+      case "tool-block": toolSetBlock(parseInt(el.getAttribute("data-size"), 10)); break;
+      case "tool-all": toolSyncRange(); toolOpts.start = 1; toolOpts.end = toolMax(); render(); break;
+      case "tool-shift": toolShiftBlock(parseInt(el.getAttribute("data-dir"), 10)); break;
+      case "tool-toggle":
+        toolSyncRange();
+        if (el.getAttribute("data-opt") === "q") toolOpts.shuffleQ = !toolOpts.shuffleQ;
+        else toolOpts.shuffleO = !toolOpts.shuffleO;
+        render();
+        break;
+      case "tool-run": toolRunSession(); break;
+      case "tool-select": toolSelect(el.getAttribute("data-letter")); break;
+      case "tool-check": toolCheck(); break;
+      case "tool-next": toolAdvance(); break;
+      case "tool-goto": toolGoto(parseInt(el.getAttribute("data-idx"), 10)); break;
+      case "tool-quit": toolAutoGrade(toolRun.index); toolFinish(); break;
+      case "tool-retry-wrong": toolRetryWrong(); break;
+      case "tool-restart": toolRun = null; render(); break;
       case "omr-submit": submitOmr(parts[1]); break;
       case "omr-retry": retryOmr(parts[1]); break;
       case "omr-clear": clearOmrMarks(parts[1]); break;

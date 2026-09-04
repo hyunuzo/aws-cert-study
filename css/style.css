@@ -504,3 +504,121 @@ hr.sep { border:none; border-top:1px solid var(--border); margin: 20px 0; }
   .omr-num { width: 22px; }
   .omr-bubble { width: 30px; height: 30px; }
 }
+
+/* ---------- SOA-C03 상황실 (#/soatool) ---------- */
+/* 원본 도구의 화면 구성을 그대로 옮기되, 색은 전부 앱 테마 변수를 쓴다. */
+.tool-statusbar {
+  display:flex; align-items:center; gap:8px; margin-bottom:18px;
+  padding:8px 12px; border:1px solid var(--border); border-radius:8px;
+  background: var(--bg-elev); color: var(--muted);
+  font-size:12px; font-weight:700; letter-spacing:.04em;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.tool-dot { width:8px; height:8px; border-radius:50%; background: var(--accent); flex-shrink:0; }
+.tool-fill { flex:1; }
+.tool-note { font-size:12.5px; margin-top:14px; }
+
+/* 설정 화면 */
+.tool-range { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+.tool-num {
+  width:96px; padding:9px 12px; font-size:15px; font-weight:700;
+  border:1px solid var(--border); border-radius:8px;
+  background: var(--bg); color: var(--fg);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.tool-tilde { color: var(--muted); font-weight:700; }
+.tool-count { color: var(--muted); font-size:13px; font-weight:600; }
+.tool-btnrow { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:8px; }
+.tool-btnrow-end { margin:18px 0 0; }
+.tool-field2 { margin-top:18px; }
+.tool-go { margin-top:18px; width:100%; }
+.tool-toggles { display:flex; gap:10px; flex-wrap:wrap; }
+.tool-toggle {
+  flex:1; min-width:220px; display:flex; align-items:center; gap:10px; text-align:left;
+  padding:12px 14px; border:1px solid var(--border); border-radius:10px;
+  background: var(--bg); color: var(--fg); cursor:pointer; font:inherit;
+}
+.tool-toggle:hover { border-color: var(--accent); }
+.tool-switch {
+  width:38px; height:22px; border-radius:11px; flex-shrink:0; position:relative;
+  background: var(--border); transition: background .15s;
+}
+.tool-switch::after {
+  content:""; position:absolute; top:3px; left:3px; width:16px; height:16px;
+  border-radius:50%; background: var(--bg-elev); transition: transform .15s;
+}
+.tool-toggle.on { border-color: var(--accent); }
+.tool-toggle.on .tool-switch { background: var(--accent); }
+.tool-toggle.on .tool-switch::after { transform: translateX(16px); }
+.tool-tlabel { font-size:14px; font-weight:600; line-height:1.35; }
+.tool-tlabel small { display:block; font-weight:400; font-size:12px; color: var(--muted); }
+
+/* LED 진행 표시 */
+.tool-ledstrip {
+  display:flex; flex-wrap:wrap; gap:3px; margin-bottom:18px;
+  padding:8px 10px; border:1px solid var(--border); border-radius:8px; background: var(--bg-elev);
+}
+.tool-led {
+  width:8px; height:14px; padding:0; border:none; border-radius:2px; flex:none; cursor:pointer;
+  background: var(--border); transition: background .15s, transform .15s;
+}
+.tool-led:hover { transform: scaleY(1.2); }
+.tool-led.correct { background: var(--success); }
+.tool-led.wrong { background: var(--danger); }
+.tool-led.current { background: var(--accent); transform: scaleY(1.15); }
+
+/* 풀이 화면 */
+.tool-grid { display:grid; grid-template-columns: minmax(0,1fr) 320px; gap:18px; align-items:start; }
+.tool-qmeta {
+  display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+  font-size:12.5px; font-weight:700; color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.tool-qtext { font-size:16px; font-weight:600; margin:12px 0 8px; white-space: pre-wrap; word-break: keep-all; }
+.tool-hint { font-size:12.5px; color: var(--muted); margin-bottom:14px; white-space: pre-wrap; }
+.tool-optlist { display:flex; flex-direction:column; gap:10px; }
+.tool-opt {
+  display:flex; align-items:flex-start; gap:12px; text-align:left; width:100%;
+  padding:12px 14px; border:1px solid var(--border); border-radius:10px;
+  background: var(--bg-elev); color: var(--fg); cursor:pointer; font:inherit; line-height:1.55;
+}
+.tool-opt:hover:not(.locked) { border-color: var(--accent); }
+.tool-opt .tool-mark {
+  width:24px; height:24px; flex-shrink:0; border-radius:6px; border:1px solid var(--border);
+  display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700; color: var(--muted); background: var(--bg);
+}
+.tool-otext { flex:1; min-width:0; word-break: keep-all; }
+.tool-opt.selected { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 12%, var(--bg-elev)); }
+.tool-opt.selected .tool-mark { background: var(--accent); border-color: var(--accent); color: var(--accent-fg); }
+.tool-opt.locked { cursor:default; }
+.tool-opt.correct { border-color: var(--success); background: var(--success-bg); }
+.tool-opt.correct .tool-mark { background: var(--success); border-color: var(--success); color:#fff; }
+.tool-opt.incorrect { border-color: var(--danger); background: var(--danger-bg); }
+.tool-opt.incorrect .tool-mark { background: var(--danger); border-color: var(--danger); color:#fff; }
+.tool-banner {
+  margin-top:16px; padding:12px 14px; border-radius:10px; font-weight:700; font-size:14px;
+}
+.tool-banner.good { background: var(--success-bg); color: var(--success); }
+.tool-banner.bad { background: var(--danger-bg); color: var(--danger); }
+.tool-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; margin-top:18px; }
+.tool-side { position: sticky; top:76px; }
+.tool-placeholder { color: var(--muted); font-size:13px; margin:8px 0 0; }
+.tool-explain { font-size:13.5px; line-height:1.7; margin-top:8px; white-space: pre-wrap; word-break: keep-all; }
+
+/* 결과 화면 */
+.tool-hero { text-align:center; padding:28px 20px; }
+.tool-pct { font-size:52px; font-weight:800; line-height:1.1; color: var(--accent); }
+.tool-frac { color: var(--muted); font-size:14px; margin-top:6px; }
+.tool-wronglist { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+.tool-wtag {
+  padding:4px 9px; border-radius:6px; font-size:12.5px; font-weight:700;
+  background: var(--danger-bg); color: var(--danger);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.tool-none { margin:8px 0 0; font-size:13px; }
+
+@media (max-width: 900px) {
+  .tool-grid { grid-template-columns: 1fr; }
+  .tool-side { position: static; }
+}
