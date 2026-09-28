@@ -1530,7 +1530,6 @@
   function toolMainHtml() {
     var q = toolRun.questions[toolRun.index];
     var st = toolRun.answers[toolRun.index];
-    var sc = toolScore();
     var last = toolRun.index === toolRun.questions.length - 1;
 
     var opts = q.options.map(function (o) {
@@ -1554,7 +1553,7 @@
 
     return (
       '<div class="tool-qmeta"><span class="tool-qnum">Q' + pad3(toolRun.index + 1) + " / " + toolRun.questions.length +
-      "  (원문 #" + q.num + ')</span><span class="tool-qscore">정답 ' + sc.correct + " · 오답 " + sc.wrong + "</span></div>" +
+      "  (원문 #" + q.num + ")</span></div>" +
       '<div class="tool-qtext">' + esc(q.question) + "</div>" +
       '<div class="tool-hint">' + (q.need > 1 ? "정답을 " + q.need + "개 선택하세요." : "정답을 1개 선택하세요.") +
       "   [숫자키 1-" + q.options.length + " 선택 · Enter 확인/다음 · ← → 이전/다음 문제]</div>" +
