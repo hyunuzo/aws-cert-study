@@ -297,7 +297,10 @@
     var section = parts[1];
     if (cert === "glossary") bindAllGlossary();
     if (cert === "omr" && section) bindOmrSheet(section);
-    if (cert === "soatool") bindTool();
+    if (cert === "soatool") {
+      bindTool();
+      if (toolRun && toolRun.mode === "exam" && toolRun.phase === "quiz") startToolExamTimer();
+    }
     if (CERTS.indexOf(cert) !== -1 && section === "glossary") bindGlossary(cert);
     if (cert && section === "exam" && session && session.kind === "exam" && session.cert === cert && session.phase === "active") {
       startExamTimer();
@@ -366,7 +369,8 @@
       '<p class="muted">Cloud Practitioner, Solutions Architect - Associate, CloudOps Engineer - Associate 시험을 위한 개념 학습, 퀴즈, 모의고사 도구입니다. 마지막 세션은 개념 없이 실전 문제만 모은 별도 문제은행입니다. 모든 진행 상황은 이 브라우저에 저장됩니다.</p>' +
       '<div class="cert-cards">' + cards + "</div>" +
       '<a class="home-link" href="#/soatool">' +
-      "<div><b>SOA-C03 상황실</b><p>덤프 " + toolMax() + "문항을 범위·순서 섞기 옵션으로 풀고 바로 해설을 확인합니다</p></div>" +
+      "<div><b>SOA-C03 상황실</b><p>덤프 " + toolMax() + "문항을 범위·섞기 옵션으로 풀거나, " +
+      TOOL_EXAM.count + "문항 " + TOOL_EXAM.minutes + "분 모의고사로 실전처럼 응시합니다</p></div>" +
       '<span class="arrow">→</span>' +
       "</a>" +
       '<a class="home-link" href="#/omr">' +
@@ -1334,7 +1338,11 @@
   // 새로고침하면 초기화된다. 보기 문자(A~F)는 데이터의 것을 쓰되, '보기 순서 섞기'를 켜면
   // 원본과 똑같이 표시 위치 기준으로 다시 매긴다.
   var toolOpts = { start: 1, end: 20, shuffleQ: false, shuffleO: false };
-  var toolRun = null; // { questions, answers, index, status, phase }
+  var toolMode = "practice"; // 설정 화면에서 고르는 모드: practice | exam
+  var toolRun = null; // { mode, questions, answers, index, status, phase }
+
+  // 실제 SOA-C03 시험과 같은 구성. 전체 문제 풀에서 매번 새로 뽑는다.
+  var TOOL_EXAM = { count: 65, minutes: 130, passScore: 720, maxScore: 1000 };
 
   function toolData() { return window.SOA_TOOL || { questions: [] }; }
   function toolMax() { return toolData().questions.length; }
@@ -1384,6 +1392,7 @@
 
   function toolBegin(base, status) {
     toolRun = {
+      mode: "practice",
       questions: toolPrepare(base),
       answers: base.map(function () { return { selected: [], checked: false, correct: false }; }),
       index: 0,
@@ -1398,7 +1407,8 @@
 
   // 정답을 확인하지 않고 다른 문제로 넘어가면 원본처럼 그 자리에서 자동 채점한다.
   function toolAutoGrade(i) {
-    if (!toolRun || i < 0 || i >= toolRun.questions.length) return;
+    if (!toolRun || toolRun.mode === "exam") return; // 모의고사는 제출할 때 한 번에 채점한다
+    if (i < 0 || i >= toolRun.questions.length) return;
     var st = toolRun.answers[i];
     if (st.checked) return;
     st.checked = true;
@@ -1417,17 +1427,61 @@
   }
 
   // ---------- 설정 화면 ----------
+  function toolToggleBtn(opt, on, title, sub) {
+    return '<button type="button" class="tool-toggle' + (on ? " on" : "") + '" data-action="tool-toggle" data-opt="' + opt + '">' +
+      '<span class="tool-switch"></span><span class="tool-tlabel">' + title + "<small>" + sub + "</small></span></button>";
+  }
+
+  function toolModeTabs() {
+    var items = [
+      ["practice", "연습 세션", "범위를 골라 풀고 바로 해설 확인"],
+      ["exam", "모의고사", TOOL_EXAM.count + "문항 · " + TOOL_EXAM.minutes + "분 실전 모드"]
+    ];
+    return '<div class="tool-modes">' + items.map(function (it) {
+      return '<button type="button" class="tool-mode' + (toolMode === it[0] ? " on" : "") + '" data-action="tool-mode" data-mode="' + it[0] + '">' +
+        "<b>" + it[1] + "</b><small>" + it[2] + "</small></button>";
+    }).join("") + "</div>";
+  }
+
+  // 모의고사 설정: 범위를 고르지 않고 전체 풀에서 무작위로 뽑으므로 안내와 보기 섞기만 둔다.
+  function viewToolExamSetup() {
+    var max = toolMax();
+    var n = Math.min(TOOL_EXAM.count, max);
+    return (
+      '<div class="card">' +
+      '<h3 class="mt-0">실전 모의고사</h3>' +
+      '<div class="stat-row">' +
+      '<div class="stat"><div class="n">' + n + '</div><div class="l">총 문항 수</div></div>' +
+      '<div class="stat"><div class="n">' + TOOL_EXAM.minutes + '분</div><div class="l">제한 시간</div></div>' +
+      '<div class="stat"><div class="n">' + TOOL_EXAM.passScore + " / " + TOOL_EXAM.maxScore + '</div><div class="l">합격 기준 점수</div></div>' +
+      "</div>" +
+      '<p class="muted" style="margin-top:14px;">전체 ' + max + "문항 풀에서 매번 " + n + "문항을 무작위로 뽑습니다. " +
+      "제출하기 전까지는 정답과 해설을 볼 수 없고, 시간이 다 되면 자동으로 제출됩니다.</p>" +
+      '<p class="muted" style="font-size:12.5px;">※ 점수는 정답률을 100~1000점 구간으로 환산한 학습용 근사치이며, AWS의 실제 채점(문항 난이도 가중) 알고리즘과는 다를 수 있습니다.</p>' +
+      '<label class="field tool-field2">섞기 옵션</label>' +
+      '<div class="tool-toggles">' +
+      toolToggleBtn("o", toolOpts.shuffleO, "보기 순서 섞기", "A/B/C/D 위치를 매번 재배치") +
+      "</div>" +
+      '<button class="btn tool-go" data-action="tool-exam-start">모의고사 시작 →</button>' +
+      "</div>"
+    );
+  }
+
   function viewToolSetup() {
     var d = toolData();
     var max = toolMax();
-    function toggle(opt, on, title, sub) {
-      return '<button type="button" class="tool-toggle' + (on ? " on" : "") + '" data-action="tool-toggle" data-opt="' + opt + '">' +
-        '<span class="tool-switch"></span><span class="tool-tlabel">' + title + "<small>" + sub + "</small></span></button>";
-    }
-    return (
+    var head =
       toolStatusbar("SESSION IDLE · " + max + " QUESTIONS LOADED") +
       "<h1>AWS " + esc(d.title || "SOA-C03 상황실") + "</h1>" +
       '<p class="muted">' + esc(d.subtitle || "") + "</p>" +
+      toolModeTabs();
+    var foot = '<p class="muted tool-note">데이터는 세션 동안만 메모리에 유지됩니다 · 새로고침 시 초기화<br>출처: ' + esc(d.source || "") + "</p>";
+    if (toolMode === "exam") return head + viewToolExamSetup() + foot;
+    return head + viewToolPracticeSetup(max) + foot;
+  }
+
+  function viewToolPracticeSetup(max) {
+    return (
       '<div class="card">' +
       '<label class="field">문제 범위</label>' +
       '<div class="tool-range">' +
@@ -1448,21 +1502,25 @@
       "</div>" +
       '<label class="field tool-field2">섞기 옵션</label>' +
       '<div class="tool-toggles">' +
-      toggle("q", toolOpts.shuffleQ, "문제 순서 섞기", "매번 다른 순서로 출제") +
-      toggle("o", toolOpts.shuffleO, "보기 순서 섞기", "A/B/C/D 위치를 매번 재배치") +
+      toolToggleBtn("q", toolOpts.shuffleQ, "문제 순서 섞기", "매번 다른 순서로 출제") +
+      toolToggleBtn("o", toolOpts.shuffleO, "보기 순서 섞기", "A/B/C/D 위치를 매번 재배치") +
       "</div>" +
       '<button class="btn tool-go" data-action="tool-run">세션 시작 →</button>' +
-      "</div>" +
-      '<p class="muted tool-note">데이터는 세션 동안만 메모리에 유지됩니다 · 새로고침 시 초기화<br>출처: ' + esc(d.source || "") + "</p>"
+      "</div>"
     );
   }
 
   // ---------- 풀이 화면 ----------
   function toolLedsHtml() {
+    var exam = toolRun.mode === "exam" && toolRun.phase === "quiz";
     return toolRun.questions.map(function (_, i) {
       var a = toolRun.answers[i];
       var cls = "tool-led";
-      if (a.checked) cls += a.correct ? " correct" : " wrong";
+      if (exam) {
+        // 채점 전이라 정오답을 알려줄 수 없다. 답한 문항과 다시보기 표시만 구분한다.
+        if (a.selected.length) cls += " answered";
+        if (toolRun.flags[i]) cls += " flagged";
+      } else if (a.checked) cls += a.correct ? " correct" : " wrong";
       if (i === toolRun.index) cls += " current";
       return '<button type="button" class="' + cls + '" data-action="tool-goto" data-idx="' + i +
         '" title="Q' + pad3(i + 1) + '으로 이동"></button>';
@@ -1529,6 +1587,7 @@
 
   // 보기 선택·채점은 화면을 통째로 다시 그리지 않는다. 원본처럼 스크롤 위치를 건드리지 않기 위해서다.
   function repaintTool() {
+    if (toolRun && toolRun.mode === "exam") { repaintToolExam(); return; }
     var main = document.getElementById("tool-main");
     var leds = document.getElementById("tool-leds");
     var exp = document.getElementById("tool-explain");
@@ -1572,7 +1631,8 @@
       toolRun.index++;
       repaintTool();
       scrollTopSmooth();
-    } else {
+    } else if (toolRun.mode !== "exam") {
+      // 모의고사는 마지막 문항에서 저절로 끝나지 않는다. 제출 버튼으로만 끝낸다.
       toolFinish();
     }
   }
@@ -1614,9 +1674,200 @@
     );
   }
 
+
+  // ---------- 모의고사 ----------
+  // 실제 시험처럼 전체 문제 풀에서 65문항을 무작위로 뽑아 130분 타이머로 진행한다.
+  // 연습 세션과 달리 제출 전에는 정답·해설을 감추고, 제출할 때 한 번에 채점한다.
+  function toolExamStart() {
+    var pool = toolData().questions;
+    if (!pool.length) return;
+    var n = Math.min(TOOL_EXAM.count, pool.length);
+    var base = shuffle(pool).slice(0, n);
+    toolRun = {
+      mode: "exam",
+      questions: toolPrepare(base),
+      answers: base.map(function () { return { selected: [], checked: false, correct: false }; }),
+      flags: {},
+      index: 0,
+      status: "EXAM ACTIVE · " + n + " QUESTIONS · " + TOOL_EXAM.minutes + " MIN",
+      phase: "quiz",
+      endAt: Date.now() + TOOL_EXAM.minutes * 60 * 1000
+    };
+    render();
+  }
+
+  // 타이머는 화면을 다시 그릴 때마다 afterRender 가 다시 건다. 남은 시간은 endAt 기준이라
+  // 다른 화면에 다녀와도 흘러간 시간이 그대로 반영된다.
+  function startToolExamTimer() {
+    function tick() {
+      var el = document.getElementById("tool-timer");
+      if (!el) { clearInterval(examTimerHandle); examTimerHandle = null; return; }
+      var remain = (toolRun.endAt - Date.now()) / 1000;
+      if (remain <= 0) {
+        clearInterval(examTimerHandle);
+        examTimerHandle = null;
+        toolExamSubmit(true);
+        return;
+      }
+      el.textContent = fmtTime(remain);
+      el.classList.toggle("low", remain < 300);
+    }
+    tick();
+    if (!toolRun || toolRun.phase !== "quiz") return; // tick 안에서 시간이 끝나 제출된 경우
+    examTimerHandle = setInterval(tick, 1000);
+  }
+
+  function toolExamAnswered() {
+    return toolRun.answers.filter(function (a) { return a.selected.length; }).length;
+  }
+
+  function toolExamStatusHtml() {
+    return '<span class="muted">답변 완료: ' + toolExamAnswered() + " / " + toolRun.questions.length + "</span>" +
+      '<button class="btn ghost small" data-action="tool-exam-flag">' +
+      (toolRun.flags[toolRun.index] ? "★ 표시 해제" : "☆ 나중에 다시보기") + "</button>";
+  }
+
+  function toolExamMainHtml() {
+    var q = toolRun.questions[toolRun.index];
+    var st = toolRun.answers[toolRun.index];
+    var total = toolRun.questions.length;
+
+    var opts = q.options.map(function (o) {
+      var cls = "tool-opt" + (st.selected.indexOf(o.letter) !== -1 ? " selected" : "");
+      return '<button type="button" class="' + cls + '" data-action="tool-select" data-letter="' + o.letter + '">' +
+        '<span class="tool-mark">' + o.letter + "</span>" +
+        '<span class="tool-otext">' + esc(o.text) + "</span></button>";
+    }).join("");
+
+    return (
+      '<div class="tool-qmeta"><span class="tool-qnum">Q' + pad3(toolRun.index + 1) + " / " + total +
+      "  (원문 #" + q.num + ')</span><span class="tool-qscore">' +
+      (q.need > 1 ? "복수 응답 · " + q.need + "개 선택" : "단일 응답") +
+      (toolRun.flags[toolRun.index] ? " · ★ 다시보기" : "") + "</span></div>" +
+      '<div class="tool-qtext">' + esc(q.question) + "</div>" +
+      '<div class="tool-hint">제출하기 전에는 정답과 해설이 표시되지 않습니다.' +
+      "   [숫자키 1-" + q.options.length + " 선택 · Enter/→ 다음 · ← 이전 · F 다시보기 표시]</div>" +
+      '<div class="tool-optlist">' + opts + "</div>" +
+      '<div class="tool-actions" style="justify-content:space-between;">' +
+      '<button class="btn secondary" data-action="tool-exam-prev"' + (toolRun.index === 0 ? " disabled" : "") + ">이전</button>" +
+      '<button class="btn" data-action="tool-exam-next"' + (toolRun.index + 1 >= total ? " disabled" : "") + ">다음</button>" +
+      "</div>"
+    );
+  }
+
+  function viewToolExam() {
+    return (
+      toolStatusbar(toolRun.status) +
+      '<div class="exam-toolbar">' +
+      '<span id="tool-timer" class="timer">--:--</span>' +
+      '<span class="tool-exam-status" id="tool-exam-status">' + toolExamStatusHtml() + "</span>" +
+      '<span class="tool-fill"></span>' +
+      '<button class="btn ghost small" data-action="tool-exam-quit">그만두기</button>' +
+      '<button class="btn danger small" data-action="tool-exam-submit">제출하기</button>' +
+      "</div>" +
+      '<div class="tool-ledstrip" id="tool-leds">' + toolLedsHtml() + "</div>" +
+      '<div class="card tool-main" id="tool-main">' + toolExamMainHtml() + "</div>"
+    );
+  }
+
+  // 타이머 요소는 건드리지 않고 나머지만 다시 그린다. 초 표시가 깜빡이지 않게 하려는 것.
+  function repaintToolExam() {
+    var main = document.getElementById("tool-main");
+    var leds = document.getElementById("tool-leds");
+    var bar = document.getElementById("tool-exam-status");
+    if (!main || !leds || !bar) { render(); return; }
+    main.innerHTML = toolExamMainHtml();
+    leds.innerHTML = toolLedsHtml();
+    bar.innerHTML = toolExamStatusHtml();
+  }
+
+  function toolExamFlag() {
+    toolRun.flags[toolRun.index] = !toolRun.flags[toolRun.index];
+    repaintToolExam();
+  }
+
+  function toolExamSubmit(auto) {
+    if (!toolRun || toolRun.mode !== "exam" || toolRun.phase !== "quiz") return;
+    if (!auto) {
+      var blank = toolRun.questions.length - toolExamAnswered();
+      if (blank > 0 && !confirm("아직 답하지 않은 문항이 " + blank + "개 있습니다. 그래도 제출할까요?")) return;
+    }
+    if (examTimerHandle) { clearInterval(examTimerHandle); examTimerHandle = null; }
+    var correct = 0;
+    toolRun.questions.forEach(function (q, i) {
+      var st = toolRun.answers[i];
+      st.checked = true;
+      st.correct = st.selected.length > 0 && sameLetters(st.selected, toolCorrectLetters(q));
+      if (st.correct) correct++;
+    });
+    var total = toolRun.questions.length;
+    var scaled = Math.round(100 + (correct / total) * 900);
+    toolRun.result = {
+      correct: correct, total: total, scaled: scaled,
+      pass: scaled >= TOOL_EXAM.passScore, auto: !!auto
+    };
+    toolRun.status = "EXAM " + (auto ? "TIME UP" : "SUBMITTED") + " · " + scaled + " / " +
+      TOOL_EXAM.maxScore + " · " + correct + "/" + total;
+    toolRun.phase = "results";
+    render();
+  }
+
+  function toolExamReviewHtml() {
+    return toolRun.questions.map(function (q, i) {
+      var st = toolRun.answers[i];
+      var mine = st.selected.slice().sort().join(", ") || "미응답";
+      var answer = toolCorrectLetters(q).sort().join(", ");
+      var label = st.correct ? "정답" : (st.selected.length ? "오답" : "미응답");
+      var lines = q.options.map(function (o) {
+        var picked = st.selected.indexOf(o.letter) !== -1;
+        var mark = o.correct ? "✓ " : (picked ? "✗ " : "");
+        var style = o.correct
+          ? "color:var(--success);font-weight:700;"
+          : (picked ? "color:var(--danger);font-weight:700;" : "");
+        return '<div class="tool-rline" style="' + style + '">' + mark + o.letter + ". " + esc(o.text) + "</div>";
+      }).join("");
+      return (
+        '<details class="qa-review tool-review">' +
+        '<summary><span class="tag ' + (st.correct ? "ok" : "bad") + '">' + label + "</span>" +
+        '<span class="tool-rsum">Q' + pad3(i + 1) + " · 원문 #" + q.num + " · 내 답 " + mine + " / 정답 " + answer + "</span></summary>" +
+        '<div class="tool-qtext" style="font-size:15px;">' + esc(q.question) + "</div>" +
+        lines +
+        '<div class="explain-box tool-rexplain">' + esc(q.explanation || "(해설 없음)") + "</div>" +
+        "</details>"
+      );
+    }).join("");
+  }
+
+  function viewToolExamResult() {
+    var r = toolRun.result;
+    var wrong = toolWrongNums();
+    var blank = toolRun.questions.length - toolExamAnswered();
+    return (
+      toolStatusbar(toolRun.status) +
+      '<div class="card result-hero">' +
+      '<div class="score ' + (r.pass ? "pass" : "fail") + '">' + r.scaled + " / " + TOOL_EXAM.maxScore + "</div>" +
+      '<div class="sub">' + (r.pass
+        ? "합격 기준(" + TOOL_EXAM.passScore + "점) 이상입니다 🎉"
+        : "합격 기준(" + TOOL_EXAM.passScore + "점)에 못 미칩니다") + "</div>" +
+      '<div class="sub">' + r.correct + " / " + r.total + " 정답 · 정답률 " +
+      Math.round((r.correct / r.total) * 100) + "% · 미응답 " + blank + "</div>" +
+      (r.auto ? '<div class="sub">제한 시간이 끝나 자동 제출되었습니다.</div>' : "") +
+      '<div style="margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">' +
+      '<button class="btn" data-action="tool-exam-start">새 모의고사</button>' +
+      '<button class="btn secondary" data-action="tool-retry-wrong"' + (wrong.length ? "" : " disabled") +
+      ">틀린 문제만 다시 풀기 (" + wrong.length + ")</button>" +
+      '<button class="btn secondary" data-action="tool-restart">설정으로</button>' +
+      "</div></div>" +
+      '<hr class="sep"><h3>문항별 리뷰</h3>' +
+      '<p class="muted">각 항목을 눌러 해설을 펼칠 수 있습니다.</p>' +
+      toolExamReviewHtml()
+    );
+  }
+
   function viewTool() {
     if (!toolMax()) return '<h1>SOA-C03 상황실</h1><p class="muted">문항 데이터를 불러오지 못했습니다.</p>';
     if (!toolRun) return viewToolSetup();
+    if (toolRun.mode === "exam") return toolRun.phase === "results" ? viewToolExamResult() : viewToolExam();
     return toolRun.phase === "results" ? viewToolResults() : viewToolQuiz();
   }
 
@@ -1690,9 +1941,14 @@
       if (idx < opts.length) { e.preventDefault(); toolSelect(opts[idx].letter); }
       return;
     }
+    if (toolRun.mode === "exam" && (e.key === "f" || e.key === "F")) {
+      e.preventDefault();
+      toolExamFlag();
+      return;
+    }
     if (e.key === "Enter") {
       e.preventDefault();
-      if (toolRun.answers[toolRun.index].checked) toolAdvance();
+      if (toolRun.mode === "exam" || toolRun.answers[toolRun.index].checked) toolAdvance();
       else toolCheck();
       return;
     }
@@ -1766,7 +2022,20 @@
         else toolOpts.shuffleO = !toolOpts.shuffleO;
         render();
         break;
+      case "tool-mode":
+        toolSyncRange();
+        toolMode = el.getAttribute("data-mode");
+        render();
+        break;
       case "tool-run": toolRunSession(); break;
+      case "tool-exam-start": toolExamStart(); break;
+      case "tool-exam-prev": toolGoto(toolRun.index - 1); break;
+      case "tool-exam-next": toolAdvance(); break;
+      case "tool-exam-flag": toolExamFlag(); break;
+      case "tool-exam-submit": toolExamSubmit(false); break;
+      case "tool-exam-quit":
+        if (confirm("모의고사를 중단할까요? 지금까지의 응답은 저장되지 않습니다.")) { toolRun = null; render(); }
+        break;
       case "tool-select": toolSelect(el.getAttribute("data-letter")); break;
       case "tool-check": toolCheck(); break;
       case "tool-next": toolAdvance(); break;
